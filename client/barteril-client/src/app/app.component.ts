@@ -17,7 +17,7 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        this.isSignInPage = (['/sign-in', '/sign-up'].includes(val.url));
+        this.isSignInPage = (['/', '/sign-up'].includes(val.url));
       }
     });
   }
