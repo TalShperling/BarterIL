@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <form class="text-center border border-light p-5" [formGroup]="registerForm" autocomplete="off">
+    <p class="h4 mb-4">Sign up</p>
+    <div class="form-row">
+      <div class="col md-form md-outline">
+        <input mdbInput mdbValidate type="text" id="firstNameForm" class="form-control" formControlName="firstNameForm">
+        <label for="firstNameForm">First Name</label>
+        <mdb-error *ngIf="firstNameForm.invalid && (firstNameForm.dirty || firstNameForm.touched)">Input invalid
+        </mdb-error>
+      </div>
+      <div class="col md-form md-outline">
+        <input mdbInput mdbValidate type="text" id="lastNameForm" class="form-control" formControlName="lastNameForm">
+        <label for="lastNameForm">Last Name</label>
+        <mdb-error *ngIf="lastNameForm.invalid && (lastNameForm.dirty || lastNameForm.touched)">Input invalid
+        </mdb-error>
+      </div>
+    </div>
+    <div class="md-form md-outline">
+      <input mdbInput mdbValidate type="text" id="emailForm" class="form-control"
+             [(ngModel)]="email" formControlName="emailForm">
+      <label for="emailForm">Email</label>
+      <mdb-error *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">Input invalid</mdb-error>
+    </div>
+    <div class="md-form md-outline">
+      <input mdbInput mdbValidate type="text" id="passwordForm" class="form-control"
+             style="-webkit-text-security: disc;" formControlName="passwordForm" [(ngModel)]="password">
+      <label for="passwordForm">Password</label>
+      <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
+        At least 8 characters
+      </mdb-error>
+    </div>
+    <div class="md-form md-outline">
+      <input mdbInput mdbValidate type="text" id="repeatPasswordForm" class="form-control"
+             style="-webkit-text-security: disc;" formControlName="repeatPasswordForm">
+      <label for="repeatPasswordForm">Repeat Password</label>
+      <mdb-error *ngIf="repeatPasswordForm.invalid && (repeatPasswordForm.dirty || repeatPasswordForm.touched)">
+        no match
+      </mdb-error>
+    </div>
+    <div class="md-form md-outline">
+      <input mdbInput mdbValidate type="text" id="phoneNumberForm" class="form-control"
+             formControlName="phoneNumberForm" [(ngModel)]="phoneNumber">
+      <label for="phoneNumberForm">Phone Number</label>
+      <mdb-error *ngIf="phoneNumberForm.invalid && (phoneNumberForm.dirty || phoneNumberForm.touched)">
+        invalid input
+      </mdb-error>
+    </div>
+    <button type="submit" mdbBtn color="primary" [disabled]="!registerForm.valid" (click)="signUp()">Sign Up</button>
+    <hr>
+    <p>Already registered?
+      <a routerLink="/sign-in">Login</a>
+    </p>
+  </form>
+</div>
+
+<div id="recaptcha-container"></div>
