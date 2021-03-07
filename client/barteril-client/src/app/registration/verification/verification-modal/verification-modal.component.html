@@ -10,10 +10,10 @@
     <div class="row d-flex md-form justify-content-center">
       <div class="col-md-8">
         <form class="text-center "
-              [formGroup]="verificationForm" autocomplete="new-password">
+              [formGroup]="verificationForm" autocomplete="off">
           <div class="md-form md-outline">
             <input mdbInput mdbValidate type="text" id="verificationCodeForm" class="form-control"
-                   formControlName="verificationCodeForm" [(ngModel)]="verificationCode">
+                   formControlName="verificationCodeForm" [(ngModel)]="verificationCode" style="text-align: center">
             <label for="verificationCodeForm">Verification Code</label>
             <mdb-error *ngIf="verificationCodeForm.invalid &&
             (verificationCodeForm.dirty || verificationCodeForm.touched)">
