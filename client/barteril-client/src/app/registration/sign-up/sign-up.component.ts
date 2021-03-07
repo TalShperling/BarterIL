@@ -8,6 +8,7 @@ import {VerificationModalComponent} from '../verification/verification-modal/ver
 import {Router} from '@angular/router';
 import {mergeMap} from 'rxjs/operators';
 import auth = firebase.auth;
+import {User} from '../../../entities/user.model';
 
 
 @Component({
@@ -43,6 +44,10 @@ export class SignUpComponent implements OnInit {
       phoneNumberForm: new FormControl(null, [Validators.required, Validators.minLength(10)])
     });
 
+    this.initializeRecaptcha();
+  }
+
+  private initializeRecaptcha() {
     this.windowRef.recaptchaVerifier = new auth.RecaptchaVerifier('recaptcha-container',
       {
         size: 'invisible'
@@ -71,7 +76,8 @@ export class SignUpComponent implements OnInit {
       this.modalRef.content.verificationEmitter.pipe(mergeMap((value: string) =>
         this.authenticateService.verify(value, this.email, this.password)))
     )).subscribe(() => {
-        this.authenticateService.saveUser();
+        this.authenticateService.saveUser(new User(this.authenticateService.getCurrentUser().uid,
+          this.firstname, this.lastname, this.phoneNumber, this.email));
         this.router.navigateByUrl('home');
       },
       error => {

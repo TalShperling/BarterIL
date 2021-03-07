@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthenticateService} from '../../services/authentication.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
+import {User} from '../../../entities/user.model';
+import firebase from 'firebase';
+import UserCredential = firebase.auth.UserCredential;
 
 @Component({
   selector: 'app-sign-in',
@@ -25,8 +28,10 @@ export class SignInComponent implements OnInit {
   }
 
   signIn(): void {
-    this.authenticateService.signIn(this.email, this.password).subscribe(res => {
-        this.authenticateService.saveUser();
+    /*TODO: after creating server side, bring the real user from firebase*/
+    this.authenticateService.signIn(this.email, this.password).subscribe((userCredential: UserCredential) => {
+        this.authenticateService.saveUser(new User(userCredential.user.uid,
+          'Tal', 'Shmerling', '0555555555', 'tal@shmerling.com'));
         this.router.navigateByUrl('home');
       },
       error => {

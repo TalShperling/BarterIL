@@ -3,7 +3,7 @@ import {WindowService} from './window.service';
 import firebase from 'firebase';
 import {Observable, of} from 'rxjs';
 import UserCredential = firebase.auth.UserCredential;
-import User = firebase.User;
+import {User} from '../../entities/user.model';
 
 
 @Injectable({
@@ -62,7 +62,7 @@ export class AuthenticateService {
     });
   }
 
-  getCurrentUser(): User {
+  getCurrentUser(): firebase.User {
     return firebase.auth().currentUser;
   }
 
@@ -70,8 +70,12 @@ export class AuthenticateService {
     return !!localStorage.getItem(this.userKey);
   }
 
-  saveUser(): void {
-    localStorage.setItem(this.userKey, JSON.stringify(this.getCurrentUser()));
+  getUser(): User {
+    return JSON.parse(localStorage.getItem(this.userKey));
+  }
+
+  saveUser(user: User): void {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 
   logout(): void {

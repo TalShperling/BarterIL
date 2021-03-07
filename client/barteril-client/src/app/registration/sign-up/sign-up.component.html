@@ -3,13 +3,15 @@
     <p class="h4 mb-4">Sign up</p>
     <div class="form-row">
       <div class="col md-form md-outline">
-        <input mdbInput mdbValidate type="text" id="firstNameForm" class="form-control" formControlName="firstNameForm">
+        <input mdbInput mdbValidate type="text" id="firstNameForm" class="form-control"
+               [(ngModel)]="firstname" formControlName="firstNameForm">
         <label for="firstNameForm">First Name</label>
         <mdb-error *ngIf="firstNameForm.invalid && (firstNameForm.dirty || firstNameForm.touched)">Input invalid
         </mdb-error>
       </div>
       <div class="col md-form md-outline">
-        <input mdbInput mdbValidate type="text" id="lastNameForm" class="form-control" formControlName="lastNameForm">
+        <input mdbInput mdbValidate type="text" id="lastNameForm" class="form-control"
+               [(ngModel)]="lastname" formControlName="lastNameForm">
         <label for="lastNameForm">Last Name</label>
         <mdb-error *ngIf="lastNameForm.invalid && (lastNameForm.dirty || lastNameForm.touched)">Input invalid
         </mdb-error>
