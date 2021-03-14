@@ -1,0 +1,40 @@
+<div class="modal-header justify-content-center">
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h5>Verification</h5>
+
+</div>
+<div class="modal-body text-center">
+  <div class="container mt-3">
+    <div class="row d-flex md-form justify-content-center">
+      <div class="col-md-8">
+        <form class="text-center "
+              [formGroup]="verificationForm" autocomplete="off">
+          <div class="md-form md-outline">
+            <input mdbInput mdbValidate type="text" id="verificationCodeForm" class="form-control"
+                   formControlName="verificationCodeForm" [(ngModel)]="verificationCode" style="text-align: center">
+            <label for="verificationCodeForm">Verification Code</label>
+            <mdb-error *ngIf="verificationCodeForm.invalid &&
+            (verificationCodeForm.dirty || verificationCodeForm.touched)">
+              Input invalid
+            </mdb-error>
+          </div>
+        </form>
+        <small>
+          a verification code was sent to your phone
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer justify-content-center">
+    <div class="row justify-content-center">
+      <button type="button" mdbBtn color="primary" class="relative waves-light btn-blue-grey" mdbWavesEffect
+              [disabled]="verificationCodeForm.invalid" (click)="onSubmit()">
+        Verify
+      </button>
+    </div>
+  </div>
+</div>
+
