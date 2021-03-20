@@ -1,24 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {AuthenticateService} from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'barteril-client';
-  isSignInPage: boolean;
+  isUserLoggedIn: boolean = false;
 
-  constructor(private router: Router) {
+  constructor(private authenticationService: AuthenticateService) {
   }
 
 
   ngOnInit(): void {
-    this.router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
-        this.isSignInPage = (['/', '/sign-up'].includes(val.url));
-      }
+    this.authenticationService.getIsUserLoggedInSubject().subscribe(isUserLoggedIn => {
+      this.isUserLoggedIn = isUserLoggedIn;
     });
   }
 }
