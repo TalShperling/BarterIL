@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {WindowService} from './window.service';
 import firebase from 'firebase';
-import {Observable, of} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import UserCredential = firebase.auth.UserCredential;
 import {User} from '../../entities/user.model';
 
@@ -11,6 +11,7 @@ import {User} from '../../entities/user.model';
 })
 export class AuthenticateService {
   windowRef: any;
+  private isUserLoggedInSubject = new Subject<boolean>();
   private countryDialogCode = '+972';
   private userKey = 'USER';
 
@@ -55,6 +56,7 @@ export class AuthenticateService {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
           observer.next(userCredential);
+          this.isUserLoggedInSubject.next(true);
         })
         .catch((error) => {
           observer.error(error);
@@ -76,11 +78,17 @@ export class AuthenticateService {
 
   saveUser(user: User): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
+    this.isUserLoggedInSubject.next(true);
   }
 
   logout(): void {
     of(firebase.auth().signOut()).subscribe(() => {
       localStorage.removeItem(this.userKey);
+      this.isUserLoggedInSubject.next(false);
     });
+  }
+
+  getIsUserLoggedInSubject(): Observable<boolean> {
+    return this.isUserLoggedInSubject.asObservable();
   }
 }
