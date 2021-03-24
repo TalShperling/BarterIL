@@ -12,6 +12,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeModule } from './home/home.module';
 import { RegistrationModule } from './registration/registration.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AngularFireAnalyticsModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
+    StoreModule.forRoot({})
   ],
   providers: [],
   bootstrap: [AppComponent]
