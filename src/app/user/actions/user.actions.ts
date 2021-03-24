@@ -26,7 +26,7 @@ export const loginFail = createAction(userActionNames.LOGIN_FAIL, props<{ messag
 
 export const logout = createAction(userActionNames.LOGOUT);
 export const logoutSuccess = createAction(userActionNames.LOGOUT_SUCCESS);
-export const logoutFail = createAction(userActionNames.LOGOUT_FAIL);
+export const logoutFail = createAction(userActionNames.LOGOUT_FAIL, props<{ message: string; }>());
 
 export const register = createAction(userActionNames.REGISTER,
   props<{ user: User & { password: string; } }>()

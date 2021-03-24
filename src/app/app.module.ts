@@ -13,6 +13,7 @@ import { HomeModule } from './home/home.module';
 import { RegistrationModule } from './registration/registration.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { StoreModule } from '@ngrx/store';
     BrowserModule,
     AppRoutingModule,
     BadgeModule,
-    RegistrationModule,
+    UserModule,
     MDBBootstrapModule.forRoot(),
     AngularFireAuthModule,
     HomeModule,

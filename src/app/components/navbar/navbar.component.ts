@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthenticateService} from '../../services/auth/authentication.service';
 import {User} from '../../../entities/user.model';
+import { Store, select } from '@ngrx/store';
+import { getUser, UserState } from '../../user/reducers/user.reducer';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { logout } from '../../user/actions/user.actions';
 
 @Component({
   selector: 'app-navbar',
@@ -9,21 +13,18 @@ import {User} from '../../../entities/user.model';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  signInUser: User;
-  userFullName: string;
+  signInUser$: Observable<User>;
+  userFullName: Observable<string>;
 
-  constructor(private router: Router,
-              private authenticateService: AuthenticateService) {
+  constructor(private router: Router, private store: Store<UserState>) {
   }
 
   ngOnInit(): void {
-    this.signInUser = this.authenticateService.getUser();
-    this.userFullName = !!this.signInUser ?
-      this.signInUser.firstName.concat(' ', this.signInUser.lastName) : '';
+    this.signInUser$ = this.store.pipe(select(getUser));
+    this.userFullName = this.signInUser$.pipe(map(user => `${user.firstName} ${user.lastName}`));
   }
 
   logout(): void {
-    this.authenticateService.logout();
-    this.router.navigateByUrl('/');
+    this.store.dispatch(logout());
   }
 }
