@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {WindowService} from './window.service';
 import firebase from 'firebase';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {User} from '../../entities/user.model';
+import {User} from '../../../entities/user.model';
 import UserCredential = firebase.auth.UserCredential;
 
 
@@ -36,7 +36,7 @@ export class AuthenticateService {
     });
   }
 
-  verify(verificationCode: string, email: string, password: string): Observable<any> {
+  verify(verificationCode: string, email: string, password: string): Observable<void> {
     return new Observable<any>(observer => {
       this.windowRef.confirmationResult.confirm(verificationCode).then((result) => {
         const credential = firebase.auth.EmailAuthProvider.credential(email, password);
@@ -56,7 +56,6 @@ export class AuthenticateService {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
           observer.next(userCredential);
-          this.isUserLoggedIn$.next(true);
         })
         .catch((error) => {
           observer.error(error);
