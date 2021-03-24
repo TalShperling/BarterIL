@@ -10,19 +10,15 @@ import {
   WavesModule
 } from 'angular-bootstrap-md';
 import {SignUpComponent} from './components/sign-up/sign-up.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {SignInComponent} from './components/sign-in/sign-in.component';
 import {RouterModule} from '@angular/router';
 import {VerificationModalComponent} from './components/verification/verification-modal/verification-modal.component';
 import {UsersService} from '../services/users/users.service';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
-import {MatInputModule} from '@angular/material/input';
 
 
 @NgModule({
-  declarations: [SignUpComponent, SignInComponent, VerificationModalComponent],
+  declarations: [SignUpComponent, VerificationModalComponent],
   exports: [SignUpComponent],
   imports: [
     CommonModule,
