@@ -10,6 +10,7 @@ import firebase from 'firebase/app';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { HomeModule } from './home/home.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBzQeNQNSI7QsIUcSwCneF8N-dybSGWNXs',
@@ -39,6 +40,7 @@ firebase.analytics();
     AngularFireAuthModule,
     HomeModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
