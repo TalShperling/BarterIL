@@ -47,7 +47,7 @@
         invalid input
       </mdb-error>
     </div>
-    <button type="submit" mdbBtn color="primary" [disabled]="!registerForm.valid" (click)="signUp()">Sign Up</button>
+    <button type="submit" mdbBtn class="signUp-button text-white" [disabled]="!registerForm.valid" (click)="signUp()">Sign Up</button>
     <hr>
     <p>Already registered?
       <a routerLink="/">Login</a>

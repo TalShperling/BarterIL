@@ -20,7 +20,7 @@
         <a href="">Forgot password?</a>
       </div>
     </div>
-    <button mdbBtn color="info" block="true" class="my-4" [disabled]="!loginForm.valid"
+    <button mdbBtn block="true" class="my-4 signIn-button text-white" [disabled]="!loginForm.valid"
             (click)="signIn()" type="submit">Sign in</button>
     <p>Not a member?
       <a routerLink="/sign-up">Register</a>
