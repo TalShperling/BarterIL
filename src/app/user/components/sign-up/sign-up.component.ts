@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import firebase from 'firebase';
-import {AuthenticateService} from '../../../services/auth/authentication.service';
+import {AuthenticateService} from '../../services/authentication.service';
 import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
 import {Router} from '@angular/router';
 import {concatMap} from 'rxjs/operators';
 import {User} from '../../../../entities/user.model';
-import {UsersService} from '../../../services/users/users.service';
+import {UsersService} from '../../services/users.service';
 import {WindowService} from '../../../services/auth/window.service';
 import auth = firebase.auth;
 import { VerificationModalComponent } from '../verification/verification-modal/verification-modal.component';
