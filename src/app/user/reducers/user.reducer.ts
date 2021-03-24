@@ -1,6 +1,6 @@
 import { User } from '../../../entities/user.model';
 import { createReducer, on } from '@ngrx/store';
-import { loadUserSuccess, loadUserFail, loginSuccess, logoutSuccess } from './actions/user.actions';
+import { loadUserSuccess, loadUserFail, loginSuccess, logoutSuccess } from '../actions/user.actions';
 
 export const userFeatureKey = 'user';
 
