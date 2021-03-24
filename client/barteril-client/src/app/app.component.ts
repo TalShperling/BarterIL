@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticateService} from './services/authentication.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +9,12 @@ import {AuthenticateService} from './services/authentication.service';
 })
 export class AppComponent implements OnInit {
   title = 'barteril-client';
-  isUserLoggedIn: boolean = false;
+  isUserLoggedIn: Observable<boolean>;
 
   constructor(private authenticationService: AuthenticateService) {
   }
 
-
   ngOnInit(): void {
-    this.authenticationService.getIsUserLoggedInSubject().subscribe(isUserLoggedIn => {
-      this.isUserLoggedIn = isUserLoggedIn;
-    });
+    this.isUserLoggedIn = this.authenticationService.getIsUserLoggedIn$();
   }
 }
