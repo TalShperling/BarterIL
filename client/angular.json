@@ -137,5 +137,8 @@
       }
     }
   },
-  "defaultProject": "barteril-client"
+  "defaultProject": "barteril-client",
+  "cli": {
+    "analytics": false
+  }
 }
