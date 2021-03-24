@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {WindowService} from './window.service';
+import { Injectable } from '@angular/core';
+import { WindowService } from './window.service';
 import firebase from 'firebase';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {User} from '../../../entities/user.model';
+import { from, Observable } from 'rxjs';
+import { User } from '../../../entities/user.model';
 import UserCredential = firebase.auth.UserCredential;
 
 
@@ -11,7 +11,6 @@ import UserCredential = firebase.auth.UserCredential;
 })
 export class AuthenticateService {
   windowRef: any;
-  private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private countryDialogCode = '+972';
   private userKey = 'USER';
 
@@ -52,42 +51,14 @@ export class AuthenticateService {
   }
 
   signIn(email: string, password: string): Observable<UserCredential> {
-    return new Observable<UserCredential>(observer => {
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          observer.next(userCredential);
-        })
-        .catch((error) => {
-          observer.error(error);
-        });
-    });
+    return from(firebase.auth().signInWithEmailAndPassword(email, password));
   }
 
-  getCurrentUser(): firebase.User {
-    return firebase.auth().currentUser;
-  }
-
-  isUserLoggedIn(): boolean {
-    return !!localStorage.getItem(this.userKey);
-  }
-
-  getUser(): User {
-    return JSON.parse(localStorage.getItem(this.userKey));
-  }
-
-  saveUser(user: User): void {
+  saveUserToLocalStorage(user: User) {
     localStorage.setItem(this.userKey, JSON.stringify(user));
-    this.isUserLoggedIn$.next(true);
   }
 
-  logout(): void {
-    of(firebase.auth().signOut()).subscribe(() => {
-      localStorage.removeItem(this.userKey);
-      this.isUserLoggedIn$.next(false);
-    });
-  }
-
-  getIsUserLoggedIn$(): Observable<boolean> {
-    return this.isUserLoggedIn$.asObservable();
+  logout() {
+    return from(firebase.auth().signOut());
   }
 }

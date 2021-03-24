@@ -1,5 +1,5 @@
 import { User } from '../../../entities/user.model';
-import { createReducer, on } from '@ngrx/store';
+import { createReducer, createSelector, on } from '@ngrx/store';
 import { loadUserSuccess, loadUserFail, loginSuccess, logoutSuccess } from '../actions/user.actions';
 
 export const userFeatureKey = 'user';
@@ -19,3 +19,8 @@ export const userReducer = createReducer(
   on(loadUserFail, (state) => ({ ...state, currentUser: null })),
   on(logoutSuccess, (state) => ({ ...state, currentUser: null }))
 );
+
+const selectUserState = (state: UserState) => state.currentUser;
+
+export const isUserLoggedIn = createSelector(selectUserState, userState => userState !== null);
+export const getUser = createSelector(selectUserState, (user) => user);

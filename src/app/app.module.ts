@@ -5,12 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BadgeModule, MDBBootstrapModule } from 'angular-bootstrap-md';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { RegistrationModule } from './registration/registration.module';
 import firebase from 'firebase/app';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { HomeModule } from './home/home.module';
 import { StoreModule } from '@ngrx/store';
+import { UserModule } from './user/user.module';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBzQeNQNSI7QsIUcSwCneF8N-dybSGWNXs',
@@ -35,7 +35,7 @@ firebase.analytics();
     BrowserModule,
     AppRoutingModule,
     BadgeModule,
-    RegistrationModule,
+    UserModule,
     MDBBootstrapModule.forRoot(),
     AngularFireAuthModule,
     HomeModule,

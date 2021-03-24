@@ -15,9 +15,12 @@ import {
 } from 'angular-bootstrap-md';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { VerificationModalComponent } from './components/verification/verification-modal/verification-modal.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 @NgModule({
-  declarations: [SignInComponent],
+  declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
+  exports: [SignUpComponent],
   imports: [
     CommonModule,
     StoreModule.forFeature(userFeatureKey, userReducer),
