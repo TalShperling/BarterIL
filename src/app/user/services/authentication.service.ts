@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WindowService } from './window.service';
+import { WindowService } from '../../services/auth/window.service';
 import firebase from 'firebase';
 import { from, Observable } from 'rxjs';
 import { User } from '../../../entities/user.model';

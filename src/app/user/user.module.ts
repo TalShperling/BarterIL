@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 import { userFeatureKey, userReducer } from './reducers/user.reducer';
-import { UsersService } from '../services/users/users.service';
+import { UsersService } from './services/users.service';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import {
   ButtonsModule,
