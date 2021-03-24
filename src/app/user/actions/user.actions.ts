@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from '../../../../entities/user.model';
+import { User } from '../../../entities/user.model';
 
 const userActionNames = {
   LOAD_USER: '[User] Load user from storage',
