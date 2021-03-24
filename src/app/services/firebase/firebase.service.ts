@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { CollectionType } from './models/collection-type.model';
 import { AngularFirestore, DocumentChangeAction, QuerySnapshot } from '@angular/fire/firestore';
+import { ObserversModule } from '@angular/cdk/observers';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,13 @@ export class FirebaseService {
     return this.firestore.doc<T>(`${collection}/${id}`).valueChanges();
   }
 
-  addData<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
-    return from(this.firestore.doc<T>(`${collection}/${data.id}`).set(data));
-  }
-
-  updateData<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
-    return from(this.firestore.doc(`${collection}/${data.id}`).update(data));
+  upsertData<T extends { id: string }>(collection: CollectionType, data: T): Observable<T> {
+    return new Observable<T>(observer => {
+      if (!data.id) {
+        data.id = this.firestore.createId();
+      }
+      this.firestore.doc<T>(`${collection}/${data.id}`).set(data).then(() => observer.next(data));
+    });
   }
 
   deleteData<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
