@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthenticateService} from '../../services/authentication.service';
+import {AuthenticateService} from '../../../services/authentication.service';
 import {Router} from '@angular/router';
-import {User} from '../../../entities/user.model';
+import {User} from '../../../../entities/user.model';
 import firebase from 'firebase';
 import UserCredential = firebase.auth.UserCredential;
 
