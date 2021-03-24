@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthenticateService} from '../../../services/authentication.service';
+import {AuthenticateService} from '../../../services/auth/authentication.service';
 import {Router} from '@angular/router';
 import {User} from '../../../../entities/user.model';
 import firebase from 'firebase';
 import UserCredential = firebase.auth.UserCredential;
+import {mergeMap} from 'rxjs/operators';
+import {UsersService} from '../../../services/users/users.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,6 +19,7 @@ export class SignInComponent implements OnInit {
   password: string;
 
   constructor(private authenticateService: AuthenticateService,
+              private userService: UsersService,
               private router: Router) {
   }
 
@@ -28,13 +31,12 @@ export class SignInComponent implements OnInit {
   }
 
   signIn(): void {
-    /*TODO: after creating server side, bring the real user from firebase*/
-    this.authenticateService.signIn(this.email, this.password).subscribe((userCredential: UserCredential) => {
-        this.authenticateService.saveUser(new User(userCredential.user.uid,
-          'Tal', 'Shmerling', '0555555555', 'tal@shmerling.com'));
+    this.authenticateService.signIn(this.email, this.password).pipe
+    (mergeMap((userCredential: UserCredential) => this.userService.getUserByID(userCredential.user.uid)))
+      .subscribe((user: User) => {
+        this.authenticateService.saveUser(user);
         this.router.navigateByUrl('home');
-      },
-      error => {
+      }, error => {
         console.log(error);
       });
   }

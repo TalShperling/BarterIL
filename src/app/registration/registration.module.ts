@@ -11,9 +11,10 @@ import {
 } from 'angular-bootstrap-md';
 import {SignUpComponent} from './components/sign-up/sign-up.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import { SignInComponent } from './components/sign-in/sign-in.component';
+import {SignInComponent} from './components/sign-in/sign-in.component';
 import {RouterModule} from '@angular/router';
-import { VerificationModalComponent } from './components/verification/verification-modal/verification-modal.component';
+import {VerificationModalComponent} from './components/verification/verification-modal/verification-modal.component';
+import {UsersService} from '../services/users/users.service';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { VerificationModalComponent } from './components/verification/verificati
     ReactiveFormsModule,
     InputUtilitiesModule,
     RouterModule,
-  ]
+  ],
+  providers: [UsersService]
 })
 export class RegistrationModule {
 }
