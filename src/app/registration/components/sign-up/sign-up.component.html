@@ -40,14 +40,26 @@
       </mdb-error>
     </div>
     <div class="md-form md-outline">
-      <input mdbInput mdbValidate type="text" id="phoneNumberForm" class="form-control"
+      <input mdbInput mdbValidate matNativeControl type="text" id="phoneNumberForm" class="form-control"
              formControlName="phoneNumberForm" [(ngModel)]="phoneNumber">
       <label for="phoneNumberForm">Phone Number</label>
       <mdb-error *ngIf="phoneNumberForm.invalid && (phoneNumberForm.dirty || phoneNumberForm.touched)">
         invalid input
       </mdb-error>
     </div>
-    <button type="submit" mdbBtn class="signUp-button text-white" [disabled]="!registerForm.valid" (click)="signUp()">Sign Up</button>
+
+    <div class="md-outline">
+      <mat-form-field appearance="fill">
+        <mat-label>Birthday</mat-label>
+        <input matInput [matDatepicker]="picker" (dateInput)="dateChanged($event)" [value]="birthday">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <button type="submit" mdbBtn class="signUp-button text-white" [disabled]="!registerForm.valid" (click)="signUp()">
+      Sign Up
+    </button>
     <hr>
     <p>Already registered?
       <a routerLink="/">Login</a>
