@@ -20,10 +20,10 @@ export class ItemsService implements IFirebaseService<Item>{
     return this.firebaseService.getDataById$<Item>(this.collectionName, id);
   }
   upsert$(data: Item): Observable<Item> {
-    return this.firebaseService.upsertData<Item>(this.collectionName, data);
+    return this.firebaseService.upsertDocument<Item>(this.collectionName, data);
   }
   delete$(data: Item): Observable<void> {
-    return this.firebaseService.deleteData<Item>(this.collectionName, data);
+    return this.firebaseService.deleteDocument<Item>(this.collectionName, data);
   }
   
 }

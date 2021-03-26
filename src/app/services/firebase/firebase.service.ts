@@ -7,7 +7,7 @@ import { ObserversModule } from '@angular/cdk/observers';
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseService {
+export abstract class FirebaseService {
 
   constructor(private firestore: AngularFirestore) { }
 
@@ -24,7 +24,7 @@ export class FirebaseService {
     return this.firestore.doc<T>(`${collection}/${id}`).valueChanges();
   }
 
-  upsertData<T extends { id: string }>(collection: CollectionType, data: T): Observable<T> {
+  upsertDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<T> {
     return new Observable<T>(observer => {
       if (!data.id) {
         data.id = this.firestore.createId();
@@ -33,7 +33,7 @@ export class FirebaseService {
     });
   }
 
-  deleteData<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
+  deleteDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
     return from(this.firestore.doc(`${collection}/${data.id}`).delete());
   }
 }

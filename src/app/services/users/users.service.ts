@@ -19,10 +19,10 @@ export class UsersService implements IFirebaseService<User> {
     return this.firebaseService.getDataById$<User>(this.collectionName, id);
   }
   upsert$(data: User): Observable<User> {
-    return this.firebaseService.upsertData<User>(this.collectionName, data);
+    return this.firebaseService.upsertDocument<User>(this.collectionName, data);
   }
   delete$(data: User): Observable<void> {
-    return this.firebaseService.deleteData<User>(this.collectionName, data);
+    return this.firebaseService.deleteDocument<User>(this.collectionName, data);
   }
 }
 
