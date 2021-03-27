@@ -24,6 +24,7 @@ export class SignUpComponent implements OnInit {
   email: string;
   password: string;
   phoneNumber: string;
+  birthday: Date = new Date();
   windowRef: any;
   modalRef: MDBModalRef;
 
@@ -71,6 +72,10 @@ export class SignUpComponent implements OnInit {
     };
   }
 
+  dateChanged(date): void {
+    this.birthday = date.value;
+  }
+
   signUp(): void {
     this.modalRef = this.modalService.show(VerificationModalComponent);
 
@@ -79,7 +84,8 @@ export class SignUpComponent implements OnInit {
       concatMap((value: string) => this.authenticateService.verify(value, this.email, this.password)),
       concatMap(() => this.userService.upsert$({
         id: this.authenticateService.getCurrentUser().uid,
-        firstName: this.firstname, lastName: this.lastname, phoneNumber: this.phoneNumber, email: this.email
+        firstName: this.firstname, lastName: this.lastname, phoneNumber: this.phoneNumber,
+        email: this.email, birthday: firebase.firestore.Timestamp.fromDate(this.birthday)
       }))
     ).subscribe((user: User) => {
         this.authenticateService.saveUser(user);
