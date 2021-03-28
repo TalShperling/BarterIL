@@ -82,7 +82,7 @@ export class SignUpComponent implements OnInit {
     this.authenticateService.signUp(this.phoneNumber).pipe(
       concatMap(() => this.modalRef.content.verificationEmitter),
       concatMap((value: string) => this.authenticateService.verify(value, this.email, this.password)),
-      concatMap(() => this.userService.createNewUser({
+      concatMap(() => this.userService.upsert$({
         id: this.authenticateService.getCurrentUser().uid,
         firstName: this.firstname, lastName: this.lastname, phoneNumber: this.phoneNumber,
         email: this.email, birthday: firebase.firestore.Timestamp.fromDate(this.birthday)

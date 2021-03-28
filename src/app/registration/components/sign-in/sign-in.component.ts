@@ -32,7 +32,7 @@ export class SignInComponent implements OnInit {
 
   signIn(): void {
     this.authenticateService.signIn(this.email, this.password).pipe
-    (mergeMap((userCredential: UserCredential) => this.userService.getUserByID(userCredential.user.uid)))
+    (mergeMap((userCredential: UserCredential) => this.userService.getById$(userCredential.user.uid)))
       .subscribe((user: User) => {
         this.authenticateService.saveUser(user);
         this.router.navigateByUrl('home');
