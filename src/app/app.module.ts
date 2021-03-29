@@ -14,6 +14,7 @@ import { RegistrationModule } from './registration/registration.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { UserModule } from './user/user.module';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { UserModule } from './user/user.module';
     AngularFireAnalyticsModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({})
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

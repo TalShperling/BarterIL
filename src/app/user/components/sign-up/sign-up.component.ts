@@ -1,15 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import firebase from 'firebase';
-import {AuthenticateService} from '../../services/authentication.service';
-import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
-import {Router} from '@angular/router';
-import {concatMap} from 'rxjs/operators';
-import {User} from '../../../../entities/user.model';
-import {UsersService} from '../../services/users.service';
-import {WindowService} from '../../../services/auth/window.service';
+import { AuthenticateService } from '../../services/authentication.service';
+import { WindowService } from '../../../services/auth/window.service';
 import auth = firebase.auth;
-import { VerificationModalComponent } from '../verification/verification-modal/verification-modal.component';
+import { Store } from '@ngrx/store';
+import { UserState } from '../../reducers/user.reducer';
+import { register } from '../../actions/user.actions';
 
 
 @Component({
@@ -26,13 +23,10 @@ export class SignUpComponent implements OnInit {
   phoneNumber: string;
   birthday: Date = new Date();
   windowRef: any;
-  modalRef: MDBModalRef;
 
   constructor(private authenticateService: AuthenticateService,
               private windowService: WindowService,
-              private modalService: MDBModalService,
-              private router: Router,
-              private userService: UsersService) {
+              private store: Store<UserState>) {
     this.windowRef = windowService.windowRef;
   }
 
@@ -77,23 +71,16 @@ export class SignUpComponent implements OnInit {
   }
 
   signUp(): void {
-    this.modalRef = this.modalService.show(VerificationModalComponent);
-
-    this.authenticateService.signUp(this.phoneNumber).pipe(
-      concatMap(() => this.modalRef.content.verificationEmitter),
-      concatMap((value: string) => this.authenticateService.verify(value, this.email, this.password)),
-      concatMap(() => this.userService.upsert$({
-        id: this.authenticateService.getCurrentUser().uid,
-        firstName: this.firstname, lastName: this.lastname, phoneNumber: this.phoneNumber,
-        email: this.email, birthday: firebase.firestore.Timestamp.fromDate(this.birthday)
-      }))
-    ).subscribe((user: User) => {
-        this.authenticateService.saveUser(user);
-        this.router.navigateByUrl('home');
-      },
-      error => {
-        console.log(error);
-      });
+    this.store.dispatch(register({
+      user: {
+        firstName: this.firstname,
+        lastName: this.lastname,
+        email: this.email,
+        phoneNumber: this.phoneNumber,
+        password: this.password,
+        birthday: firebase.firestore.Timestamp.fromDate(this.birthday)
+      }
+    }));
   }
 
   get firstNameForm() {

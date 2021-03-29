@@ -11,7 +11,7 @@ export class UsersService implements IFirebaseService<User> {
   collectionName: CollectionType = CollectionType.USERS;
 
   constructor(private firebaseService: FirebaseService) {}
-  
+
   getAll$(): Observable<User[]> {
     return this.firebaseService.getAllData$<User>(this.collectionName);
   }

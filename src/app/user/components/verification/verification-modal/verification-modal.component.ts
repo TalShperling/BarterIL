@@ -8,7 +8,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./verification-modal.component.scss']
 })
 export class VerificationModalComponent implements OnInit {
-  @Output() verificationEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() verificationEmitter: EventEmitter<string> = new EventEmitter<string>();
   verificationForm: FormGroup;
   verificationCode: string;
 

@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { login, loginFail, loginSuccess, logout, logoutFail, logoutSuccess } from '../actions/user.actions';
+import {
+  login,
+  loginFail,
+  loginSuccess,
+  logout,
+  logoutFail,
+  logoutSuccess,
+  register,
+  registerFail,
+  registerSuccess
+} from '../actions/user.actions';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AuthenticateService } from '../services/authentication.service';
 import firebase from 'firebase';
@@ -43,6 +53,28 @@ export class UserEffects {
     ofType(logoutSuccess),
     tap(() => this.router.navigateByUrl('/'))
     ), {dispatch: false}
+  );
+
+  redirectOnLogin$ = createEffect(() => this.actions$.pipe(
+    ofType(registerSuccess, loginSuccess),
+    tap(() => this.router.navigateByUrl('home'))
+    ), {dispatch: false}
+  );
+
+  signUp$ = createEffect(() => this.actions$.pipe(
+    ofType(register),
+    switchMap(({user}) => this.authService.signUp(user.phoneNumber)
+      .pipe(
+        switchMap(([confirmationResult, code]) =>
+          this.authService.verify(confirmationResult, code, user.email, user.password)),
+        switchMap(() => this.userService.createNewUser({
+          id: this.authService.getFirebaseCurrentUser().uid,
+          firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber, email: user.email
+        })),
+        map((createdUser) => registerSuccess({user: createdUser})),
+        catchError((err) => of(registerFail({message: err})))
+      )),
+    )
   );
 
   constructor(
