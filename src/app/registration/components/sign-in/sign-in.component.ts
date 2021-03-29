@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import UserCredential = firebase.auth.UserCredential;
 import {mergeMap} from 'rxjs/operators';
 import {UsersService} from '../../../services/users/users.service';
+import {AlertsService} from '../../../services/alerts/alerts.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,13 +15,15 @@ import {UsersService} from '../../../services/users/users.service';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
+  private errorAlert: string = 'The username or password is incorrect';
   loginForm: FormGroup;
   email: string;
   password: string;
 
   constructor(private authenticateService: AuthenticateService,
               private userService: UsersService,
-              private router: Router) {
+              private router: Router,
+              private alertsService: AlertsService) {
   }
 
   ngOnInit(): void {
@@ -36,8 +39,8 @@ export class SignInComponent implements OnInit {
       .subscribe((user: User) => {
         this.authenticateService.saveUser(user);
         this.router.navigateByUrl('home');
-      }, error => {
-        console.log(error);
+      }, () => {
+        this.alertsService.showErrorAlert(this.errorAlert);
       });
   }
 
