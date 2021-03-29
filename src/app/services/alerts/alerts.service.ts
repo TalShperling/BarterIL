@@ -15,4 +15,11 @@ export class AlertsService {
       duration: this.duration,
     });
   }
+
+  showSuccessAlert(message: string) {
+    this.snackBar.open(message, this.action, {
+      panelClass: ['notify-success'],
+      duration: this.duration,
+    });
+  }
 }
