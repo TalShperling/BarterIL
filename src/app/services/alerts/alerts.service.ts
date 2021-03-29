@@ -9,14 +9,14 @@ export class AlertsService {
   constructor(private snackBar: MatSnackBar) {
   }
 
-  showErrorAlert(message: string) {
+  showErrorAlert(message: string): void {
     this.snackBar.open(message, this.action, {
       panelClass: ['notify-error'],
       duration: this.duration,
     });
   }
 
-  showSuccessAlert(message: string) {
+  showSuccessAlert(message: string): void {
     this.snackBar.open(message, this.action, {
       panelClass: ['notify-success'],
       duration: this.duration,
