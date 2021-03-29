@@ -3,7 +3,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable()
 export class AlertsService {
-  private action = 'close';
+  private action: string = 'close';
   private duration: number = 3000;
 
   constructor(private snackBar: MatSnackBar) {
