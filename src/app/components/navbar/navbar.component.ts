@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {User} from '../../../entities/user.model';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from '../../../entities/user.model';
 import { Store, select } from '@ngrx/store';
 import { getUser, UserState } from '../../user/reducers/user.reducer';
 import { Observable } from 'rxjs';
@@ -14,14 +14,14 @@ import { logout } from '../../user/actions/user.actions';
 })
 export class NavbarComponent implements OnInit {
   signInUser$: Observable<User>;
-  userFullName: Observable<string>;
+  userFullName$: Observable<string>;
 
   constructor(private router: Router, private store: Store<UserState>) {
   }
 
   ngOnInit(): void {
     this.signInUser$ = this.store.pipe(select(getUser));
-    this.userFullName = this.signInUser$.pipe(map(user => `${user.firstName} ${user.lastName}`));
+    this.userFullName$ = this.signInUser$.pipe(map(user => `${user.firstName} ${user.lastName}`));
   }
 
   logout(): void {

@@ -11,6 +11,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { HomeModule } from './home/home.module';
 import { StoreModule } from '@ngrx/store';
 import { UserModule } from './user/user.module';
+import { EffectsModule } from '@ngrx/effects';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBzQeNQNSI7QsIUcSwCneF8N-dybSGWNXs',
@@ -40,7 +41,8 @@ firebase.analytics();
     AngularFireAuthModule,
     HomeModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    StoreModule.forRoot({})
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

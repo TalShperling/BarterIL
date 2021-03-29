@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {User} from '../../../entities/user.model';
-import {Observable} from 'rxjs';
-import {AngularFirestore} from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
+import { User } from '../../../entities/user.model';
+import { from, Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class UsersService {
@@ -10,11 +11,7 @@ export class UsersService {
   }
 
   getUserByID(id: string): Observable<User> {
-    return new Observable<User>(observer => {
-      this.firestore.collection<User>('users').doc(id).get().subscribe(user => {
-        observer.next(user.data() as User);
-      });
-    });
+    return from(this.firestore.collection<User>('users').doc(id).get()).pipe(map(response => response.data()));
   }
 
   createNewUser(user: User): Observable<User> {

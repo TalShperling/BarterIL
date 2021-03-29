@@ -29,7 +29,7 @@ export const logoutSuccess = createAction(userActionNames.LOGOUT_SUCCESS);
 export const logoutFail = createAction(userActionNames.LOGOUT_FAIL, props<{ message: string; }>());
 
 export const register = createAction(userActionNames.REGISTER,
-  props<{ user: User & { password: string; } }>()
+  props<{ user: Omit<User, 'id'> & { password: string; } }>()
 );
 export const registerSuccess = createAction(userActionNames.REGISTER_SUCCESS, props<{ user: User }>());
 export const registerFail = createAction(userActionNames.REGISTER_FAIL, props<{ message: string; }>());
