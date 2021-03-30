@@ -3,11 +3,12 @@ import { WindowService } from '../../services/auth/window.service';
 import firebase from 'firebase';
 import { from, Observable } from 'rxjs';
 import { User } from '../../../entities/user.model';
-import UserCredential = firebase.auth.UserCredential;
-import { catchError, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import ConfirmationResult = firebase.auth.ConfirmationResult;
+import { catchError, switchMap, withLatestFrom } from 'rxjs/operators';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 import { VerificationModalComponent } from '../components/verification/verification-modal/verification-modal.component';
+import { AngularFireAuth } from '@angular/fire/auth';
+import ConfirmationResult = firebase.auth.ConfirmationResult;
+import UserCredential = firebase.auth.UserCredential;
 
 
 @Injectable({
@@ -21,15 +22,15 @@ export class AuthenticateService {
   private userKey = 'USER';
 
 
-  constructor(private windowService: WindowService, private modalService: MDBModalService) {
+  constructor(private windowService: WindowService, private modalService: MDBModalService, private afAuth: AngularFireAuth) {
     this.windowRef = windowService.windowRef;
   }
 
   signUp(phoneNumber: string): Observable<[ConfirmationResult, string]> {
+    this.modalRef = this.modalService.show(VerificationModalComponent);
     return from(
-      firebase.auth().signInWithPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)
+      this.afAuth.signInWithPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)
     ).pipe(
-      tap(() => this.modalRef = this.modalService.show(VerificationModalComponent)),
       withLatestFrom(this.modalRef.content.verificationEmitter as string),
       catchError((error) => {
         this.resetRecaptcha();
@@ -42,25 +43,33 @@ export class AuthenticateService {
     return from(confirmationResult.confirm(verificationCode)).pipe(
       switchMap(() => {
         const credential = firebase.auth.EmailAuthProvider.credential(email, password);
-        return from(firebase.auth().currentUser.linkWithCredential(credential));
+        return this.afAuth.user.pipe(switchMap(user => user.linkWithCredential(credential)));
       })
     );
   }
 
   signIn(email: string, password: string): Observable<UserCredential> {
-    return from(firebase.auth().signInWithEmailAndPassword(email, password));
+    return from(this.afAuth.signInWithEmailAndPassword(email, password));
   }
 
   saveUserToLocalStorage(user: User) {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 
-  logout() {
-    return from(firebase.auth().signOut());
+  removeUserFromLocalStorage() {
+    localStorage.removeItem(this.userKey);
   }
 
-  getFirebaseCurrentUser() {
-    return firebase.auth().currentUser;
+  getUserFromLocalStorage(): User {
+    return JSON.parse(localStorage.getItem(this.userKey));
+  }
+
+  logout() {
+    return from(this.afAuth.signOut());
+  }
+
+  getFirebaseCurrentUser$() {
+    return this.afAuth.user;
   }
 
   private resetRecaptcha() {
