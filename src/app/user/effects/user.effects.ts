@@ -19,9 +19,17 @@ import { UsersService } from '../services/users.service';
 import { User } from '../../../entities/user.model';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable()
 export class UserEffects {
+
+  tryLoadingUser$ = createEffect(() => this.afAuth.user.pipe(
+    switchMap((user) => this.userService.getUserByID(user.uid)),
+    map((user) => loginSuccess({user})),
+    catchError((err) => of(loginFail({message: err})))
+  ));
+
   loginUser$ = createEffect(() => this.actions$.pipe(
     ofType(login),
     switchMap(({email, password}) => this.authService.signIn(email, password)
@@ -34,7 +42,7 @@ export class UserEffects {
   );
 
   saveUserToStorage$ = createEffect(() => this.actions$.pipe(
-    ofType(loginSuccess),
+    ofType(loginSuccess, registerSuccess),
     tap(({user}) => this.authService.saveUserToLocalStorage(user))
     ), {dispatch: false}
   );
@@ -50,8 +58,11 @@ export class UserEffects {
   );
 
   redirectOnLogout$ = createEffect(() => this.actions$.pipe(
-    ofType(logoutSuccess),
-    tap(() => this.router.navigateByUrl('/'))
+    ofType(logoutSuccess, loginFail),
+    tap(() => {
+      this.router.navigateByUrl('/');
+      this.authService.removeUserFromLocalStorage();
+    })
     ), {dispatch: false}
   );
 
@@ -67,10 +78,11 @@ export class UserEffects {
       .pipe(
         switchMap(([confirmationResult, code]) =>
           this.authService.verify(confirmationResult, code, user.email, user.password)),
-        switchMap(() => this.userService.createNewUser({
-          id: this.authService.getFirebaseCurrentUser().uid,
+        switchMap(() => this.authService.getFirebaseCurrentUser$().pipe(
+          switchMap(({uid}) => this.userService.createNewUser({
+          id: uid,
           firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber, email: user.email
-        })),
+        })))),
         map((createdUser) => registerSuccess({user: createdUser})),
         catchError((err) => of(registerFail({message: err})))
       )),
@@ -81,7 +93,8 @@ export class UserEffects {
     private actions$: Actions,
     private authService: AuthenticateService,
     private userService: UsersService,
-    private router: Router
+    private router: Router,
+    public afAuth: AngularFireAuth
   ) {
   }
 }
