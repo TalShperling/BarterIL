@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { WindowService } from '../../services/auth/window.service';
 import firebase from 'firebase';
-import { from, Observable } from 'rxjs';
+import { combineLatest, from, Observable } from 'rxjs';
 import { User } from '../../../entities/user.model';
-import { catchError, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 import { VerificationModalComponent } from '../components/verification/verification-modal/verification-modal.component';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -28,10 +28,10 @@ export class AuthenticateService {
 
   signUp(phoneNumber: string): Observable<[ConfirmationResult, string]> {
     this.modalRef = this.modalService.show(VerificationModalComponent);
-    return from(
-      this.afAuth.signInWithPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)
+    return combineLatest(
+      from(this.afAuth.signInWithPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)),
+      this.modalRef.content.verificationEmitter as string
     ).pipe(
-      withLatestFrom(this.modalRef.content.verificationEmitter as string),
       catchError((error) => {
         this.resetRecaptcha();
         throw error;

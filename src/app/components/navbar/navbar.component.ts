@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.signInUser$ = this.store.pipe(select(getUser));
-    this.userFullName$ = this.signInUser$.pipe(map(user => `${user.firstName} ${user.lastName}`));
+    this.userFullName$ = this.signInUser$.pipe(map(user => user ? `${user.firstName} ${user.lastName}` : 'no name'));
   }
 
   logout(): void {
