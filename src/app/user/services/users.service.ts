@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {User} from '../../../entities/user.model';
 import {Observable} from 'rxjs';
-import {AngularFirestore} from '@angular/fire/firestore';
-import { IFirebaseService } from '../firebase/models/firebase-service.interface';
-import { CollectionType } from '../firebase/models/collection-type.model';
-import { FirebaseService } from '../firebase/firebase.service';
+import { CollectionType } from '../../services/firebase/models/collection-type.model';
+import { FirebaseService } from '../../services/firebase/firebase.service';
+import { IFirebaseService } from '../../services/firebase/models/firebase-service.interface';
 
 @Injectable()
 export class UsersService implements IFirebaseService<User> {

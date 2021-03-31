@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Item } from 'src/entities/item.model';
-import { FirebaseService } from '../firebase/firebase.service';
-import { CollectionType } from '../firebase/models/collection-type.model';
-import { IFirebaseService } from '../firebase/models/firebase-service.interface';
+import { FirebaseService } from '../../services/firebase/firebase.service';
+import { CollectionType } from '../../services/firebase/models/collection-type.model';
+import { IFirebaseService } from '../../services/firebase/models/firebase-service.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +25,5 @@ export class ItemsService implements IFirebaseService<Item>{
   delete$(data: Item): Observable<void> {
     return this.firebaseService.deleteDocument<Item>(this.collectionName, data);
   }
-  
+
 }

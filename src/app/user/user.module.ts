@@ -14,11 +14,14 @@ import {
   InputUtilitiesModule,
   WavesModule
 } from 'angular-bootstrap-md';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { VerificationModalComponent } from './components/verification/verification-modal/verification-modal.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UserEffects } from './effects/user.effects';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
@@ -35,8 +38,12 @@ import { UserEffects } from './effects/user.effects';
     InputUtilitiesModule,
     WavesModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule
   ],
-  providers: [UsersService]
+  providers: [UsersService, MatDatepickerModule]
 })
 export class UserModule { }

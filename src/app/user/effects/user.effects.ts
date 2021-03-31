@@ -25,7 +25,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class UserEffects {
 
   tryLoadingUser$ = createEffect(() => this.afAuth.user.pipe(
-    switchMap((user) => this.userService.getUserByID(user.uid)),
+    switchMap((user) => this.userService.getById$(user.uid)),
     map((user) => loginSuccess({user})),
     catchError((err) => of(loginFail({message: err})))
   ));
@@ -34,7 +34,7 @@ export class UserEffects {
     ofType(login),
     switchMap(({email, password}) => this.authService.signIn(email, password)
       .pipe(
-        switchMap((userCredential: UserCredential) => this.userService.getUserByID(userCredential.user.uid)),
+        switchMap((userCredential: UserCredential) => this.userService.getById$(userCredential.user.uid)),
         map((user: User) => loginSuccess({user})),
         catchError((err) => of(loginFail({message: err})))
       ))
@@ -79,9 +79,9 @@ export class UserEffects {
         switchMap(([confirmationResult, code]) =>
           this.authService.verify(confirmationResult, code, user.email, user.password)),
         switchMap(() => this.authService.getFirebaseCurrentUser$().pipe(
-          switchMap(({uid}) => this.userService.createNewUser({
+          switchMap(({uid}) => this.userService.upsert$({
           id: uid,
-          firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber, email: user.email
+          ...user
         })))),
         map((createdUser) => registerSuccess({user: createdUser})),
         catchError((err) => of(registerFail({message: err})))
