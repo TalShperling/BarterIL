@@ -20,6 +20,7 @@ import { User } from '../../../entities/user.model';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { omit } from 'lodash';
 
 @Injectable()
 export class UserEffects {
@@ -81,7 +82,7 @@ export class UserEffects {
         switchMap(() => this.authService.getFirebaseCurrentUser$().pipe(
           switchMap(({uid}) => this.userService.upsert$({
           id: uid,
-          ...user
+          ...omit(user, 'password')
         })))),
         map((createdUser) => registerSuccess({user: createdUser})),
         catchError((err) => of(registerFail({message: err})))

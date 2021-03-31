@@ -17,7 +17,7 @@ export class VerificationModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificationForm = new FormGroup({
-      verificationCodeForm: new FormControl('', [Validators.required])
+      verificationCodeForm: new FormControl('', [Validators.min(6), Validators.maxLength(6)])
     });
   }
 

@@ -3,7 +3,7 @@ import { WindowService } from '../../services/auth/window.service';
 import firebase from 'firebase';
 import { combineLatest, from, Observable } from 'rxjs';
 import { User } from '../../../entities/user.model';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 import { VerificationModalComponent } from '../components/verification/verification-modal/verification-modal.component';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -41,9 +41,9 @@ export class AuthenticateService {
 
   verify(confirmationResult: ConfirmationResult, verificationCode: string, email: string, password: string): Observable<UserCredential> {
     return from(confirmationResult.confirm(verificationCode)).pipe(
-      switchMap(() => {
+      tap(() => {
         const credential = firebase.auth.EmailAuthProvider.credential(email, password);
-        return this.afAuth.user.pipe(switchMap(user => user.linkWithCredential(credential)));
+        this.afAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential));
       })
     );
   }
