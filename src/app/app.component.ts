@@ -11,12 +11,12 @@ import { isUserLoggedIn, UserState } from './user/reducers/user.reducer';
 })
 export class AppComponent implements OnInit {
   title = 'barteril-client';
-  isUserLoggedIn: Observable<boolean>;
+  isUserLoggedIn$: Observable<boolean>;
 
   constructor(private authenticationService: AuthenticateService, private store: Store<UserState>) {
   }
 
   ngOnInit(): void {
-    this.isUserLoggedIn = this.store.pipe(select(isUserLoggedIn));
+    this.isUserLoggedIn$ = this.store.pipe(select(isUserLoggedIn));
   }
 }

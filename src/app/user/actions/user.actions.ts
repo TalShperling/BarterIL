@@ -2,9 +2,6 @@ import { createAction, props } from '@ngrx/store';
 import { User } from '../../../entities/user.model';
 
 const userActionNames = {
-  LOAD_USER: '[User] Load user from storage',
-  LOAD_USER_SUCCESS: '[User] Load user succeeded',
-  LOAD_USER_FAIL: '[User] Load user failed',
   LOGIN: '[User] Login',
   LOGIN_SUCCESS: '[User] Login succeeded',
   LOGIN_FAIL: '[User] Login failed',
@@ -15,10 +12,6 @@ const userActionNames = {
   REGISTER_SUCCESS: '[User] Register succeeded',
   REGISTER_FAIL: '[User] Register failed',
 };
-
-export const loadUser = createAction(userActionNames.LOAD_USER);
-export const loadUserSuccess = createAction(userActionNames.LOAD_USER_SUCCESS, props<{ user: User }>());
-export const loadUserFail = createAction(userActionNames.LOAD_USER_FAIL);
 
 export const login = createAction(userActionNames.LOGIN, props<{ email: string; password: string; }>());
 export const loginSuccess = createAction(userActionNames.LOGIN_SUCCESS, props<{ user: User }>());
