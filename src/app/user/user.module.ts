@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UsersService } from './services/users.service';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
@@ -42,7 +43,8 @@ import { UsersService } from './services/users.service';
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    FormsModule
+    FormsModule,
+    MatInputModule
   ],
   providers: [UsersService, MatDatepickerModule]
 })
