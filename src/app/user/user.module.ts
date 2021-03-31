@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { userFeatureKey, userReducer } from './reducers/user.reducer';
-import { UsersService } from './services/users.service';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import {
   ButtonsModule,
@@ -22,6 +21,7 @@ import { UserEffects } from './effects/user.effects';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { UsersService } from './services/users.service';
 
 @NgModule({
   declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
