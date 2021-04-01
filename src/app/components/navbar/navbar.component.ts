@@ -19,12 +19,12 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router, private store: Store<UserState>) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.signInUser$ = this.store.pipe(select(getUser));
     this.userFullName$ = this.signInUser$.pipe(map(user => user ? `${user.firstName} ${user.lastName}` : 'no name'));
   }
 
-  logout() {
+  logout(): void {
     this.store.dispatch(logout());
   }
 }

@@ -22,14 +22,14 @@ export class AuthenticateService {
   private userKey = 'USER';
 
 
-  constructor(private windowService: WindowService, private modalService: MDBModalService, private afAuth: AngularFireAuth) {
+  constructor(private windowService: WindowService, private modalService: MDBModalService, private angularFireAuth: AngularFireAuth) {
     this.windowRef = windowService.windowRef;
   }
 
-  signUp(phoneNumber: string): Observable<[ConfirmationResult, string]> {
+  signUp$(phoneNumber: string): Observable<[ConfirmationResult, string]> {
     this.modalRef = this.modalService.show(VerificationModalComponent);
     return combineLatest(
-      from(this.afAuth.signInWithPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)),
+      from(this.angularFireAuth.signInWithPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)),
       this.modalRef.content.verificationEmitter as string
     ).pipe(
       catchError((error) => {
@@ -39,24 +39,24 @@ export class AuthenticateService {
     );
   }
 
-  verify(confirmationResult: ConfirmationResult, verificationCode: string, email: string, password: string): Observable<UserCredential> {
+  verify$(confirmationResult: ConfirmationResult, verificationCode: string, email: string, password: string): Observable<UserCredential> {
     return from(confirmationResult.confirm(verificationCode)).pipe(
       tap(() => {
         const credential = firebase.auth.EmailAuthProvider.credential(email, password);
-        this.afAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential));
+        this.angularFireAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential));
       })
     );
   }
 
-  signIn(email: string, password: string): Observable<UserCredential> {
-    return from(this.afAuth.signInWithEmailAndPassword(email, password));
+  signIn$(email: string, password: string): Observable<UserCredential> {
+    return from(this.angularFireAuth.signInWithEmailAndPassword(email, password));
   }
 
-  saveUserToLocalStorage(user: User) {
+  saveUserToLocalStorage(user: User): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 
-  removeUserFromLocalStorage() {
+  removeUserFromLocalStorage(): void {
     localStorage.removeItem(this.userKey);
   }
 
@@ -64,15 +64,15 @@ export class AuthenticateService {
     return JSON.parse(localStorage.getItem(this.userKey));
   }
 
-  logout() {
-    return from(this.afAuth.signOut());
+  logout$(): Observable<void> {
+    return from(this.angularFireAuth.signOut());
   }
 
-  getFirebaseCurrentUser$() {
-    return this.afAuth.user;
+  getFirebaseCurrentUser$(): Observable<firebase.User> {
+    return this.angularFireAuth.user;
   }
 
-  private resetRecaptcha() {
+  private resetRecaptcha(): void {
     this.windowRef.grecaptcha.reset(this.windowRef.recaptchaWidgetId);
     this.windowRef.recaptchaVerifier.render().then((widgetId) => {
       this.windowRef.grecaptcha.reset(widgetId);

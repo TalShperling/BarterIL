@@ -25,7 +25,7 @@ import { omit } from 'lodash';
 @Injectable()
 export class UserEffects {
 
-  tryLoadingUser$ = createEffect(() => this.afAuth.user.pipe(
+  tryLoadingUser$ = createEffect(() => this.angularFireAuth.user.pipe(
     switchMap((user) => this.userService.getById$(user.uid)),
     map((user) => loginSuccess({user})),
     catchError((err) => of(loginFail({message: err})))
@@ -33,7 +33,7 @@ export class UserEffects {
 
   loginUser$ = createEffect(() => this.actions$.pipe(
     ofType(login),
-    switchMap(({email, password}) => this.authService.signIn(email, password)
+    switchMap(({email, password}) => this.authService.signIn$(email, password)
       .pipe(
         switchMap((userCredential: UserCredential) => this.userService.getById$(userCredential.user.uid)),
         map((user: User) => loginSuccess({user})),
@@ -50,7 +50,7 @@ export class UserEffects {
 
   logoutUser$ = createEffect(() => this.actions$.pipe(
     ofType(logout),
-    switchMap(() => this.authService.logout()
+    switchMap(() => this.authService.logout$()
       .pipe(
         map(() => logoutSuccess()),
         catchError((err) => of(logoutFail({message: err})))
@@ -75,10 +75,10 @@ export class UserEffects {
 
   signUp$ = createEffect(() => this.actions$.pipe(
     ofType(register),
-    switchMap(({user}) => this.authService.signUp(user.phoneNumber)
+    switchMap(({user}) => this.authService.signUp$(user.phoneNumber)
       .pipe(
         switchMap(([confirmationResult, code]) =>
-          this.authService.verify(confirmationResult, code, user.email, user.password)),
+          this.authService.verify$(confirmationResult, code, user.email, user.password)),
         switchMap(() => this.authService.getFirebaseCurrentUser$().pipe(
           switchMap(({uid}) => this.userService.upsert$({
           id: uid,
@@ -95,7 +95,7 @@ export class UserEffects {
     private authService: AuthenticateService,
     private userService: UsersService,
     private router: Router,
-    public afAuth: AngularFireAuth
+    public angularFireAuth: AngularFireAuth
   ) {
   }
 }

@@ -44,7 +44,7 @@ export class SignUpComponent implements OnInit {
     this.initializeRecaptcha();
   }
 
-  private initializeRecaptcha() {
+  private initializeRecaptcha(): void {
     this.windowRef.recaptchaVerifier = new auth.RecaptchaVerifier('recaptcha-container',
       {
         size: 'invisible'
@@ -52,7 +52,7 @@ export class SignUpComponent implements OnInit {
     this.windowRef.recaptchaVerifier.render();
   }
 
-  private noWhitespaceValidator(control: FormControl) {
+  private noWhitespaceValidator(control: FormControl): { whitespace: boolean } {
     const isWhitespace = (control.value || '').trim().length === 0;
     const isValid = !isWhitespace;
     return isValid ? null : {whitespace: true};
@@ -83,27 +83,27 @@ export class SignUpComponent implements OnInit {
     }));
   }
 
-  get firstNameForm() {
+  get firstNameForm(): AbstractControl {
     return this.registerForm.get('firstNameForm');
   }
 
-  get lastNameForm() {
+  get lastNameForm(): AbstractControl {
     return this.registerForm.get('lastNameForm');
   }
 
-  get emailForm() {
+  get emailForm(): AbstractControl {
     return this.registerForm.get('emailForm');
   }
 
-  get passwordForm() {
+  get passwordForm(): AbstractControl {
     return this.registerForm.get('passwordForm');
   }
 
-  get repeatPasswordForm() {
+  get repeatPasswordForm(): AbstractControl {
     return this.registerForm.get('repeatPasswordForm');
   }
 
-  get phoneNumberForm() {
+  get phoneNumberForm(): AbstractControl {
     return this.registerForm.get('phoneNumberForm');
   }
 }

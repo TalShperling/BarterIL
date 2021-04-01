@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { UserState } from '../../reducers/user.reducer';
 import { login } from '../../actions/user.actions';
@@ -17,22 +17,22 @@ export class SignInComponent implements OnInit {
   constructor(private store: Store<UserState>) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginForm = new FormGroup({
       passwordForm: new FormControl(null, [Validators.required, Validators.minLength(8)]),
       emailForm: new FormControl(null, [Validators.required, Validators.email]),
     });
   }
 
-  signIn() {
+  signIn(): void {
     this.store.dispatch(login({ email: this.email, password: this.password }));
   }
 
-  get emailForm() {
+  get emailForm(): AbstractControl {
     return this.loginForm.get('emailForm');
   }
 
-  get passwordForm() {
+  get passwordForm(): AbstractControl {
     return this.loginForm.get('passwordForm');
   }
 }
