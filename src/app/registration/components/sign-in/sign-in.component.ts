@@ -15,7 +15,7 @@ import {AlertsService} from '../../../services/alerts/alerts.service';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
-  private errorAlert: string = 'The username or password is incorrect';
+  private invalidInputMessage: string = 'The email or password is incorrect';
   loginForm: FormGroup;
   email: string;
   password: string;
@@ -40,7 +40,7 @@ export class SignInComponent implements OnInit {
         this.authenticateService.saveUser(user);
         this.router.navigateByUrl('home');
       }, () => {
-        this.alertsService.showErrorAlert(this.errorAlert);
+        this.alertsService.showErrorAlert(this.invalidInputMessage);
       });
   }
 
