@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import firebase from 'firebase';
-import { AuthenticateService } from '../../services/authentication.service';
-import { WindowService } from '../../../services/auth/window.service';
+import {AuthenticateService} from '../../services/authentication.service';
+import {WindowService} from '../../../services/auth/window.service';
+import {Store} from '@ngrx/store';
+import {UserState} from '../../reducers/user.reducer';
+import {register, registerFail} from '../../actions/user.actions';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {Actions, ofType} from '@ngrx/effects';
+import {AlertsService} from '../../../services/alerts/alerts.service';
 import auth = firebase.auth;
-import { Store } from '@ngrx/store';
-import { UserState } from '../../reducers/user.reducer';
-import { register } from '../../actions/user.actions';
 
 
 @Component({
@@ -14,7 +18,9 @@ import { register } from '../../actions/user.actions';
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnDestroy {
+  private invalidDetailsMessage: string = 'Some of the details you entered are incorrect. Try again';
+  notifier$ = new Subject();
   registerForm: FormGroup;
   firstname: string;
   lastname: string;
@@ -26,7 +32,9 @@ export class SignUpComponent implements OnInit {
 
   constructor(private authenticateService: AuthenticateService,
               private windowService: WindowService,
-              private store: Store<UserState>) {
+              private store: Store<UserState>,
+              private actions$: Actions,
+              private alertsService: AlertsService) {
     this.windowRef = windowService.windowRef;
   }
 
@@ -40,6 +48,9 @@ export class SignUpComponent implements OnInit {
       emailForm: new FormControl(null, [Validators.required, Validators.email]),
       phoneNumberForm: new FormControl(null, [Validators.required, Validators.minLength(10)])
     });
+
+    this.actions$.pipe(takeUntil(this.notifier$), ofType(registerFail))
+      .subscribe(() => this.alertsService.showErrorAlert(this.invalidDetailsMessage));
 
     this.initializeRecaptcha();
   }
@@ -105,5 +116,10 @@ export class SignUpComponent implements OnInit {
 
   get phoneNumberForm(): AbstractControl {
     return this.registerForm.get('phoneNumberForm');
+  }
+
+  ngOnDestroy(): void {
+    this.notifier$.next();
+    this.notifier$.complete();
   }
 }
