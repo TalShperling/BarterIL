@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MDBModalRef} from 'angular-bootstrap-md';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-verification-modal',
@@ -8,7 +8,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./verification-modal.component.scss']
 })
 export class VerificationModalComponent implements OnInit {
-  @Output() verificationEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() verificationEmitter: EventEmitter<string> = new EventEmitter<string>();
   verificationForm: FormGroup;
   verificationCode: string;
 
@@ -17,15 +17,15 @@ export class VerificationModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificationForm = new FormGroup({
-      verificationCodeForm: new FormControl('', [Validators.required])
+      verificationCodeForm: new FormControl('', [Validators.min(6), Validators.maxLength(6)])
     });
   }
 
-  get verificationCodeForm() {
+  get verificationCodeForm(): AbstractControl {
     return this.verificationForm.get('verificationCodeForm');
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.verificationEmitter.emit(this.verificationCode);
     this.modalRef.hide();
   }

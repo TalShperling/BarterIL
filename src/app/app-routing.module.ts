@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {SignUpComponent} from './registration/components/sign-up/sign-up.component';
-import {SignInComponent} from './registration/components/sign-in/sign-in.component';
-import {HomeComponent} from './home/components/home/home.component';
-import {AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import { SignInComponent } from './user/components/sign-in/sign-in.component';
+import { HomeComponent } from './home/components/home/home.component';
+import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { SignUpComponent } from './user/components/sign-up/sign-up.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -33,4 +33,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
