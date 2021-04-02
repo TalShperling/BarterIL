@@ -23,6 +23,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UsersService } from './services/users.service';
 import { MatInputModule } from '@angular/material/input';
+import {AlertsService} from '../services/alerts/alerts.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
@@ -44,8 +46,9 @@ import { MatInputModule } from '@angular/material/input';
     MatDatepickerModule,
     MatNativeDateModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSnackBarModule
   ],
-  providers: [UsersService, MatDatepickerModule]
+  providers: [UsersService, MatDatepickerModule, AlertsService]
 })
 export class UserModule { }
