@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { UserState } from '../../reducers/user.reducer';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {UserState} from '../../reducers/user.reducer';
 import {login, loginFail} from '../../actions/user.actions';
-import {Subject} from 'rxjs';
 import {AlertsService} from '../../../services/alerts/alerts.service';
 import {Actions, ofType} from '@ngrx/effects';
 import {takeUntil} from 'rxjs/operators';
+import {DestroyerService} from '../../../services/destroyer.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,14 +15,14 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class SignInComponent implements OnInit, OnDestroy {
   private invalidInputMessage: string = 'The email or password is incorrect';
-  notifier$ = new Subject();
   loginForm: FormGroup;
   email: string;
   password: string;
 
   constructor(private store: Store<UserState>,
               private alertsService: AlertsService,
-              private actions$: Actions) {
+              private actions$: Actions,
+              private destroyerService: DestroyerService) {
   }
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       emailForm: new FormControl(null, [Validators.required, Validators.email]),
     });
 
-    this.actions$.pipe(takeUntil(this.notifier$), ofType(loginFail))
+    this.actions$.pipe(takeUntil(this.destroyerService.getNotifier$()), ofType(loginFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.invalidInputMessage));
   }
 
@@ -48,7 +48,6 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notifier$.next();
-    this.notifier$.complete();
+    this.destroyerService.destroy();
   }
 }

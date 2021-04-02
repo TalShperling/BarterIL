@@ -6,10 +6,10 @@ import {WindowService} from '../../../services/auth/window.service';
 import {Store} from '@ngrx/store';
 import {UserState} from '../../reducers/user.reducer';
 import {register, registerFail} from '../../actions/user.actions';
-import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {Actions, ofType} from '@ngrx/effects';
 import {AlertsService} from '../../../services/alerts/alerts.service';
+import {DestroyerService} from '../../../services/destroyer.service';
 import auth = firebase.auth;
 
 
@@ -20,7 +20,6 @@ import auth = firebase.auth;
 })
 export class SignUpComponent implements OnInit, OnDestroy {
   private invalidDetailsMessage: string = 'Some of the details you entered are incorrect. Try again';
-  notifier$ = new Subject();
   registerForm: FormGroup;
   firstname: string;
   lastname: string;
@@ -34,7 +33,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
               private windowService: WindowService,
               private store: Store<UserState>,
               private actions$: Actions,
-              private alertsService: AlertsService) {
+              private alertsService: AlertsService,
+              private destroyerService: DestroyerService) {
     this.windowRef = windowService.windowRef;
   }
 
@@ -49,7 +49,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
       phoneNumberForm: new FormControl(null, [Validators.required, Validators.minLength(10)])
     });
 
-    this.actions$.pipe(takeUntil(this.notifier$), ofType(registerFail))
+    this.actions$.pipe(takeUntil(this.destroyerService.getNotifier$()), ofType(registerFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.invalidDetailsMessage));
 
     this.initializeRecaptcha();
@@ -119,7 +119,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notifier$.next();
-    this.notifier$.complete();
+    this.destroyerService.destroy();
   }
 }
