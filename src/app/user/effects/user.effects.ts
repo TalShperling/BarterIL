@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import {Injectable} from '@angular/core';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {
   login,
   loginFail,
@@ -9,18 +9,18 @@ import {
   logoutSuccess,
   register,
   registerFail,
-  registerSuccess
+  registerSuccess, update, updateFail, updateSuccess, updateWithoutPhone
 } from '../actions/user.actions';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { AuthenticateService } from '../services/authentication.service';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {AuthenticateService} from '../services/authentication.service';
 import firebase from 'firebase';
 import UserCredential = firebase.auth.UserCredential;
-import { UsersService } from '../services/users.service';
-import { User } from '../../../entities/user.model';
-import { of } from 'rxjs';
-import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { omit } from 'lodash';
+import {UsersService} from '../services/users.service';
+import {User} from '../../../entities/user.model';
+import {of} from 'rxjs';
+import {Router} from '@angular/router';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {omit} from 'lodash';
 
 @Injectable()
 export class UserEffects {
@@ -81,12 +81,38 @@ export class UserEffects {
           this.authService.verify$(confirmationResult, code, user.email, user.password)),
         switchMap(() => this.authService.getFirebaseCurrentUser$().pipe(
           switchMap(({uid}) => this.userService.upsert$({
-          id: uid,
-          ...omit(user, 'password')
-        })))),
+            id: uid,
+            ...omit(user, 'password')
+          })))),
         map((createdUser) => registerSuccess({user: createdUser})),
         catchError((err) => of(registerFail({message: err})))
       )),
+    )
+  );
+
+  updateUserWithoutPhone$ = createEffect(() => this.actions$.pipe(
+    ofType(updateWithoutPhone),
+    switchMap(({user}) => this.authService.updateUserEmail(user.email)
+      .pipe(
+        switchMap(() => this.userService.update$(user)),
+        map((updatedUser: User) => updateSuccess({user: updatedUser})),
+        catchError((err) => of(updateFail({message: err})))
+      ))
+    )
+  );
+
+  updateUserWithPhone$ = createEffect(() => this.actions$.pipe(
+    ofType(update),
+    switchMap(({user}) => this.authService.updateUserEmail(user.email)
+      .pipe(
+        switchMap(() => this.authService.verifyPhoneNumberAndCode(user.phoneNumber)
+          .pipe(
+            switchMap(([confirmationResult, code]) =>
+              this.authService.updateUserPhoneNumber(confirmationResult, code)))),
+        switchMap(() => this.userService.update$(user)),
+        map((updatedUser: User) => updateSuccess({user: updatedUser})),
+        catchError((err) => of(updateFail({message: err})))
+      ))
     )
   );
 
