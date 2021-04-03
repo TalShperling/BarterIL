@@ -1,6 +1,6 @@
 <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark special-color fixed-top" [containerInside]="false"
             style="direction: ltr">
-  <mdb-navbar-brand><a class="navbar-brand text-white">BarterIL</a></mdb-navbar-brand>
+  <mdb-navbar-brand><a class="navbar-brand text-white" routerLink="/">BarterIL</a></mdb-navbar-brand>
   <links>
     <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item">
@@ -28,7 +28,7 @@
               {{ userFullName$ | async }}
             </div>
             <div class="dropdown-menu dropdown-menu-right dropdown-primary mt-2 text-center">
-              <a class="dropdown-item">Info</a>
+              <a class="dropdown-item" routerLink="user-info">Info</a>
               <a class="dropdown-item" (click)="logout()">Logout</a>
             </div>
           </div>
