@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { WindowService } from '../../services/auth/window.service';
+import {Injectable} from '@angular/core';
+import {WindowService} from '../../services/auth/window.service';
 import firebase from 'firebase';
-import { combineLatest, from, Observable } from 'rxjs';
-import { User } from '../../../entities/user.model';
-import { catchError, take, tap } from 'rxjs/operators';
-import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
-import { VerificationModalComponent } from '../components/verification/verification-modal/verification-modal.component';
-import { AngularFireAuth } from '@angular/fire/auth';
+import {combineLatest, from, Observable} from 'rxjs';
+import {User} from '../../../entities/user.model';
+import {catchError, take, tap} from 'rxjs/operators';
+import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
+import {VerificationModalComponent} from '../components/verification/verification-modal/verification-modal.component';
+import {AngularFireAuth} from '@angular/fire/auth';
 import ConfirmationResult = firebase.auth.ConfirmationResult;
 import UserCredential = firebase.auth.UserCredential;
 
@@ -70,6 +70,30 @@ export class AuthenticateService {
 
   getFirebaseCurrentUser$(): Observable<firebase.User> {
     return this.angularFireAuth.user;
+  }
+
+  updateUserEmail(email: string): Observable<void> {
+    return from(firebase.auth().currentUser.updateEmail(email));
+  }
+
+  verifyPhoneNumberAndCode(phoneNumber: string): Observable<[string, string]> {
+    const provider = new firebase.auth.PhoneAuthProvider();
+    this.modalRef = this.modalService.show(VerificationModalComponent);
+
+    return combineLatest(
+      from(provider.verifyPhoneNumber(this.countryDialogCode + phoneNumber, this.windowRef.recaptchaVerifier)),
+      this.modalRef.content.verificationEmitter as string
+    ).pipe(
+      catchError((error) => {
+        this.resetRecaptcha();
+        throw error;
+      })
+    );
+  }
+
+  updateUserPhoneNumber(confirmationResult: string, verificationCode: string): Observable<void> {
+    const phoneCredential = firebase.auth.PhoneAuthProvider.credential(confirmationResult, verificationCode);
+    return from(firebase.auth().currentUser.updatePhoneNumber(phoneCredential));
   }
 
   private resetRecaptcha(): void {
