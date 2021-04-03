@@ -33,6 +33,12 @@ export abstract class FirebaseService {
     });
   }
 
+  updateDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<T> {
+    return new Observable<T>(observer => {
+      this.firestore.doc<T>(`${collection}/${data.id}`).update(data).then(() => observer.next(data));
+    });
+  }
+
   deleteDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
     return from(this.firestore.doc(`${collection}/${data.id}`).delete());
   }
