@@ -23,9 +23,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UsersService } from './services/users.service';
 import { MatInputModule } from '@angular/material/input';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 @NgModule({
-  declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
+  declarations: [SignInComponent, SignUpComponent, VerificationModalComponent, UserInfoComponent],
   exports: [SignUpComponent],
   imports: [
     CommonModule,

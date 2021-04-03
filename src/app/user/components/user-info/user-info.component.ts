@@ -3,7 +3,12 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
 import {Store} from '@ngrx/store';
 import {getUser, UserState} from '../../reducers/user.reducer';
 import {User} from '../../../../entities/user.model';
-import {update} from '../../actions/user.actions';
+import {update, updateWithoutPhone} from '../../actions/user.actions';
+import firebase from 'firebase';
+import {AuthenticateService} from '../../services/authentication.service';
+import {WindowService} from '../../../services/auth/window.service';
+import auth = firebase.auth;
+
 
 @Component({
   selector: 'app-user-info',
@@ -14,8 +19,12 @@ export class UserInfoComponent implements OnInit {
   editDetailsForm: FormGroup;
   birthday: Date;
   user: User = null;
+  windowRef: any;
 
-  constructor(private store: Store<UserState>) {
+  constructor(private store: Store<UserState>,
+              private authenticateService: AuthenticateService,
+              private windowService: WindowService) {
+    this.windowRef = windowService.windowRef;
   }
 
   ngOnInit(): void {
@@ -27,24 +36,35 @@ export class UserInfoComponent implements OnInit {
     });
 
     this.initializeUserDetails();
+    this.initializeRecaptcha();
   }
+
 
   initializeUserDetails(): void {
     this.store.select(getUser).subscribe(user => {
-      this.user = {...user};
-      this.editDetailsForm.patchValue({firstNameForm: user.firstName});
-      this.editDetailsForm.patchValue({lastNameForm: user.lastName});
-      this.editDetailsForm.patchValue({emailForm: user.email});
-      this.editDetailsForm.patchValue({phoneNumberForm: user.phoneNumber});
-      this.birthday = user.birthday.toDate();
+      if (!!user) {
+        this.user = {...user};
+        this.editDetailsForm.patchValue({firstNameForm: user.firstName});
+        this.editDetailsForm.patchValue({lastNameForm: user.lastName});
+        this.editDetailsForm.patchValue({emailForm: user.email});
+        this.editDetailsForm.patchValue({phoneNumberForm: user.phoneNumber});
+        this.birthday = user.birthday.toDate();
+      }
     });
   }
 
   saveDetails(): void {
     this.user.firstName = this.firstNameForm.value;
     this.user.lastName = this.lastNameForm.value;
+    this.user.email = this.emailForm.value;
+    this.user.birthday = firebase.firestore.Timestamp.fromDate(this.birthday);
 
-    this.store.dispatch(update({user: this.user}));
+    if (this.user.phoneNumber === this.phoneNumberForm.value) {
+      this.store.dispatch(updateWithoutPhone({user: Object.assign({}, this.user)}));
+    } else {
+      this.user.phoneNumber = this.phoneNumberForm.value;
+      this.store.dispatch(update({user: Object.assign({}, this.user)}));
+    }
   }
 
   get firstNameForm(): AbstractControl {
@@ -71,5 +91,13 @@ export class UserInfoComponent implements OnInit {
     const isWhitespace = (control.value || '').trim().length === 0;
     const isValid = !isWhitespace;
     return isValid ? null : {whitespace: true};
+  }
+
+  private initializeRecaptcha(): void {
+    this.windowRef.recaptchaVerifier = new auth.RecaptchaVerifier('info-recaptcha-container',
+      {
+        size: 'invisible'
+      });
+    this.windowRef.recaptchaVerifier.render();
   }
 }
