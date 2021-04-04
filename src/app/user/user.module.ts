@@ -25,7 +25,6 @@ import {UsersService} from './services/users.service';
 import {MatInputModule} from '@angular/material/input';
 import {AlertsService} from '../services/alerts/alerts.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {DestroyerService} from '../services/destroyer.service';
 
 @NgModule({
   declarations: [SignInComponent, SignUpComponent, VerificationModalComponent],
@@ -53,8 +52,7 @@ import {DestroyerService} from '../services/destroyer.service';
   providers: [
     UsersService,
     MatDatepickerModule,
-    AlertsService,
-    DestroyerService
+    AlertsService
   ]
 })
 export class UserModule {

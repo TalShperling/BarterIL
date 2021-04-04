@@ -9,8 +9,8 @@ import {register, registerFail} from '../../actions/user.actions';
 import {takeUntil} from 'rxjs/operators';
 import {Actions, ofType} from '@ngrx/effects';
 import {AlertsService} from '../../../services/alerts/alerts.service';
-import {DestroyerService} from '../../../services/destroyer.service';
 import auth = firebase.auth;
+import {ObservableListener} from '../../../components/observable-listener';
 
 
 @Component({
@@ -18,7 +18,7 @@ import auth = firebase.auth;
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent implements OnInit, OnDestroy {
+export class SignUpComponent extends ObservableListener implements OnInit {
   private invalidDetailsMessage: string = 'Some of the details you entered are incorrect. Try again';
   registerForm: FormGroup;
   firstname: string;
@@ -33,8 +33,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
               private windowService: WindowService,
               private store: Store<UserState>,
               private actions$: Actions,
-              private alertsService: AlertsService,
-              private destroyerService: DestroyerService) {
+              private alertsService: AlertsService) {
+    super();
     this.windowRef = windowService.windowRef;
   }
 
@@ -49,7 +49,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
       phoneNumberForm: new FormControl(null, [Validators.required, Validators.minLength(10)])
     });
 
-    this.actions$.pipe(takeUntil(this.destroyerService.getNotifier$()), ofType(registerFail))
+    this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(registerFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.invalidDetailsMessage));
 
     this.initializeRecaptcha();
@@ -116,9 +116,5 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   get phoneNumberForm(): AbstractControl {
     return this.registerForm.get('phoneNumberForm');
-  }
-
-  ngOnDestroy(): void {
-    this.destroyerService.destroy();
   }
 }
