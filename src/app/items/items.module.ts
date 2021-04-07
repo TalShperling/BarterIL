@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProtuctComponent } from './components/protuct/protuct.component';
+import { ProductComponent } from './components/product/product.component';
 import { ItemsService } from './services/items.service';
 
 @NgModule({
-  declarations: [ProtuctComponent],
+  declarations: [ProductComponent],
   imports: [
     CommonModule
   ],
