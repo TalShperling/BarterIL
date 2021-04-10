@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { WindowService } from '../../services/auth/window.service';
+import {Injectable} from '@angular/core';
+import {WindowService} from '../../services/auth/window.service';
 import firebase from 'firebase';
-import { combineLatest, from, Observable } from 'rxjs';
-import { User } from '../../../entities/user.model';
-import { catchError, take, tap } from 'rxjs/operators';
-import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
-import { VerificationModalComponent } from '../components/verification/verification-modal/verification-modal.component';
-import { AngularFireAuth } from '@angular/fire/auth';
+import {combineLatest, from, Observable} from 'rxjs';
+import {User} from '../../../entities/user.model';
+import {catchError, take, tap} from 'rxjs/operators';
+import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
+import {VerificationModalComponent} from '../components/verification/verification-modal/verification-modal.component';
+import {AngularFireAuth} from '@angular/fire/auth';
 import ConfirmationResult = firebase.auth.ConfirmationResult;
 import UserCredential = firebase.auth.UserCredential;
 
@@ -43,7 +43,12 @@ export class AuthenticateService {
     return from(confirmationResult.confirm(verificationCode)).pipe(
       tap(() => {
         const credential = firebase.auth.EmailAuthProvider.credential(email, password);
-        this.angularFireAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential));
+        this.angularFireAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential).catch(error => {
+          throw error;
+        }));
+      }),
+      catchError(error => {
+        throw error;
       })
     );
   }
