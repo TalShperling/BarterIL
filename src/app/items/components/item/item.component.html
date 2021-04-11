@@ -1,12 +1,21 @@
-<mdb-card>
-    <mdb-card-body>
-        <mdb-card-title>
-            <h4>{{item?.name}}</h4>
-        </mdb-card-title>
-        <mdb-card-text>{{item?.description}}</mdb-card-text>
-        <div class="flex-row">
-            <a class="card-link">Card link</a>
-            <a class="card-link">Another link</a>
-        </div>
-    </mdb-card-body>
-</mdb-card>
+<div>
+    <mdb-card>
+        <mdb-card-body class="container">
+            <div class="row">
+                <img class="col-sm-6" [src]=item.pictureUrls[0] />
+                <div class="col-sm-6">
+                    <mdb-card-title>
+                        <h4>{{item?.name}}</h4>
+                    </mdb-card-title>
+                    <mdb-card-text>{{item?.description}}</mdb-card-text>
+                    <div class="container">
+                        <div class="row">
+                            <a class="col-sm-6">Card link</a>
+                            <a class="col-sm-6">Another link</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mdb-card-body>
+    </mdb-card>
+</div>

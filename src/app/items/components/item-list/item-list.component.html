@@ -1,3 +1,15 @@
-<div>
-    <app-item *ngFor="let item of items" [item]="item"></app-item>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2">
+            <p>Recommended</p>
+            <!-- <div class="jumbotron"> -->
+                <div class="row">
+                    <app-item class="col-sm-12 itemClass" *ngFor="let item of items" [item]="item"></app-item>
+                </div>
+            <!-- </div> -->
+        </div>
+        <div class="col-sm-10">
+            <app-item class="col-sm-5 itemClass" *ngFor="let item of items" [item]="item"></app-item>
+        </div>
+    </div>
 </div>
