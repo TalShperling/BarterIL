@@ -3,19 +3,22 @@
         <mdb-card-body class="container">
             <div class="row">
                 <img class="col-sm-6" [src]=item.pictureUrls[0] />
-                <div class="col-sm-6">
-                    <mdb-card-title>
-                        <h4>{{item?.name}}</h4>
-                    </mdb-card-title>
-                    <mdb-card-text>{{item?.description}}</mdb-card-text>
-                    <div class="container">
-                        <div class="row">
-                            <a class="col-sm-6">Card link</a>
-                            <a class="col-sm-6">Another link</a>
+                <div class="col-sm-6 d-flex flex-column justify-content-between">
+                        <div class="container">
+                            <mdb-card-title>
+                                <h4>{{item?.name}}</h4>
+                            </mdb-card-title>
+                            <mdb-card-text>{{item?.description}}</mdb-card-text>
+                        </div>
+                        <div class="container">
+                            <div class="d-flex justify-content-between">
+                                <button (click)="editItem()" type="button" class="btn btn-primary">Edit</button>
+                                <button (click)="viewItem()" type="button" class="btn btn-info" >View</button>
+                                <button (click)="deleteItem()" type="button" class="btn btn-danger" >Delete</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </mdb-card-body>
     </mdb-card>
 </div>

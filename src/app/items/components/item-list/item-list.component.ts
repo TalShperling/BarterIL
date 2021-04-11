@@ -17,4 +17,18 @@ export class ItemListComponent implements OnInit {
     });
   }
 
+  deleteItem(itemId: string) {
+    this.itemsService.delete$(this.items.find(item => item.id === itemId)).subscribe(()=> {
+      alert("item deleted successfully!");
+    });
+  }
+
+  viewItem(itemId: string) {
+    alert(`showing item no.${itemId}`);
+  }
+
+  editItem(itemId: string) {
+    alert(`opening edit dialog for item no.${itemId}`)
+  }
+
 }

@@ -1,14 +1,20 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-2">
-            <p>Recommended</p>
-            <!-- <div class="jumbotron"> -->
+        <div class="col-sm-3">
+            <h1 class="h1">Recommended</h1>
+            <div class="jumbotron">
                 <div class="row">
-                    <app-item class="col-sm-12 itemClass" *ngFor="let item of items" [item]="item"></app-item>
+                    <app-item class="col-sm-12 itemClass" 
+                        *ngFor="let item of items" 
+                        [item]="item" 
+                        (onDeleteItem)="deleteItem($event)"
+                        (onEditItem)="editItem($event)"
+                        (onViewItem)="viewItem($event)">
+                    </app-item>
                 </div>
-            <!-- </div> -->
+            </div>
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm-9">
             <app-item class="col-sm-5 itemClass" *ngFor="let item of items" [item]="item"></app-item>
         </div>
     </div>
