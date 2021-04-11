@@ -24,7 +24,6 @@ import { omit } from 'lodash';
 
 @Injectable()
 export class UserEffects {
-
   tryLoadingUser$ = createEffect(() => this.angularFireAuth.user.pipe(
     switchMap((user) => this.userService.getById$(user.uid)),
     map((user) => loginSuccess({user})),

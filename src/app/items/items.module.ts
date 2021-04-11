@@ -1,12 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductComponent } from './components/product/product.component';
+import { ItemComponent } from './components/item/item.component';
 import { ItemsService } from './services/items.service';
+import {
+  CardsModule,
+} from 'angular-bootstrap-md';
+import { ItemListComponent } from './components/item-list/item-list.component';
 
 @NgModule({
-  declarations: [ProductComponent],
+  declarations: [ItemComponent, ItemListComponent],
+  exports: [ItemComponent, ItemListComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    CardsModule,
   ],
   providers: [ItemsService]
 })
