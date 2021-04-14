@@ -25,6 +25,7 @@ import {UsersService} from './services/users.service';
 import {MatInputModule} from '@angular/material/input';
 import {AlertsService} from '../services/alerts/alerts.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {UserInfoComponent} from './components/user-info/user-info.component';
 
 @NgModule({
   declarations: [SignInComponent, SignUpComponent, VerificationModalComponent, UserInfoComponent],

@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { CollectionType } from './models/collection-type.model';
-import { AngularFirestore, DocumentChangeAction, QuerySnapshot } from '@angular/fire/firestore';
-import { ObserversModule } from '@angular/cdk/observers';
+import {Injectable} from '@angular/core';
+import {from, Observable} from 'rxjs';
+import {CollectionType} from './models/collection-type.model';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +29,6 @@ export abstract class FirebaseService {
         data.id = this.firestore.createId();
       }
       this.firestore.doc<T>(`${collection}/${data.id}`).set(data).then(() => observer.next(data));
-    });
-  }
-
-  updateDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<T> {
-    return new Observable<T>(observer => {
-      this.firestore.doc<T>(`${collection}/${data.id}`).update(data).then(() => observer.next(data));
     });
   }
 

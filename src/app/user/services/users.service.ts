@@ -27,9 +27,5 @@ export class UsersService implements IFirebaseService<User> {
   delete$(data: User): Observable<void> {
     return this.firebaseService.deleteDocument<User>(this.collectionName, data);
   }
-
-  update$(data: User): Observable<User> {
-    return this.firebaseService.updateDocument<User>(this.collectionName, data);
-  }
 }
 

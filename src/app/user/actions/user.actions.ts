@@ -11,8 +11,8 @@ const userActionNames = {
   REGISTER: '[User] Register',
   REGISTER_SUCCESS: '[User] Register succeeded',
   REGISTER_FAIL: '[User] Register failed',
-  UPDATE: '[User] update',
-  UPDATE_WITHOUT_PHONE: '[User] update without phone',
+  UPDATE: '[User] Update',
+  UPDATE_WITHOUT_PHONE: '[User] Update without phone',
   UPDATE_SUCCESS: '[User] Update succeeded',
   UPDATE_FAIL: '[User] Update failed',
 };

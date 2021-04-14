@@ -94,7 +94,7 @@ export class UserEffects {
     ofType(updateWithoutPhone),
     switchMap(({user}) => this.authService.updateUserEmail(user.email)
       .pipe(
-        switchMap(() => this.userService.update$(user)),
+        switchMap(() => this.userService.upsert$(user)),
         map((updatedUser: User) => updateSuccess({user: updatedUser})),
         catchError((err) => of(updateFail({message: err})))
       ))
@@ -109,7 +109,7 @@ export class UserEffects {
           .pipe(
             switchMap(([confirmationResult, code]) =>
               this.authService.updateUserPhoneNumber(confirmationResult, code)))),
-        switchMap(() => this.userService.update$(user)),
+        switchMap(() => this.userService.upsert$(user)),
         map((updatedUser: User) => updateSuccess({user: updatedUser})),
         catchError((err) => of(updateFail({message: err})))
       ))
