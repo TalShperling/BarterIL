@@ -4,3 +4,22 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.notify-error{
+  color: #ffffff !important;
+  background-color: #f55858 !important;
+  border-color: #f55858 !important;
+  .mat-simple-snackbar-action {
+    color: #ffffff !important;
+  }
+}
+
+.notify-success{
+  color: #155724 !important;
+  background-color: #d4edda !important;
+  border-color: #c3e6cb !important;
+  .mat-simple-snackbar-action {
+    color: #155724 !important;
+  }
+}

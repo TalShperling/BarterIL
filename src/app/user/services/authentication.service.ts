@@ -43,7 +43,12 @@ export class AuthenticateService {
     return from(confirmationResult.confirm(verificationCode)).pipe(
       tap(() => {
         const credential = firebase.auth.EmailAuthProvider.credential(email, password);
-        this.angularFireAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential));
+        this.angularFireAuth.user.pipe(take(1)).subscribe(user => user.linkWithCredential(credential).catch(error => {
+          throw error;
+        }));
+      }),
+      catchError(error => {
+        throw error;
       })
     );
   }
