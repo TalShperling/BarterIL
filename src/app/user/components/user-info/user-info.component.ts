@@ -8,6 +8,8 @@ import firebase from 'firebase';
 import {AuthenticateService} from '../../services/authentication.service';
 import {WindowService} from '../../../services/auth/window.service';
 import auth = firebase.auth;
+import {ObservableListener} from '../../../components/observable-listener';
+import {takeUntil} from 'rxjs/operators';
 
 
 @Component({
@@ -15,7 +17,7 @@ import auth = firebase.auth;
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss']
 })
-export class UserInfoComponent implements OnInit {
+export class UserInfoComponent extends ObservableListener implements OnInit {
   editDetailsForm: FormGroup;
   birthday: Date;
   user: User = null;
@@ -24,6 +26,7 @@ export class UserInfoComponent implements OnInit {
   constructor(private store: Store<UserState>,
               private authenticateService: AuthenticateService,
               private windowService: WindowService) {
+    super();
     this.windowRef = windowService.windowRef;
   }
 
@@ -41,16 +44,17 @@ export class UserInfoComponent implements OnInit {
 
 
   initializeUserDetails(): void {
-    this.store.select(getUser).subscribe(user => {
-      if (!!user) {
-        this.user = {...user};
-        this.editDetailsForm.patchValue({firstNameForm: user.firstName});
-        this.editDetailsForm.patchValue({lastNameForm: user.lastName});
-        this.editDetailsForm.patchValue({emailForm: user.email});
-        this.editDetailsForm.patchValue({phoneNumberForm: user.phoneNumber});
-        this.birthday = user.birthday.toDate();
-      }
-    });
+    this.store.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy))
+      .subscribe(user => {
+        if (!!user) {
+          this.user = {...user};
+          this.editDetailsForm.patchValue({firstNameForm: user.firstName});
+          this.editDetailsForm.patchValue({lastNameForm: user.lastName});
+          this.editDetailsForm.patchValue({emailForm: user.email});
+          this.editDetailsForm.patchValue({phoneNumberForm: user.phoneNumber});
+          this.birthday = user.birthday.toDate();
+        }
+      });
   }
 
   saveDetails(): void {
@@ -60,10 +64,10 @@ export class UserInfoComponent implements OnInit {
     this.user.birthday = firebase.firestore.Timestamp.fromDate(this.birthday);
 
     if (this.user.phoneNumber === this.phoneNumberForm.value) {
-      this.store.dispatch(updateWithoutPhone({user: Object.assign({}, this.user)}));
+      this.store.dispatch(updateWithoutPhone({user: {...this.user}}));
     } else {
       this.user.phoneNumber = this.phoneNumberForm.value;
-      this.store.dispatch(update({user: Object.assign({}, this.user)}));
+      this.store.dispatch(update({user: {...this.user}}));
     }
   }
 
