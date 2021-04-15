@@ -68,7 +68,7 @@ export class UserEffects {
   );
 
   redirectOnLogin$ = createEffect(() => this.actions$.pipe(
-    ofType(registerSuccess, loginSuccess),
+    ofType(registerSuccess, loginSuccess, updateSuccess),
     tap(() => this.router.navigateByUrl('home'))
     ), {dispatch: false}
   );
@@ -103,12 +103,10 @@ export class UserEffects {
 
   updateUserWithPhone$ = createEffect(() => this.actions$.pipe(
     ofType(update),
-    switchMap(({user}) => this.authService.updateUserEmail(user.email)
-      .pipe(
-        switchMap(() => this.authService.verifyPhoneNumberAndCode(user.phoneNumber)
-          .pipe(
-            switchMap(([confirmationResult, code]) =>
-              this.authService.updateUserPhoneNumber(confirmationResult, code)))),
+    switchMap(({user}) => this.authService.verifyPhoneNumberAndCode(user.phoneNumber)
+      .pipe(switchMap(([confirmationResult, code]) =>
+        this.authService.updateUserPhoneNumber(confirmationResult, code)
+          .pipe(switchMap(() => this.authService.updateUserEmailWithAuthentication(confirmationResult, code, user.email)))),
         switchMap(() => this.userService.upsert$(user)),
         map((updatedUser: User) => updateSuccess({user: updatedUser})),
         catchError((err) => of(updateFail({message: err})))

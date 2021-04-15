@@ -3,7 +3,7 @@ import {WindowService} from '../../services/auth/window.service';
 import firebase from 'firebase';
 import {combineLatest, from, Observable} from 'rxjs';
 import {User} from '../../../entities/user.model';
-import {catchError, take, tap} from 'rxjs/operators';
+import {catchError, first, mergeMap, take, tap} from 'rxjs/operators';
 import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
 import {VerificationModalComponent} from '../components/verification/verification-modal/verification-modal.component';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -78,7 +78,22 @@ export class AuthenticateService {
   }
 
   updateUserEmail(email: string): Observable<void> {
-    return from(firebase.auth().currentUser.updateEmail(email));
+    return this.getFirebaseCurrentUser$().pipe(mergeMap(user => {
+        return from(user.updateEmail(email));
+      }),
+      catchError((error) => {
+        throw error;
+      }));
+  }
+
+  updateUserEmailWithAuthentication(confirmationResult: string, verificationCode: string, email: string): Observable<void> {
+    return this.getFirebaseCurrentUser$().pipe(first(), mergeMap(user => {
+        return from(user.reauthenticateWithCredential(firebase.auth.PhoneAuthProvider.credential(confirmationResult, verificationCode)))
+          .pipe(mergeMap(() => from(user.updateEmail(email))));
+      }),
+      catchError((error) => {
+        throw error;
+      }));
   }
 
   verifyPhoneNumberAndCode(phoneNumber: string): Observable<[string, string]> {
@@ -98,7 +113,10 @@ export class AuthenticateService {
 
   updateUserPhoneNumber(confirmationResult: string, verificationCode: string): Observable<void> {
     const phoneCredential = firebase.auth.PhoneAuthProvider.credential(confirmationResult, verificationCode);
-    return from(firebase.auth().currentUser.updatePhoneNumber(phoneCredential));
+    return from(firebase.auth().currentUser.updatePhoneNumber(phoneCredential))
+      .pipe(catchError((error) => {
+        throw error;
+      }));
   }
 
   private resetRecaptcha(): void {
