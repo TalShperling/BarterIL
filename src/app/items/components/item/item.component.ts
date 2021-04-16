@@ -14,7 +14,6 @@ export class ItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.item);
   }
 
   deleteItem() {
