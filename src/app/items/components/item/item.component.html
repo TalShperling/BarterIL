@@ -1,24 +1,21 @@
-<div>
-    <mdb-card>
-        <mdb-card-body class="container">
-            <div class="row">
-                <img class="col-sm-6" [src]=item.pictureUrls[0] />
-                <div class="col-sm-6 d-flex flex-column justify-content-between">
-                        <div class="container">
-                            <mdb-card-title>
-                                <h4>{{item?.name}}</h4>
-                            </mdb-card-title>
-                            <mdb-card-text>{{item?.description}}</mdb-card-text>
-                        </div>
-                        <div class="container">
-                            <div class="d-flex justify-content-between">
-                                <button (click)="editItem()" type="button" class="btn btn-primary">Edit</button>
-                                <button (click)="viewItem()" type="button" class="btn btn-info" >View</button>
-                                <button (click)="deleteItem()" type="button" class="btn btn-danger" >Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<mdb-card class="d-flex flex-column justify-content-between">
+    <div class="view overlay waves-light item-image" mdbWavesEffect>
+        <mdb-card-img [src]=item.pictureUrls[0]></mdb-card-img>
+    </div>
+    <div style="padding: 10px">
+        <mdb-card-body>
+            <mdb-card-title>
+                <h3>{{item.name}}</h3>
+            </mdb-card-title>
+            <hr>
+            <mdb-card-text>
+                {{item.description}}
+            </mdb-card-text>
+            <div class="d-flex justify-content-between">
+                <button (click)="editItem()" type="button" class="btn btn-primary">Edit</button>
+                <button (click)="viewItem()" type="button" class="btn btn-info">View</button>
+                <button (click)="deleteItem()" type="button" class="btn btn-danger">Delete</button>
+            </div>
         </mdb-card-body>
-    </mdb-card>
-</div>
+    </div>
+</mdb-card>

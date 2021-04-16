@@ -18,7 +18,7 @@ export class ItemListComponent implements OnInit {
   }
 
   deleteItem(itemId: string) {
-    this.itemsService.delete$(this.items.find(item => item.id === itemId)).subscribe(()=> {
+    this.itemsService.delete$(this.items.find(item => item.id === itemId)).subscribe(() => {
       alert("item deleted successfully!");
     });
   }
