@@ -1,6 +1,6 @@
-import { User } from '../../../entities/user.model';
-import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
-import { loginSuccess, logoutSuccess, registerSuccess } from '../actions/user.actions';
+import {User} from '../../../entities/user.model';
+import {createFeatureSelector, createReducer, createSelector, on} from '@ngrx/store';
+import {loginSuccess, logoutSuccess, registerSuccess, updateSuccess} from '../actions/user.actions';
 
 export const userFeatureKey = 'user';
 
@@ -16,7 +16,8 @@ export const userReducer = createReducer(
   initialUserState,
   on(loginSuccess, (state, { user }) => ({ ...state, currentUser: user })),
   on(registerSuccess, (state, { user }) => ({ ...state, currentUser: user })),
-  on(logoutSuccess, (state) => ({ ...state, currentUser: null }))
+  on(logoutSuccess, (state) => ({ ...state, currentUser: null })),
+  on(updateSuccess, (state, {user}) => ({...state, currentUser: user}))
 );
 
 const selectUserState = createFeatureSelector<UserState>(userFeatureKey);

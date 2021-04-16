@@ -1,5 +1,5 @@
-import { createAction, props } from '@ngrx/store';
-import { User } from '../../../entities/user.model';
+import {createAction, props} from '@ngrx/store';
+import {User} from '../../../entities/user.model';
 
 const userActionNames = {
   LOGIN: '[User] Login',
@@ -11,6 +11,10 @@ const userActionNames = {
   REGISTER: '[User] Register',
   REGISTER_SUCCESS: '[User] Register succeeded',
   REGISTER_FAIL: '[User] Register failed',
+  UPDATE: '[User] Update',
+  UPDATE_WITHOUT_PHONE: '[User] Update without phone',
+  UPDATE_SUCCESS: '[User] Update succeeded',
+  UPDATE_FAIL: '[User] Update failed',
 };
 
 export const login = createAction(userActionNames.LOGIN, props<{ email: string; password: string; }>());
@@ -26,3 +30,8 @@ export const register = createAction(userActionNames.REGISTER,
 );
 export const registerSuccess = createAction(userActionNames.REGISTER_SUCCESS, props<{ user: User }>());
 export const registerFail = createAction(userActionNames.REGISTER_FAIL, props<{ message: string; }>());
+
+export const update = createAction(userActionNames.UPDATE, props<{ user: User }>());
+export const updateWithoutPhone = createAction(userActionNames.UPDATE_WITHOUT_PHONE, props<{ user: User }>());
+export const updateSuccess = createAction(userActionNames.UPDATE_SUCCESS, props<{ user: User }>());
+export const updateFail = createAction(userActionNames.UPDATE_FAIL, props<{ message: string; }>());

@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { CollectionType } from './models/collection-type.model';
-import { AngularFirestore, DocumentChangeAction, QuerySnapshot } from '@angular/fire/firestore';
-import { ObserversModule } from '@angular/cdk/observers';
+import {Injectable} from '@angular/core';
+import {from, Observable} from 'rxjs';
+import {CollectionType} from './models/collection-type.model';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
