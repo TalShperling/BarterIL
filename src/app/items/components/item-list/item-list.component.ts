@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Item } from 'src/entities/item.model';
 import { ItemsService } from '../../services/items.service';
-import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { MODAL_ACTIONS } from 'src/app/components/modal/modal.actions';
 
 @Component({
   selector: 'app-item-list',
@@ -12,8 +9,7 @@ import { MODAL_ACTIONS } from 'src/app/components/modal/modal.actions';
 })
 export class ItemListComponent implements OnInit {
   public items: Item[] = [];
-  modalRef: MDBModalRef;
-  constructor(private itemsService: ItemsService, private modalService: MDBModalService) { }
+  constructor(private itemsService: ItemsService) { }
 
   ngOnInit(): void {
     this.itemsService.getAll$().subscribe((itemList: Item[]) => {
@@ -27,25 +23,8 @@ export class ItemListComponent implements OnInit {
     });
   }
 
-  subscribeModalActions() {
-    this.modalRef.content.action.subscribe( (result: MODAL_ACTIONS) => {
-      switch(result) {
-        case(MODAL_ACTIONS.CLOSE): 
-          this.modalRef.hide();
-      }
-    });
-  }
-
   viewItem(itemId: string) {
-    this.modalRef = this.modalService.show(ModalComponent, {
-      animated: true,
-      data: {
-        heading: "View Item",
-        content: {description: "The data", actions: [MODAL_ACTIONS.CLOSE]}
-      }
-    });
-
-    this.subscribeModalActions();
+    alert("Viewing item");
   }
 
   editItem(itemId: string) {
