@@ -14,11 +14,13 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +37,7 @@ import { UserModule } from './user/user.module';
     StoreModule.forRoot({}),
     EffectsModule.forRoot()
   ],
+  entryComponents: [ ModalComponent ],
   providers: [],
   bootstrap: [AppComponent]
 })
