@@ -11,10 +11,16 @@
             <mdb-card-text>
                 {{item.description}}
             </mdb-card-text>
-            <div class="d-flex justify-content-between">
-                <button (click)="editItem()" type="button" class="btn btn-primary">Edit</button>
-                <button (click)="viewItem()" type="button" class="btn btn-info">View</button>
-                <button (click)="deleteItem()" type="button" class="btn btn-danger">Delete</button>
+            <div class="d-flex justify-content-around">
+                <a mdbBtn floating="true" size="lg" class="primary-color" (click)="viewItem()" mdbWavesEffect>
+                    <mdb-icon fas icon="info-circle"></mdb-icon>
+                </a>
+                <a mdbBtn floating="true" size="lg" class="success-color" (click)="editItem()" mdbWavesEffect>
+                    <mdb-icon fas icon="edit"></mdb-icon>
+                </a>
+                <a mdbBtn floating="true" size="lg" class="danger-color" (click)="deleteItem()" mdbWavesEffect>
+                    <mdb-icon fas icon="trash"></mdb-icon>
+                </a>
             </div>
         </mdb-card-body>
     </div>
