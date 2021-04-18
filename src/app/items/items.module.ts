@@ -10,6 +10,7 @@ import { EditItemModalComponent } from './components/edit-item-modal/edit-item-m
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { AlertsService } from '../services/alerts/alerts.service';
 
 @NgModule({
   declarations: [ItemComponent, ItemListComponent, EditItemModalComponent],
@@ -27,6 +28,6 @@ import { MatInputModule } from '@angular/material/input';
     IconsModule,
     WavesModule
   ],
-  providers: [ItemsService]
+  providers: [ItemsService, AlertsService]
 })
 export class ItemsModule { }

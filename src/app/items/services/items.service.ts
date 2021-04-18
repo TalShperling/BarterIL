@@ -5,9 +5,7 @@ import { FirebaseService } from '../../services/firebase/firebase.service';
 import { CollectionType } from '../../services/firebase/models/collection-type.model';
 import { IFirebaseService } from '../../services/firebase/models/firebase-service.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ItemsService implements IFirebaseService<Item>{
   collectionName = CollectionType.ITEMS;
 

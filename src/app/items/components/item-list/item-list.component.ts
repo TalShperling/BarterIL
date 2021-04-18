@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MDBModalRef, MDBModalService, ModalOptions } from 'angular-bootstrap-md';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { Item } from 'src/entities/item.model';
 import { MODAL_ACTIONS } from 'src/entities/modal.model';
 import { ItemsService } from '../../services/items.service';
@@ -14,7 +15,7 @@ import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.compo
 export class ItemListComponent implements OnInit {
   modalRef: MDBModalRef;
   public items: Item[] = [];
-  constructor(private itemsService: ItemsService, private modalService: MDBModalService) { }
+  constructor(private itemsService: ItemsService, private modalService: MDBModalService, private alertsService: AlertsService) { }
 
   ngOnInit(): void {
     this.itemsService.getAll$().subscribe((itemList: Item[]) => {
@@ -22,7 +23,7 @@ export class ItemListComponent implements OnInit {
     });
   }
 
-  deleteItem(itemId: string) {
+  deleteItem(itemId: string): void {
     const modalOptions = {
       data: {
         options: {
@@ -53,16 +54,16 @@ export class ItemListComponent implements OnInit {
     this.modalRef = this.modalService.show(ModalComponent, modalOptions);
   }
 
-  viewItem(itemId: string) {
-    alert("Viewing item");
+  viewItem(itemId: string): void {
+    this.alertsService.showSuccessAlert(`Showing item ${itemId}`);
   }
 
-  editItem(itemId: string) {
+  editItem(itemId: string): void {
     this.modalService.show(EditItemModalComponent, {
       data: {
         itemToEdit: Object.assign({}, this.findItemById(itemId)),
         onItemSave: (editedItem: Item)=> {this.itemsService.upsert$(editedItem).subscribe((savedItem:Item) =>{
-          console.log(savedItem);          
+          this.alertsService.showSuccessAlert("Item was edited successfully");
         })}
       }
     });

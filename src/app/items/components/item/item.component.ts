@@ -11,20 +11,21 @@ export class ItemComponent implements OnInit {
   @Output() onDeleteItem = new EventEmitter<string>();
   @Output() onEditItem = new EventEmitter<string>();
   @Output() onViewItem = new EventEmitter<string>();
+  
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  deleteItem() {
+  deleteItem(): void {
     this.onDeleteItem.emit(this.item.id);
   }
 
-  viewItem() {
+  viewItem(): void {
     this.onViewItem.emit(this.item.id);
   }
 
-  editItem() {
+  editItem(): void {
     this.onEditItem.emit(this.item.id);
   }
 }
