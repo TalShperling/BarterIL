@@ -8,24 +8,28 @@ import { Item } from 'src/entities/item.model';
 })
 export class ItemComponent implements OnInit {
   @Input() item: Item;
-  @Output() onDeleteItem = new EventEmitter<string>();
-  @Output() onEditItem = new EventEmitter<string>();
-  @Output() onViewItem = new EventEmitter<string>();
-  
-  constructor() { }
+  @Output() onDeleteItem: EventEmitter<Item>;
+  @Output() onEditItem: EventEmitter<Item>;
+  @Output() onViewItem: EventEmitter<Item>;
+
+  constructor() { 
+    this.onDeleteItem = new EventEmitter<Item>();
+    this.onEditItem = new EventEmitter<Item>();
+    this.onViewItem = new EventEmitter<Item>();
+  }
 
   ngOnInit(): void {
   }
 
   deleteItem(): void {
-    this.onDeleteItem.emit(this.item.id);
+    this.onDeleteItem.emit(this.item);
   }
 
   viewItem(): void {
-    this.onViewItem.emit(this.item.id);
+    this.onViewItem.emit(this.item);
   }
 
   editItem(): void {
-    this.onEditItem.emit(this.item.id);
+    this.onEditItem.emit(this.item);
   }
 }

@@ -1,4 +1,4 @@
-export enum MODAL_ACTIONS {
+export enum ModalActions {
     CLOSE = "Close",
     SAVE = "Save",
     DELETE = "Delete",
@@ -6,8 +6,7 @@ export enum MODAL_ACTIONS {
 }
 
 export interface ModalOptions {
-    heading: string;
+    header: string;
     description: string;
-    actions: {actionName:MODAL_ACTIONS, callback: ()=>{}, color: string}[];
-    component: any;
+    actions: { actionName: ModalActions, callback: () => void, color: string }[];
 }
