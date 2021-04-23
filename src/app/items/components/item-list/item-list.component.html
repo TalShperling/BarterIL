@@ -1,10 +1,10 @@
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" *ngIf="(items$ | async) as itemsList">
         <div class="col-sm-2">
             <div class="jumbotron recommended-items">
                 <h2 class="h2">Recommended</h2>
                 <div class="d-flex flex-column justify-content-between">
-                    <app-item class="card-deck" *ngFor="let item of (items$ | async)" [item]="item"
+                    <app-item class="card-deck" *ngFor="let item of itemsList" [item]="item"
                         (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
                         (onViewItem)="viewItem($event)">
                     </app-item>
@@ -13,7 +13,7 @@
         </div>
         <div class="col-sm-10">
             <div class="d-flex flex-row justify-content-around">
-                <app-item class="card-deck" *ngFor="let item of (items$ | async)" [item]="item" (onDeleteItem)="deleteItem($event)"
+                <app-item class="card-deck" *ngFor="let item of itemsList" [item]="item" (onDeleteItem)="deleteItem($event)"
                     (onEditItem)="editItem($event)" (onViewItem)="viewItem($event)">
                 </app-item>
             </div>
