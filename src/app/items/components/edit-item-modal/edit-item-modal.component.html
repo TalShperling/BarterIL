@@ -1,0 +1,50 @@
+<div class="modal-header justify-content-center">
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h5>Edit Item</h5>
+</div>
+<div class="modal-body text-center">
+  <form class="text-center" [formGroup]="editItemForm" autocomplete="on">
+    <div class="md-form md-outline">
+      <input mdbInput type="text" id="idForm" class="form-control" [(ngModel)]="itemToEdit.id" formControlName="idForm"
+        disabled>
+      <label for="idForm">Id</label>
+    </div>
+
+    <div class="md-form md-outline">
+      <input mdbInput mdbValidate type="text" id="nameForm" class="form-control" [(ngModel)]="itemToEdit.name"
+        formControlName="nameForm">
+      <label for="nameForm">Name</label>
+      <mdb-error *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">Name is invalid</mdb-error>
+    </div>
+
+    <div class="md-form md-outline">
+      <textarea class="md-textarea form-control" rows="3" id="descriptionForm" type="text" length="120" mdbCharCounter
+        mdbValidate mdbInput [(ngModel)]="itemToEdit.description" formControlName="descriptionForm"></textarea>
+      <label for="descriptionForm">Description</label>
+      <mdb-error *ngIf="descriptionForm.invalid && (descriptionForm.dirty || descriptionForm.touched)">Description is
+        invalid</mdb-error>
+    </div>
+
+    <div class="md-form md-outline">
+      <input mdbInput mdbValidate type="number" id="categoryIdForm" class="form-control"
+        [(ngModel)]="itemToEdit.categoryId" formControlName="categoryIdForm">
+      <label for="categoryIdForm">Category ID</label>
+      <mdb-error *ngIf="categoryIdForm.invalid && (categoryIdForm.dirty || categoryIdForm.touched)">Category Id is
+        invalid</mdb-error>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer justify-content-center">
+  <div class="row justify-content-center">
+    <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect
+      [disabled]="!editItemForm.valid" (click)="onSubmit()">
+      Verify
+    </button>
+    <button type="button" mdbBtn class="relative waves-light danger-color" mdbWavesEffect (click)="modalRef.hide()">
+      Close
+    </button>
+  </div>
+</div>

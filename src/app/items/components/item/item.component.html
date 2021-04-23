@@ -1,0 +1,27 @@
+<mdb-card class="d-flex flex-column justify-content-between">
+    <div class="view overlay waves-light item-image" mdbWavesEffect>
+        <mdb-card-img [src]=item.pictureUrls[0]></mdb-card-img>
+    </div>
+    <div class="p-3">
+        <mdb-card-body>
+            <mdb-card-title>
+                <h3>{{item.name}}</h3>
+            </mdb-card-title>
+            <hr>
+            <mdb-card-text>
+                {{item.description}}
+            </mdb-card-text>
+            <div class="d-flex justify-content-around">
+                <a mdbBtn floating="true" size="lg" class="primary-color" (click)="viewItem()" mdbWavesEffect>
+                    <mdb-icon fas icon="info-circle"></mdb-icon>
+                </a>
+                <a mdbBtn floating="true" size="lg" class="success-color" (click)="editItem()" mdbWavesEffect>
+                    <mdb-icon fas icon="edit"></mdb-icon>
+                </a>
+                <a mdbBtn floating="true" size="lg" class="danger-color" (click)="deleteItem()" mdbWavesEffect>
+                    <mdb-icon fas icon="trash"></mdb-icon>
+                </a>
+            </div>
+        </mdb-card-body>
+    </div>
+</mdb-card>

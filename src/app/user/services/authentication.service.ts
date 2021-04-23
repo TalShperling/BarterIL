@@ -10,7 +10,6 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import ConfirmationResult = firebase.auth.ConfirmationResult;
 import UserCredential = firebase.auth.UserCredential;
 
-
 @Injectable({
   providedIn: 'root'
 })

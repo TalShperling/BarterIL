@@ -16,7 +16,7 @@ export abstract class FirebaseService {
    * @returns all the data from type T an Observable of data as a synchronized array of JSON objects.
    */
   getAllData$<T extends { id: string }>(collection: CollectionType): Observable<T[]> {
-    return this.firestore.collection<T>(collection).valueChanges();
+    return this.firestore.collection<T>(collection).valueChanges({idField: "id"});
   }
 
   getDataById$<T>(collection: CollectionType, id: string): Observable<T> {
