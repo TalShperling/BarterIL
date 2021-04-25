@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Item } from 'src/entities/item.model';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Item} from 'src/entities/item.model';
 
 @Component({
   selector: 'app-item',
@@ -12,7 +12,7 @@ export class ItemComponent implements OnInit {
   @Output() onEditItem: EventEmitter<Item>;
   @Output() onViewItem: EventEmitter<Item>;
 
-  constructor() { 
+  constructor() {
     this.onDeleteItem = new EventEmitter<Item>();
     this.onEditItem = new EventEmitter<Item>();
     this.onViewItem = new EventEmitter<Item>();

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import firebase from 'firebase';
 import {AuthenticateService} from '../../services/authentication.service';
@@ -9,8 +9,8 @@ import {register, registerFail} from '../../actions/user.actions';
 import {takeUntil} from 'rxjs/operators';
 import {Actions, ofType} from '@ngrx/effects';
 import {AlertsService} from '../../../services/alerts/alerts.service';
-import auth = firebase.auth;
 import {ObservableListener} from '../../../components/observable-listener';
+import auth = firebase.auth;
 
 
 @Component({

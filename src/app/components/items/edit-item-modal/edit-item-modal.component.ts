@@ -18,6 +18,18 @@ export class EditItemModalComponent implements OnInit {
   constructor(public modalRef: MDBModalRef) {
   }
 
+  get nameForm(): AbstractControl {
+    return this.editItemForm.get('nameForm');
+  }
+
+  get categoryIdForm(): AbstractControl {
+    return this.editItemForm.get('categoryIdForm');
+  }
+
+  get descriptionForm(): AbstractControl {
+    return this.editItemForm.get('descriptionForm');
+  }
+
   ngOnInit(): void {
     this.editItemForm = new FormGroup({
       nameForm: new FormControl(null, [Validators.required]),
