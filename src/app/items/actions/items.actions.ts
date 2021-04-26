@@ -2,9 +2,9 @@ import { createAction, props } from "@ngrx/store";
 import { Item } from "src/entities/item.model";
 
 const ItemsActionNames = {
-  SET_ITEMS: '[Items] Set items',
-  SET_ITEMS_SUCCESS: '[Items] Set items succeeded',
-  SET_ITEMS_FAIL: '[Items] Set items failed',
+  INITIATE_ITEMS: '[Items] Initiate items',
+  INITIATE_ITEMS_SUCCESS: '[Items] Initiate items succeeded',
+  INITIATE_ITEMS_FAIL: '[Items] Initiate items failed',
   DELETE_ITEM: '[Items] Delete item',
   DELETE_ITEM_SUCCESS: '[Items] Delete item succeeded',
   DELETE_ITEM_FAIL: '[Items] Delete item failed',
@@ -16,9 +16,9 @@ const ItemsActionNames = {
   CREATE_ITEM_FAIL: '[Items] Create item failed',
 };
 
-export const setItems = createAction(ItemsActionNames.SET_ITEMS);
-export const setItemsSuccess = createAction(ItemsActionNames.SET_ITEMS_SUCCESS, props<{ items: Item[] }>());
-export const setItemsFail = createAction(ItemsActionNames.SET_ITEMS_FAIL, props<{ message: string; }>());
+export const initiateItems = createAction(ItemsActionNames.INITIATE_ITEMS);
+export const initiateItemsSuccess = createAction(ItemsActionNames.INITIATE_ITEMS_SUCCESS, props<{ items: Item[] }>());
+export const initiateItemsFail = createAction(ItemsActionNames.INITIATE_ITEMS_FAIL, props<{ message: string; }>());
 
 export const deleteItem = createAction(ItemsActionNames.DELETE_ITEM, props<{itemToDelete: Item}>());
 export const deleteItemSuccess = createAction(ItemsActionNames.DELETE_ITEM_SUCCESS, props<{ deletedItemId: string }>());

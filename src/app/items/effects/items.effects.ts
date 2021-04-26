@@ -4,19 +4,19 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import firebase from 'firebase';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { createItem, createItemFail, createItemSuccess, deleteItem, deleteItemFail, deleteItemSuccess, setItems, setItemsFail, setItemsSuccess, updateItem, updateItemFail, updateItemSuccess } from 'src/app/items/actions/items.actions';
+import { createItem, createItemFail, createItemSuccess, deleteItem, deleteItemFail, deleteItemSuccess, initiateItems, initiateItemsFail, initiateItemsSuccess, updateItem, updateItemFail, updateItemSuccess } from 'src/app/items/actions/items.actions';
 import { ItemsService } from 'src/app/items/services/items.service';
 import { Item } from 'src/entities/item.model';
 import UserCredential = firebase.auth.UserCredential;
 
 @Injectable()
 export class ItemsEffects {
-  setItems$ = createEffect(() => this.actions$.pipe(
-    ofType(setItems),
+  initiateItems$ = createEffect(() => this.actions$.pipe(
+    ofType(initiateItems),
     switchMap(() => this.itemsService.getAll$()
       .pipe(
-        map((items: Item[]) => setItemsSuccess({ items })),
-        catchError((err) => of(setItemsFail({ message: err })))
+        map((items: Item[]) => initiateItemsSuccess({ items })),
+        catchError((err) => of(initiateItemsFail({ message: err })))
       ))
   )
   );
