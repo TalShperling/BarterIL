@@ -15,6 +15,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
 import { ModalComponent } from './components/modal/modal.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ModalComponent } from './components/modal/modal.component';
     AngularFirestoreModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot()
+    EffectsModule.forRoot(),
+    StoreDevtoolsModule.instrument(),
   ],
   entryComponents: [ ModalComponent ],
   providers: [],
