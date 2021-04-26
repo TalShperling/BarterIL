@@ -11,12 +11,18 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AlertsService } from '../services/alerts/alerts.service';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { itemsFeatureKey, itemsReducer } from './reducers/items.reducer';
+import { ItemsEffects } from './effects/items.effects';
 
 @NgModule({
   declarations: [ItemComponent, ItemListComponent, EditItemModalComponent],
   exports: [ItemListComponent],
   imports: [
     FormsModule,
+    StoreModule.forFeature(itemsFeatureKey, itemsReducer),
+    EffectsModule.forFeature([ItemsEffects]),
     ReactiveFormsModule,
     InputsModule,
     InputUtilitiesModule,
