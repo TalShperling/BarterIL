@@ -1,0 +1,9 @@
+.card-deck {
+  list-style: none;
+  flex: 0 0 33.333333%;
+}
+
+.recommended-items {
+  max-height: 100vh !important;
+  overflow: auto !important;
+}
