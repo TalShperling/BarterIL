@@ -13,7 +13,7 @@ export class AddItemFloatButtonComponent {
               private modalService: MDBModalService) {
   }
 
-  openAddItemModal() {
+  openAddItemModal(): void {
     this.modalService.show(EditItemModalComponent, {
       data: {
         isAddingMode: true,
