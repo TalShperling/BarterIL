@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Item} from 'src/entities/item.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Item } from 'src/entities/item.model';
 
 @Component({
   selector: 'app-item',

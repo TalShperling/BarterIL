@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {ItemsService} from '../../services/items/items.service';
+import {ItemsService} from '../../items/services/items.service';
 import {MDBModalService} from 'angular-bootstrap-md';
-import {EditItemModalComponent} from '../items/edit-item-modal/edit-item-modal.component';
+import {EditItemModalComponent} from '../../items/components/edit-item-modal/edit-item-modal.component';
 
 @Component({
   selector: 'app-add-item-float-button',
