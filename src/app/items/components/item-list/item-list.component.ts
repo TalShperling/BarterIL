@@ -9,7 +9,18 @@ import { ObservableListener } from 'src/app/components/observable-listener';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { Item } from 'src/entities/item.model';
 import { ModalActions } from 'src/entities/modal.model';
-import { createItemFail, createItemSuccess, deleteItem, deleteItemFail, deleteItemSuccess, initiateItems, initiateItemsFail, updateItem, updateItemFail, updateItemSuccess } from '../../actions/items.actions';
+import {
+  createItemFail,
+  createItemSuccess,
+  deleteItem,
+  deleteItemFail,
+  deleteItemSuccess,
+  initiateItems,
+  initiateItemsFail,
+  updateItem,
+  updateItemFail,
+  updateItemSuccess
+} from '../../actions/items.actions';
 import { getItems, ItemsState } from '../../reducers/items.reducer';
 import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.component';
 
@@ -21,11 +32,11 @@ import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.compo
 export class ItemListComponent extends ObservableListener implements OnInit {
   modalRef: MDBModalRef;
   items$: Observable<Item[]>;
-  private deleteFailedMessage: string = "The item couldn't be deleted, please try again later";
+  private deleteFailedMessage: string = 'The item couldn\'t be deleted, please try again later';
   private deleteSuccessMessage: string = 'The item has been deleted successfully';
-  private updateFailedMessage: string = "The item couldn't be updated, please try again later";
+  private updateFailedMessage: string = 'The item couldn\'t be updated, please try again later';
   private updateSuccessMessage: string = 'The item has been updated successfully';
-  private createFailedMessage: string = "The item couldn't be created, please try again later";
+  private createFailedMessage: string = 'The item couldn\'t be created, please try again later';
   private createSuccessMessage: string = 'The item has been created successfully';
   private initAllFailMessage: string = 'An error occurred while trying to fetching the items from the server';
 
@@ -79,7 +90,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
             {
               actionName: ModalActions.DELETE,
               callback: () => {
-                this.store$.dispatch(deleteItem({ itemToDelete }))
+                this.store$.dispatch(deleteItem({itemToDelete}));
               },
               color: 'danger-color'
             },
@@ -107,7 +118,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
       data: {
         itemToEdit: Object.assign({}, item),
         onItemSave: (editedItem: Item) => {
-          this.store$.dispatch(updateItem({ item: editedItem }));
+          this.store$.dispatch(updateItem({item: editedItem}));
         }
       }
     });

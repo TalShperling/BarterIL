@@ -1,5 +1,5 @@
-import { createAction, props } from "@ngrx/store";
-import { Item } from "src/entities/item.model";
+import { createAction, props } from '@ngrx/store';
+import { Item } from 'src/entities/item.model';
 
 const ItemsActionNames = {
   INITIATE_ITEMS: '[Items] Initiate items',
@@ -20,14 +20,14 @@ export const initiateItems = createAction(ItemsActionNames.INITIATE_ITEMS);
 export const initiateItemsSuccess = createAction(ItemsActionNames.INITIATE_ITEMS_SUCCESS, props<{ items: Item[] }>());
 export const initiateItemsFail = createAction(ItemsActionNames.INITIATE_ITEMS_FAIL, props<{ message: string; }>());
 
-export const deleteItem = createAction(ItemsActionNames.DELETE_ITEM, props<{itemToDelete: Item}>());
+export const deleteItem = createAction(ItemsActionNames.DELETE_ITEM, props<{ itemToDelete: Item }>());
 export const deleteItemSuccess = createAction(ItemsActionNames.DELETE_ITEM_SUCCESS, props<{ deletedItemId: string }>());
 export const deleteItemFail = createAction(ItemsActionNames.DELETE_ITEM_FAIL, props<{ message: string; }>());
 
-export const updateItem = createAction(ItemsActionNames.UPDATE_ITEM, props<{item: Item}>());
+export const updateItem = createAction(ItemsActionNames.UPDATE_ITEM, props<{ item: Item }>());
 export const updateItemSuccess = createAction(ItemsActionNames.UPDATE_ITEM_SUCCESS, props<{ updatedItem: Item }>());
 export const updateItemFail = createAction(ItemsActionNames.UPDATE_ITEM_FAIL, props<{ message: string; }>());
 
-export const createItem = createAction(ItemsActionNames.CREATE_ITEM, props<{item: Item}>());
+export const createItem = createAction(ItemsActionNames.CREATE_ITEM, props<{ item: Item }>());
 export const createItemSuccess = createAction(ItemsActionNames.CREATE_ITEM_SUCCESS, props<{ newItem: Item }>());
 export const createItemFail = createAction(ItemsActionNames.CREATE_ITEM_FAIL, props<{ message: string; }>());

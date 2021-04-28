@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ItemComponent } from './components/item/item.component';
 import { ItemsService } from './services/items.service';
 import {
-  CardsModule, IconsModule, ButtonsModule, WavesModule, ModalModule, InputsModule, InputUtilitiesModule
+  CardsModule, IconsModule, ButtonsModule, WavesModule, InputsModule, InputUtilitiesModule
 } from 'angular-bootstrap-md';
 import { ItemListComponent } from './components/item-list/item-list.component';
 import { EditItemModalComponent } from './components/edit-item-modal/edit-item-modal.component';
@@ -20,6 +20,7 @@ import { ItemsEffects } from './effects/items.effects';
   declarations: [ItemComponent, ItemListComponent, EditItemModalComponent],
   exports: [ItemListComponent],
   imports: [
+    CommonModule,
     FormsModule,
     StoreModule.forFeature(itemsFeatureKey, itemsReducer),
     EffectsModule.forFeature([ItemsEffects]),
@@ -28,7 +29,6 @@ import { ItemsEffects } from './effects/items.effects';
     InputUtilitiesModule,
     MatFormFieldModule,
     MatInputModule,
-    CommonModule,
     CardsModule,
     ButtonsModule,
     IconsModule,
