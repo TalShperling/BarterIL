@@ -7,9 +7,9 @@ import {update, updateWithoutPhone} from '../../actions/user.actions';
 import firebase from 'firebase';
 import {AuthenticateService} from '../../services/authentication.service';
 import {WindowService} from '../../../services/auth/window.service';
-import auth = firebase.auth;
 import {ObservableListener} from '../../../components/observable-listener';
 import {takeUntil} from 'rxjs/operators';
+import auth = firebase.auth;
 
 
 @Component({

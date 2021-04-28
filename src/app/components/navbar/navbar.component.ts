@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { User } from '../../../entities/user.model';
-import { Store, select } from '@ngrx/store';
-import { getUser, UserState } from '../../user/reducers/user.reducer';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { logout } from '../../user/actions/user.actions';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {User} from '../../../entities/user.model';
+import {select, Store} from '@ngrx/store';
+import {getUser, UserState} from '../../user/reducers/user.reducer';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {logout} from '../../user/actions/user.actions';
 
 @Component({
   selector: 'app-navbar',

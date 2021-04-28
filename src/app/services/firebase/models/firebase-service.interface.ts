@@ -1,5 +1,5 @@
-import { Observable } from "rxjs";
-import { CollectionType } from "./collection-type.model";
+import {Observable} from 'rxjs';
+import {CollectionType} from './collection-type.model';
 
 export interface IFirebaseService<T extends { id: string }> {
     collectionName: CollectionType;

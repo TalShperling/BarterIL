@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { SignInComponent } from './user/components/sign-in/sign-in.component';
-import { HomeComponent } from './home/components/home/home.component';
-import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
-import { SignUpComponent } from './user/components/sign-up/sign-up.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {SignInComponent} from './user/components/sign-in/sign-in.component';
+import {HomeComponent} from './components/home/home.component';
+import {AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import {SignUpComponent} from './user/components/sign-up/sign-up.component';
 import {UserInfoComponent} from './user/components/user-info/user-info.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);

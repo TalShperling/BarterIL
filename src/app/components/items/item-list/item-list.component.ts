@@ -5,7 +5,7 @@ import {ModalComponent} from 'src/app/components/modal/modal.component';
 import {AlertsService} from 'src/app/services/alerts/alerts.service';
 import {Item} from 'src/entities/item.model';
 import {ModalActions} from 'src/entities/modal.model';
-import {ItemsService} from '../../services/items.service';
+import {ItemsService} from '../../../services/items/items.service';
 import {EditItemModalComponent} from '../edit-item-modal/edit-item-modal.component';
 
 @Component({

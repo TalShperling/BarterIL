@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticateService} from './user/services/authentication.service';
 import {Observable} from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { isUserLoggedIn, UserState } from './user/reducers/user.reducer';
+import {select, Store} from '@ngrx/store';
+import {isUserLoggedIn, UserState} from './user/reducers/user.reducer';
 
 @Component({
   selector: 'app-root',

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MDBModalRef} from 'angular-bootstrap-md';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-verification-modal',

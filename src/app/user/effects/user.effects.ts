@@ -9,18 +9,22 @@ import {
   logoutSuccess,
   register,
   registerFail,
-  registerSuccess, update, updateFail, updateSuccess, updateWithoutPhone
+  registerSuccess,
+  update,
+  updateFail,
+  updateSuccess,
+  updateWithoutPhone
 } from '../actions/user.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {AuthenticateService} from '../services/authentication.service';
 import firebase from 'firebase';
-import UserCredential = firebase.auth.UserCredential;
 import {UsersService} from '../services/users.service';
 import {User} from '../../../entities/user.model';
 import {of} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {omit} from 'lodash';
+import UserCredential = firebase.auth.UserCredential;
 
 @Injectable()
 export class UserEffects {

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MDBModalRef } from 'angular-bootstrap-md';
-import { ModalOptions } from 'src/entities/modal.model';
+import {Component} from '@angular/core';
+import {MDBModalRef} from 'angular-bootstrap-md';
+import {ModalOptions} from 'src/entities/modal.model';
 
 @Component({
   selector: 'app-modal',
