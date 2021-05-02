@@ -1,14 +1,17 @@
 import {Injectable} from '@angular/core';
-import {from, Observable} from 'rxjs';
+import {combineLatest, from, Observable, of} from 'rxjs';
 import {CollectionType} from './models/collection-type.model';
 import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask} from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class FirebaseService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore,
+              private storage: AngularFireStorage
+  ) { }
 
   /**
    * @param collection - the collection type
@@ -16,7 +19,7 @@ export abstract class FirebaseService {
    * @returns all the data from type T an Observable of data as a synchronized array of JSON objects.
    */
   getAllData$<T extends { id: string }>(collection: CollectionType): Observable<T[]> {
-    return this.firestore.collection<T>(collection).valueChanges({idField: "id"});
+    return this.firestore.collection<T>(collection).valueChanges({idField: 'id'});
   }
 
   getDataById$<T>(collection: CollectionType, id: string): Observable<T> {
@@ -34,5 +37,10 @@ export abstract class FirebaseService {
 
   deleteDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<void> {
     return from(this.firestore.doc(`${collection}/${data.id}`).delete());
+  }
+
+  uploadFile(file, imageUUID: string): Observable<[AngularFireUploadTask, AngularFireStorageReference]> {
+    const fileRef = this.storage.ref(imageUUID);
+    return combineLatest(of(this.storage.upload(imageUUID, file)), of(fileRef));
   }
 }
