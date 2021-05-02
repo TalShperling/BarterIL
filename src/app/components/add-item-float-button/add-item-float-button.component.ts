@@ -18,9 +18,9 @@ export class AddItemFloatButtonComponent {
       data: {
         isAddingMode: true,
         onItemSave: () => {
-          console.log('Hey zot-ani');
         }
-      }
+      },
+      class: 'modal-lg'
     });
   }
 }
