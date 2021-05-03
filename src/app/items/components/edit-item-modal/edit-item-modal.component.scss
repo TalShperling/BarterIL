@@ -2,12 +2,16 @@
   max-width: 70%;
 }
 
+::ng-deep .modal-lg .modal-body {
+  overflow-y: scroll;
+  max-height: 65vh;
+}
+
 .item-image {
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 5px;
-  width: 200px;
-  height: 200px;
+  width: 60%;
+  height: 60%;
   cursor: pointer;
 }
 
