@@ -59,7 +59,7 @@ export class EditItemModalComponent implements OnInit {
         pictureUrls: []
       };
       this.isImageUploaded = false;
-      this.imageURL = 'https://cdn3.iconfinder.com/data/icons/email-51/48/32-512.png';
+      this.imageURL = '/assets/upload-button.png';
     } else {
       this.isImageUploaded = true;
       this.imageURL = this.itemToEdit.pictureUrls[0];
