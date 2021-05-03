@@ -6,6 +6,7 @@ import {FirebaseService} from '../../../services/firebase/firebase.service';
 import {finalize, tap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import * as uuid from 'uuid';
+import {AngularFireStorageReference, AngularFireUploadTask} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-edit-item-modal',
@@ -57,6 +58,11 @@ export class EditItemModalComponent implements OnInit {
         name: '',
         pictureUrls: []
       };
+      this.isImageUploaded = false;
+      this.imageURL = 'https://cdn3.iconfinder.com/data/icons/email-51/48/32-512.png';
+    } else {
+      this.isImageUploaded = true;
+      this.imageURL = this.itemToEdit.pictureUrls[0];
     }
 
     this.initImageUpload();
@@ -64,10 +70,8 @@ export class EditItemModalComponent implements OnInit {
 
   private initImageUpload(): void {
     this.uploadPercent = 0;
-    this.isImageUploaded = false;
     this.isUploadingImage = false;
     this.imageUUID = this.imageUUID ? this.imageUUID : uuid.v4();
-    this.imageURL = 'https://cdn3.iconfinder.com/data/icons/email-51/48/32-512.png';
   }
 
   onSubmit(): void {
@@ -76,22 +80,32 @@ export class EditItemModalComponent implements OnInit {
   }
 
   uploadFile($event: Event) {
-    this.initImageUpload();
     const file = ($event.target as HTMLInputElement).files[0];
-    this.firebase.uploadFile(file, this.imageUUID).subscribe(([task, fileRef]) => {
-      task.percentageChanges().pipe(tap(percentage => {
-        this.uploadPercent = Math.floor(percentage);
-        this.isUploadingImage = this.uploadPercent !== 100;
-        return of(this.uploadPercent);
-      })).subscribe();
+    if (file) {
+      this.initImageUpload();
+      this.firebase.uploadFile(file, this.imageUUID).subscribe(([task, fileRef]) => {
+        this.observeImageUploadPercentages(task);
+        this.getImageURLOnUploadFinish(task, fileRef);
+      });
+    }
+  }
 
-      task.snapshotChanges().pipe(
-        finalize(() => fileRef.getDownloadURL().subscribe(url => {
-          this.imageURL = url;
-          this.isImageUploaded = true;
-        }))
-      ).subscribe();
-    });
+  private observeImageUploadPercentages(task: AngularFireUploadTask) {
+    task.percentageChanges().pipe(tap(percentage => {
+      this.uploadPercent = Math.floor(percentage);
+      this.isUploadingImage = this.uploadPercent !== 100;
+      return of(this.uploadPercent);
+    })).subscribe();
+  }
+
+  private getImageURLOnUploadFinish(task: AngularFireUploadTask, fileRef: AngularFireStorageReference) {
+    task.snapshotChanges().pipe(
+      finalize(() => fileRef.getDownloadURL().subscribe(url => {
+        this.imageURL = url;
+        this.itemToEdit.pictureUrls = [url];
+        this.isImageUploaded = true;
+      }))
+    ).subscribe();
   }
 }
 
