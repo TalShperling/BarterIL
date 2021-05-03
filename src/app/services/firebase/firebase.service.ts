@@ -28,10 +28,9 @@ export abstract class FirebaseService {
 
   upsertDocument<T extends { id: string }>(collection: CollectionType, data: T): Observable<T> {
     return new Observable<T>(observer => {
-      if (!data.id) {
-        data.id = this.firestore.createId();
-      }
-      this.firestore.doc<T>(`${collection}/${data.id}`).set(data).then(() => observer.next(data));
+      const documentId = data.id || this.firestore.createId();
+      this.firestore.doc<T>(`${collection}/${documentId}`)
+        .set({...data, id: documentId}).then(() => observer.next({...data, id: documentId}));
     });
   }
 
