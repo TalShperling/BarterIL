@@ -2,6 +2,10 @@ import {Component} from '@angular/core';
 import {ItemsService} from '../../items/services/items.service';
 import {MDBModalService} from 'angular-bootstrap-md';
 import {EditItemModalComponent} from '../../items/components/edit-item-modal/edit-item-modal.component';
+import {Item} from '../../../entities/item.model';
+import {createItem} from '../../items/actions/items.actions';
+import {Store} from '@ngrx/store';
+import {ItemsState} from '../../items/reducers/items.reducer';
 
 @Component({
   selector: 'app-add-item-float-button',
@@ -10,17 +14,19 @@ import {EditItemModalComponent} from '../../items/components/edit-item-modal/edi
 })
 export class AddItemFloatButtonComponent {
   constructor(private itemsService: ItemsService,
-              private modalService: MDBModalService) {
+              private modalService: MDBModalService,
+              private store$: Store<ItemsState>) {
   }
 
   openAddItemModal(): void {
     this.modalService.show(EditItemModalComponent, {
       data: {
         isAddingMode: true,
-        onItemSave: () => {
-          console.log('Hey zot-ani');
+        onItemSave: (addedItem: Item) => {
+          this.store$.dispatch(createItem({item: addedItem}));
         }
-      }
+      },
+      class: 'modal-lg'
     });
   }
 }

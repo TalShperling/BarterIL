@@ -1,0 +1,20 @@
+.modal-lg {
+  max-width: 70%;
+}
+
+::ng-deep .modal-lg .modal-body {
+  overflow-y: scroll;
+  max-height: 65vh;
+}
+
+.item-image {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 60%;
+  height: 60%;
+  cursor: pointer;
+}
+
+.item-image:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}

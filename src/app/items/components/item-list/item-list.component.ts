@@ -120,7 +120,8 @@ export class ItemListComponent extends ObservableListener implements OnInit {
         onItemSave: (editedItem: Item) => {
           this.store$.dispatch(updateItem({item: editedItem}));
         }
-      }
+      },
+      class: 'modal-lg'
     });
   }
 }
