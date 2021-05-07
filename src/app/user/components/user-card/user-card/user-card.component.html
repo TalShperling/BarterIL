@@ -1,0 +1,32 @@
+<mdb-card>
+  <div class="view overlay waves-light pt-2" mdbWavesEffect>
+    <mdb-card-img src="assets/images/user-image.png" alt="Card image cap"></mdb-card-img>
+    <a>
+      <div class="mask rgba-white-slight"></div>
+    </a>
+  </div>
+  <mdb-card-body>
+    <mdb-card-title>
+      <h4>{{user.firstName.concat(' ', user.lastName)}}</h4>
+    </mdb-card-title>
+    <mdb-card-text>
+      <div class="d-flex flex-column">
+        <div class="p-2">
+          <span>{{user.email}}</span>
+        </div>
+        <div class="p-2">
+          <span>{{(user.birthday.toDate() | date: 'dd/MM/yyyy')}}</span>
+        </div>
+        <div class="p-2">
+          <span>{{(user.phoneNumber)}}</span>
+        </div>
+      </div>
+    </mdb-card-text>
+    <hr>
+    <div class="d-flex justify-content-center">
+      <div>
+        <a mdbBtn class="edit-btn" (click)="editUser(user)" mdbWavesEffect>Edit</a>
+      </div>
+    </div>
+  </mdb-card-body>
+</mdb-card>
