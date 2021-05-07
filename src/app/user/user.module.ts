@@ -26,9 +26,22 @@ import {MatInputModule} from '@angular/material/input';
 import {AlertsService} from '../services/alerts/alerts.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {UserInfoComponent} from './components/user-info/user-info.component';
+import {UsersManagementComponent} from './components/users-management/users-management.component';
+import {UserCardComponent} from './components/user-card/user-card/user-card.component';
+import { UserEditByAdminModalComponent } from './components/user-edit-by-admin-modal/user-edit-by-admin-modal.component';
+import {FilterUsersPipe} from '../components/pipes/filter-users.pipe';
 
 @NgModule({
-  declarations: [SignInComponent, SignUpComponent, VerificationModalComponent, UserInfoComponent],
+  declarations: [
+    SignInComponent,
+    SignUpComponent,
+    VerificationModalComponent,
+    UserInfoComponent,
+    UsersManagementComponent,
+    UserCardComponent,
+    UserEditByAdminModalComponent,
+    FilterUsersPipe
+  ],
   exports: [SignUpComponent],
   imports: [
     CommonModule,

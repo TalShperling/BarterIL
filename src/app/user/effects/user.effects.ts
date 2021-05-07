@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {
+  initiateUsers,
+  initiateUsersFail,
+  initiateUsersSuccess,
   login,
   loginFail,
   loginSuccess,
@@ -12,7 +15,7 @@ import {
   registerSuccess,
   update,
   updateFail,
-  updateSuccess,
+  updateSuccess, updateSuperficialData,
   updateWithoutPhone
 } from '../actions/user.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
@@ -28,6 +31,16 @@ import UserCredential = firebase.auth.UserCredential;
 
 @Injectable()
 export class UserEffects {
+  initiateUsers$ = createEffect(() => this.actions$.pipe(
+    ofType(initiateUsers),
+    switchMap(() => this.userService.getAll$()
+      .pipe(
+        map((users: User[]) => initiateUsersSuccess({users})),
+        catchError((err) => of(initiateUsersFail({message: err})))
+      ))
+    )
+  );
+
   tryLoadingUser$ = createEffect(() => this.angularFireAuth.user.pipe(
     switchMap((user) => this.userService.getById$(user.uid)),
     map((user) => loginSuccess({user})),
@@ -71,7 +84,7 @@ export class UserEffects {
   );
 
   redirectOnLogin$ = createEffect(() => this.actions$.pipe(
-    ofType(registerSuccess, loginSuccess, updateSuccess),
+    ofType(registerSuccess, loginSuccess),
     tap(() => this.router.navigateByUrl('home'))
     ), {dispatch: false}
   );
@@ -93,6 +106,15 @@ export class UserEffects {
     )
   );
 
+  updateUser$ = createEffect(() => this.actions$.pipe(
+    ofType(updateSuperficialData),
+    switchMap(({user}) => this.userService.upsert$(user)
+      .pipe(
+        map((updatedUser: User) => updateSuccess({user: updatedUser})),
+        catchError((err) => of(updateFail({message: err})))
+      ))
+  ));
+
   updateUserWithoutPhone$ = createEffect(() => this.actions$.pipe(
     ofType(updateWithoutPhone),
     switchMap(({user}) => this.authService.updateUserEmail(user.email)
@@ -108,8 +130,8 @@ export class UserEffects {
     ofType(update),
     switchMap(({user}) => this.authService.verifyPhoneNumberAndCode(user.phoneNumber)
       .pipe(switchMap(([confirmationResult, code]) =>
-        this.authService.updateUserPhoneNumber(confirmationResult, code)
-          .pipe(switchMap(() => this.authService.updateUserEmailWithAuthentication(confirmationResult, code, user.email)))),
+          this.authService.updateUserPhoneNumber(confirmationResult, code)
+            .pipe(switchMap(() => this.authService.updateUserEmailWithAuthentication(confirmationResult, code, user.email)))),
         switchMap(() => this.userService.upsert$(user)),
         map((updatedUser: User) => updateSuccess({user: updatedUser})),
         catchError((err) => of(updateFail({message: err})))
