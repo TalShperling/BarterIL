@@ -8,4 +8,6 @@ export interface User {
   phoneNumber: string;
   birthday: Timestamp;
   email: string;
+  isAdmin: boolean;
+  isActive: boolean;
 }
