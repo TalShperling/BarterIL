@@ -5,6 +5,7 @@ import {HomeComponent} from './components/home/home.component';
 import {AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import {SignUpComponent} from './user/components/sign-up/sign-up.component';
 import {UserInfoComponent} from './user/components/user-info/user-info.component';
+import {UsersManagementComponent} from './user/components/users-management/users-management.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -33,7 +34,13 @@ const routes: Routes = [
     component: UserInfoComponent,
     canActivate: [AngularFireAuthGuard],
     data: {authGuardPipe: redirectUnauthorizedToLogin}
-  }
+  },
+  {
+    path: 'users-management',
+    component: UsersManagementComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: {authGuardPipe: redirectUnauthorizedToLogin}
+  },
 ];
 
 @NgModule({

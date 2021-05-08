@@ -89,7 +89,9 @@ export class SignUpComponent extends ObservableListener implements OnInit {
         email: this.email,
         phoneNumber: this.phoneNumber,
         password: this.password,
-        birthday: firebase.firestore.Timestamp.fromDate(this.birthday)
+        birthday: firebase.firestore.Timestamp.fromDate(this.birthday),
+        isActive: true,
+        isAdmin: false
       }
     }));
   }

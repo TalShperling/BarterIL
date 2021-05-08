@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="d-flex" *ngIf="(items$ | async) as itemsList">
-    <div class="jumbotron w-75 pt-0 recommended-items mt-2">
+    <div class="jumbotron w-100 pt-0 recommended-items mt-2">
       <h2 class="h2 mt-3">Recommended</h2>
       <div class="d-flex flex-column">
         <app-item class="card-deck mt-4" *ngFor="let item of itemsList" [item]="item"
