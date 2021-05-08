@@ -5,7 +5,8 @@ import {
   loginSuccess,
   logoutSuccess,
   registerSuccess,
-  updateSuccess
+  updateSuccess,
+  updateSuperficialDataSuccess
 } from '../actions/user.actions';
 
 export const userFeatureKey = 'user';
@@ -22,11 +23,15 @@ export const initialUserState: UserState = {
 
 export const userReducer = createReducer(
   initialUserState,
-  on(loginSuccess, (state, { user }) => ({ ...state, currentUser: user })),
-  on(initiateUsersSuccess, (state, { users }) => ({ ...state, users })),
-  on(registerSuccess, (state, { user }) => ({ ...state, currentUser: user })),
-  on(logoutSuccess, (state) => ({ ...state, currentUser: null })),
-  on(updateSuccess, (state, {user}) => ({...state, currentUser: user}))
+  on(loginSuccess, (state, {user}) => ({...state, currentUser: user})),
+  on(initiateUsersSuccess, (state, {users}) => ({...state, users})),
+  on(registerSuccess, (state, {user}) => ({...state, currentUser: user})),
+  on(logoutSuccess, (state) => ({...state, currentUser: null})),
+  on(updateSuccess, (state, {user}) => ({...state, currentUser: user})),
+  on(updateSuperficialDataSuccess, (state, {user}) => ({
+    ...state,
+    users: state.users.map(currentUser => currentUser.id === user.id ? {...currentUser, ...user} : currentUser)
+  }))
 );
 
 const selectUserState = createFeatureSelector<UserState>(userFeatureKey);
