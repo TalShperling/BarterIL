@@ -15,7 +15,7 @@ export const initialItemsState: ItemsState = {
 export const itemsReducer = createReducer(
   initialItemsState,
   on(initiateItemsSuccess, (state, {items}) => ({...state, items})),
-  on(deleteItemSuccess, (state, {deletedItemId}) => ({...state, items: state.items.filter(item => item.id === deletedItemId)})),
+  on(deleteItemSuccess, (state, {deletedItemId}) => ({...state, items: state.items.filter(item => item.id !== deletedItemId)})),
   on(createItemSuccess, (state, {newItem}) => ({...state, items: [...state.items, newItem]})),
   on(updateItemSuccess, (state, {updatedItem}) => ({
     ...state,
