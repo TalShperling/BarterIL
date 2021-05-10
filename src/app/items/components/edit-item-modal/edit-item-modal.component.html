@@ -14,7 +14,6 @@
           <label for="nameForm">Name</label>
           <mdb-error *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">Name is invalid</mdb-error>
         </div>
-
         <div class="md-form md-outline">
       <textarea class="md-textarea form-control" rows="3" id="descriptionForm" type="text" length="120" mdbCharCounter
                 mdbValidate mdbInput [(ngModel)]="itemToEdit.description" formControlName="descriptionForm"></textarea>

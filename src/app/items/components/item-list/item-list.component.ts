@@ -23,6 +23,7 @@ import {
 } from '../../actions/items.actions';
 import { getItems, ItemsState } from '../../reducers/items.reducer';
 import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.component';
+import { ItemDetailsModalComponent } from '../item-details-modal/item-details-modal.component';
 
 @Component({
   selector: 'app-item-list',
@@ -109,8 +110,13 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     this.modalRef = this.modalService.show(ModalComponent, modalOptions);
   }
 
-  viewItem(itemId: string): void {
-    this.alertsService.showSuccessAlert(`Showing item ${itemId}`);
+  viewItem(item: Item): void {
+    this.modalRef = this.modalService.show(ItemDetailsModalComponent, {
+      data: {
+        item
+      },
+      class: 'modal-lg'
+    });
   }
 
   editItem(item: Item): void {

@@ -6,7 +6,7 @@ import { Item } from 'src/entities/item.model';
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss']
 })
-export class ItemComponent implements OnInit {
+export class ItemComponent {
   @Input() item: Item;
   @Output() onDeleteItem: EventEmitter<Item>;
   @Output() onEditItem: EventEmitter<Item>;
@@ -18,8 +18,6 @@ export class ItemComponent implements OnInit {
     this.onViewItem = new EventEmitter<Item>();
   }
 
-  ngOnInit(): void {
-  }
 
   deleteItem(): void {
     this.onDeleteItem.emit(this.item);

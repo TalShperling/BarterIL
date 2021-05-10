@@ -15,9 +15,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { itemsFeatureKey, itemsReducer } from './reducers/items.reducer';
 import { ItemsEffects } from './effects/items.effects';
+import { ItemDetailsModalComponent } from './components/item-details-modal/item-details-modal.component';
 
 @NgModule({
-  declarations: [ItemComponent, ItemListComponent, EditItemModalComponent],
+  declarations: [ItemComponent, ItemListComponent, EditItemModalComponent, ItemDetailsModalComponent],
   exports: [ItemListComponent],
   imports: [
     CommonModule,
