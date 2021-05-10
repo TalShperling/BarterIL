@@ -1,7 +1,7 @@
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { UserItems } from 'src/entities/user-items.model';
 import { User } from 'src/entities/user.model';
-import { addItemToUserSuccess, initiateUsersItemsSuccess, removeItemFromUserSuccess, updateItemAmountSuccess } from '../actions/users-items.actions';
+import { addItemToCurrentUserSuccess, addUserItemSuccess, initiateUsersItemsSuccess, removeItemFromCurrentUserSuccess, updateItemAmountSuccess } from '../actions/users-items.actions';
 import { getUser } from './user.reducer';
 
 export const userItemsFeatureKey = 'user_items';
@@ -14,11 +14,18 @@ export const initialUserItemsState: UserItemsState = {
     usersItems: []
 };
 
-export const userReducer = createReducer(
+export const userItemsReducer = createReducer(
     initialUserItemsState,
     on(initiateUsersItemsSuccess, (state, { usersItems }) => ({ ...state, usersItems })),
-    on(addItemToUserSuccess, (state, { userItems }) => ({ ...state, usersItems: [...state.usersItems, userItems] })),
-    on(removeItemFromUserSuccess, (state, { userItems }) => ({ ...state, usersItems: state.usersItems.filter(userItem => userItem.id !== userItems.id) })),
+    on(addUserItemSuccess, (state, { userItems }) => ({ ...state, usersItems: [...state.usersItems, userItems] })),
+    on(addItemToCurrentUserSuccess, (state, { updatedUserItems }) => ({
+        ...state,
+        userItems: state.usersItems.map(userItem => userItem.id === updatedUserItems.id ? { ...userItem, ...updatedUserItems } : userItem)
+    })),
+    on(removeItemFromCurrentUserSuccess, (state, { updatedUserItems }) => ({
+        ...state,
+        userItems: state.usersItems.map(userItem => userItem.id === updatedUserItems.id ? { ...userItem, ...updatedUserItems } : userItem)
+    })),
     on(updateItemAmountSuccess, (state, { userItems }) => ({
         ...state,
         userItems: state.usersItems.map(userItem => userItem.id === userItems.id ? { ...userItem, ...userItems } : userItem)
