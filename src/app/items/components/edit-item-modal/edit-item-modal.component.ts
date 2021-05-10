@@ -1,22 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MDBModalRef} from 'angular-bootstrap-md';
-import {Item} from 'src/entities/item.model';
-import {FirebaseService} from '../../../services/firebase/firebase.service';
-import {finalize, tap} from 'rxjs/operators';
-import {of} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { Item } from 'src/entities/item.model';
+import { FirebaseService } from '../../../services/firebase/firebase.service';
+import { finalize, takeUntil, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import * as uuid from 'uuid';
-import {AngularFireStorageReference, AngularFireUploadTask} from '@angular/fire/storage';
+import { AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import { User } from 'src/entities/user.model';
+import { Store } from '@ngrx/store';
+import { getUser, UserState } from 'src/app/user/reducers/user.reducer';
+import { ObservableListener } from 'src/app/components/observable-listener';
 
 @Component({
   selector: 'app-edit-item-modal',
   templateUrl: './edit-item-modal.component.html',
   styleUrls: ['./edit-item-modal.component.scss']
 })
-export class EditItemModalComponent implements OnInit {
+export class EditItemModalComponent extends ObservableListener implements OnInit {
   private imageUUID: string;
   private isAddingMode = false;
   private onItemSave: (itemToEdit: Item) => {};
+  currentUser: User;
   editItemForm: FormGroup;
   itemToEdit: Item;
   title: string;
@@ -26,7 +31,15 @@ export class EditItemModalComponent implements OnInit {
   imageURL: string;
 
   constructor(public modalRef: MDBModalRef,
-              private firebase: FirebaseService) {
+              private firebase: FirebaseService,
+              private store$: Store<UserState>) {
+    super();
+    this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy))
+      .subscribe(user => {
+        if (!!user) {
+          this.currentUser = user;
+        }
+      });
   }
 
   get nameForm(): AbstractControl {
@@ -54,6 +67,7 @@ export class EditItemModalComponent implements OnInit {
       this.itemToEdit = {
         id: null,
         categoryId: null,
+        ownerId: this.currentUser.id,
         description: '',
         name: '',
         pictureUrls: []

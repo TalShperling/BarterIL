@@ -3,12 +3,14 @@ import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { MDBModalRef, MDBModalService, ModalOptions } from 'angular-bootstrap-md';
 import { Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ObservableListener } from 'src/app/components/observable-listener';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
+import { getUser } from 'src/app/user/reducers/user.reducer';
 import { Item } from 'src/entities/item.model';
 import { ModalActions } from 'src/entities/modal.model';
+import { User } from 'src/entities/user.model';
 import {
   createItemFail,
   createItemSuccess,
@@ -32,6 +34,7 @@ import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.compo
 export class ItemListComponent extends ObservableListener implements OnInit {
   modalRef: MDBModalRef;
   items$: Observable<Item[]>;
+  currentUser$: Observable<User>;
   private deleteFailedMessage: string = 'The item couldn\'t be deleted, please try again later';
   private deleteSuccessMessage: string = 'The item has been deleted successfully';
   private updateFailedMessage: string = 'The item couldn\'t be updated, please try again later';
@@ -78,6 +81,9 @@ export class ItemListComponent extends ObservableListener implements OnInit {
 
     this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(initiateItemsFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.initAllFailMessage));
+
+    this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy))
+
   }
 
   deleteItem(itemToDelete: Item): void {
@@ -90,7 +96,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
             {
               actionName: ModalActions.DELETE,
               callback: () => {
-                this.store$.dispatch(deleteItem({itemToDelete}));
+                this.store$.dispatch(deleteItem({ itemToDelete }));
               },
               color: 'danger-color'
             },
@@ -118,7 +124,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
       data: {
         itemToEdit: Object.assign({}, item),
         onItemSave: (editedItem: Item) => {
-          this.store$.dispatch(updateItem({item: editedItem}));
+          this.store$.dispatch(updateItem({ item: editedItem }));
         }
       },
       class: 'modal-lg'

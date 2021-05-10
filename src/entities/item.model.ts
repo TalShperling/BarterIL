@@ -3,5 +3,6 @@ export interface Item {
     name: string;
     categoryId: string;
     description: string;
+    ownerId: string;
     pictureUrls: string[];
 }
