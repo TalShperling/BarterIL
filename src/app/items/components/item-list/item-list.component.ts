@@ -1,28 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Actions, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
-import { MDBModalRef, MDBModalService, ModalOptions } from 'angular-bootstrap-md';
-import { Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { ObservableListener } from 'src/app/components/observable-listener';
-import { AlertsService } from 'src/app/services/alerts/alerts.service';
-import { Item } from 'src/entities/item.model';
-import { ModalActions } from 'src/entities/modal.model';
+import {Component, OnInit} from '@angular/core';
+import {Actions, ofType} from '@ngrx/effects';
+import {Store} from '@ngrx/store';
+import {MDBModalRef} from 'angular-bootstrap-md';
+import {Observable} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ObservableListener} from 'src/app/components/observable-listener';
+import {AlertsService} from 'src/app/services/alerts/alerts.service';
+import {Item} from 'src/entities/item.model';
 import {
   createItemFail,
   createItemSuccess,
-  deleteItem,
   deleteItemFail,
   deleteItemSuccess,
   initiateItems,
   initiateItemsFail,
-  updateItem,
   updateItemFail,
   updateItemSuccess
 } from '../../actions/items.actions';
-import { getItems, ItemsState } from '../../reducers/items.reducer';
-import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.component';
+import {getItems, ItemsState} from '../../reducers/items.reducer';
+import {ItemsModalService} from '../../services/items-modal.service';
 
 @Component({
   selector: 'app-item-list',
@@ -41,10 +37,10 @@ export class ItemListComponent extends ObservableListener implements OnInit {
   private initAllFailMessage: string = 'An error occurred while trying to fetching the items from the server';
 
   constructor(
-    private modalService: MDBModalService,
     private alertsService: AlertsService,
     private actions$: Actions,
-    private store$: Store<ItemsState>) {
+    private store$: Store<ItemsState>,
+    private itemsModalService: ItemsModalService) {
     super();
     this.store$.dispatch(initiateItems());
   }
@@ -81,47 +77,14 @@ export class ItemListComponent extends ObservableListener implements OnInit {
   }
 
   deleteItem(itemToDelete: Item): void {
-    const modalOptions = {
-      data: {
-        options: {
-          heading: `Delete '${itemToDelete.name}'`,
-          description: 'Are you sure you want to delete this item?',
-          actions: [
-            {
-              actionName: ModalActions.DELETE,
-              callback: () => {
-                this.store$.dispatch(deleteItem({itemToDelete}));
-              },
-              color: 'danger-color'
-            },
-            {
-              actionName: ModalActions.CLOSE,
-              callback: () => {
-                this.modalRef.hide();
-              },
-              color: 'info-color'
-            }
-          ]
-        } as ModalOptions
-      }
-    };
-
-    this.modalRef = this.modalService.show(ModalComponent, modalOptions);
+    this.itemsModalService.deleteItem(itemToDelete);
   }
 
   viewItem(itemId: string): void {
-    this.alertsService.showSuccessAlert(`Showing item ${itemId}`);
+    this.itemsModalService.viewItem(itemId);
   }
 
   editItem(item: Item): void {
-    this.modalService.show(EditItemModalComponent, {
-      data: {
-        itemToEdit: Object.assign({}, item),
-        onItemSave: (editedItem: Item) => {
-          this.store$.dispatch(updateItem({item: editedItem}));
-        }
-      },
-      class: 'modal-lg'
-    });
+    this.itemsModalService.editItem(item);
   }
 }

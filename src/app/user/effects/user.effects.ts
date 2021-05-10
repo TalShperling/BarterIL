@@ -15,7 +15,7 @@ import {
   registerSuccess,
   update,
   updateFail,
-  updateSuccess, updateSuperficialData,
+  updateSuccess, updateSuperficialData, updateSuperficialDataFail, updateSuperficialDataSuccess,
   updateWithoutPhone
 } from '../actions/user.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
@@ -110,8 +110,8 @@ export class UserEffects {
     ofType(updateSuperficialData),
     switchMap(({user}) => this.userService.upsert$(user)
       .pipe(
-        map((updatedUser: User) => updateSuccess({user: updatedUser})),
-        catchError((err) => of(updateFail({message: err})))
+        map((updatedUser: User) => updateSuperficialDataSuccess({user: updatedUser})),
+        catchError((err) => of(updateSuperficialDataFail({message: err})))
       ))
   ));
 
