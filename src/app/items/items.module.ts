@@ -23,12 +23,14 @@ import {ItemsEffects} from './effects/items.effects';
 import {ItemsManagementComponent} from './components/items-management/items-management.component';
 import {FilterItemsPipe} from '../components/pipes/filter-items.pipe';
 import {ItemsModalService} from './services/items-modal.service';
+import { ItemDetailsModalComponent } from './components/item-details-modal/item-details-modal.component';
 
 @NgModule({
   declarations: [
     ItemComponent,
     ItemListComponent,
     EditItemModalComponent,
+    ItemDetailsModalComponent,
     ItemsManagementComponent,
     FilterItemsPipe
   ],
