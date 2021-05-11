@@ -6,6 +6,7 @@ import {AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from '
 import {SignUpComponent} from './user/components/sign-up/sign-up.component';
 import {UserInfoComponent} from './user/components/user-info/user-info.component';
 import {UsersManagementComponent} from './user/components/users-management/users-management.component';
+import {ItemsManagementComponent} from './items/components/items-management/items-management.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -38,6 +39,12 @@ const routes: Routes = [
   {
     path: 'users-management',
     component: UsersManagementComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: {authGuardPipe: redirectUnauthorizedToLogin}
+  },
+  {
+    path: 'items-management',
+    component: ItemsManagementComponent,
     canActivate: [AngularFireAuthGuard],
     data: {authGuardPipe: redirectUnauthorizedToLogin}
   },
