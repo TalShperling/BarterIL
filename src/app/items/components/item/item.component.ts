@@ -13,6 +13,7 @@ export class ItemComponent implements OnInit {
   @Output() onDeleteItem: EventEmitter<Item>;
   @Output() onEditItem: EventEmitter<Item>;
   @Output() onViewItem: EventEmitter<Item>;
+  imageSrc: string;
 
   constructor() {
     this.onDeleteItem = new EventEmitter<Item>();
@@ -21,6 +22,7 @@ export class ItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.imageSrc = this.item.pictureUrls[0];
   }
 
   deleteItem(): void {
@@ -33,5 +35,9 @@ export class ItemComponent implements OnInit {
 
   editItem(): void {
     this.onEditItem.emit(this.item);
+  }
+
+  onImageError(): void {
+    this.imageSrc = 'assets/images/no-image-to-show.png';
   }
 }
