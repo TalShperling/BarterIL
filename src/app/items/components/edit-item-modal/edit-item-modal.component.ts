@@ -31,15 +31,8 @@ export class EditItemModalComponent extends ObservableListener implements OnInit
   imageURL: string;
 
   constructor(public modalRef: MDBModalRef,
-              private firebase: FirebaseService,
-              private store$: Store<UserState>) {
+              private firebase: FirebaseService) {
     super();
-    this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy))
-      .subscribe(user => {
-        if (!!user) {
-          this.currentUser = user;
-        }
-      });
   }
 
   get nameForm(): AbstractControl {
@@ -67,7 +60,7 @@ export class EditItemModalComponent extends ObservableListener implements OnInit
       this.itemToEdit = {
         id: null,
         categoryId: null,
-        ownerId: this.currentUser.id,
+        ownerId: null,
         description: '',
         name: '',
         pictureUrls: []
