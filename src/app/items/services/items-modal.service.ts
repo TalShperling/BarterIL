@@ -7,15 +7,14 @@ import {ModalActions} from '../../../entities/modal.model';
 import {ModalComponent} from '../../components/modal/modal.component';
 import {deleteItem, updateItem} from '../actions/items.actions';
 import {EditItemModalComponent} from '../components/edit-item-modal/edit-item-modal.component';
-import {AlertsService} from '../../services/alerts/alerts.service';
+import { ItemDetailsModalComponent } from '../components/item-details-modal/item-details-modal.component';
 
 @Injectable()
 export class ItemsModalService {
   modalRef: MDBModalRef;
 
   constructor(private store$: Store<ItemsState>,
-              private modalService: MDBModalService,
-              private alertsService: AlertsService) {
+              private modalService: MDBModalService) {
   }
 
   deleteItem(itemToDelete: Item): void {
@@ -48,8 +47,13 @@ export class ItemsModalService {
     this.modalRef = this.modalService.show(ModalComponent, modalOptions);
   }
 
-  viewItem(itemId: string): void {
-    this.alertsService.showSuccessAlert(`Showing item ${itemId}`);
+  viewItem(item: Item): void {
+    this.modalRef = this.modalService.show(ItemDetailsModalComponent, {
+      data: {
+        item
+      },
+      class: 'modal-lg'
+    });
   }
 
   editItem(item: Item): void {

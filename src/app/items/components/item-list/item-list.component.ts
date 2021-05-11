@@ -80,8 +80,8 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     this.itemsModalService.deleteItem(itemToDelete);
   }
 
-  viewItem(itemId: string): void {
-    this.itemsModalService.viewItem(itemId);
+  viewItem(item: Item): void {
+    this.itemsModalService.viewItem(item);
   }
 
   editItem(item: Item): void {
