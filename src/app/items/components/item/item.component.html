@@ -19,7 +19,7 @@
     <p class="card-text">
       {{item.description}}
     </p>
-    <div class="d-flex justify-content-around" *ngIf="currentUser?.id === item?.ownerId">
+    <div class="d-flex justify-content-around" *ngIf="currentUser?.id === item?.ownerId || currentUser.isAdmin">
       <a mdbBtn floating="true" size="lg" class="success-color" (click)="editItem()" mdbWavesEffect>
         <mdb-icon fas icon="edit"></mdb-icon>
       </a>
