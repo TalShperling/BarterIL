@@ -4,5 +4,6 @@ export interface Item {
     amount?: number;
     categoryId: string;
     description: string;
+    ownerId: string;
     pictureUrls: string[];
 }

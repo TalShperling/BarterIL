@@ -16,7 +16,10 @@ const ItemsActionNames = {
   CREATE_ITEM_FAIL: '[Items] Create item failed',
   UPDATE_ITEM_WITH_IMAGE: '[Items] Update item with image',
   UPDATE_ITEM_WITH_IMAGE_SUCCESS: '[Items] Update item with image succeeded',
-  UPDATE_ITEM_WITH_IMAGE_FAIL: '[Items] Update item with image failed'
+  UPDATE_ITEM_WITH_IMAGE_FAIL: '[Items] Update item with image failed',
+  CREATE_ITEM_WITH_IMAGE: '[Items] Create item with image',
+  CREATE_ITEM_WITH_IMAGE_SUCCESS: '[Items] Create item with image succeeded',
+  CREATE_ITEM_WITH_IMAGE_FAIL: '[Items] Create item with image failed'
 };
 
 export const initiateItems = createAction(ItemsActionNames.INITIATE_ITEMS);
@@ -32,9 +35,14 @@ export const updateItemSuccess = createAction(ItemsActionNames.UPDATE_ITEM_SUCCE
 export const updateItemFail = createAction(ItemsActionNames.UPDATE_ITEM_FAIL, props<{ message: string; }>());
 
 export const updateItemWithImage = createAction(ItemsActionNames.UPDATE_ITEM_WITH_IMAGE, props<{ item: Item, itemImage: File }>());
-export const updateItemWithImageSuccess = createAction(ItemsActionNames.UPDATE_ITEM_WITH_IMAGE_SUCCESS, props<{ newItem: Item }>());
+export const updateItemWithImageSuccess = createAction(ItemsActionNames.UPDATE_ITEM_WITH_IMAGE_SUCCESS, props<{ updatedItem: Item }>());
 export const updateItemWithImageFail = createAction(ItemsActionNames.UPDATE_ITEM_WITH_IMAGE_FAIL, props<{ message: string }>());
 
 export const createItem = createAction(ItemsActionNames.CREATE_ITEM, props<{ item: Item }>());
 export const createItemSuccess = createAction(ItemsActionNames.CREATE_ITEM_SUCCESS, props<{ newItem: Item }>());
 export const createItemFail = createAction(ItemsActionNames.CREATE_ITEM_FAIL, props<{ message: string; }>());
+
+export const createItemWithImage = createAction(ItemsActionNames.CREATE_ITEM_WITH_IMAGE, props<{ item: Item, itemImage: File }>());
+export const createItemWithImageSuccess = createAction(ItemsActionNames.CREATE_ITEM_WITH_IMAGE_SUCCESS, props<{ newItem: Item }>());
+export const createItemWithImageFail = createAction(ItemsActionNames.CREATE_ITEM_WITH_IMAGE_FAIL, props<{ message: string }>());
+

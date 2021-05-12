@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MDBModalRef} from 'angular-bootstrap-md';
-import {Item} from 'src/entities/item.model';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { Item } from 'src/entities/item.model';
 
 @Component({
   selector: 'app-edit-item-modal',
@@ -48,6 +48,7 @@ export class EditItemModalComponent implements OnInit {
       this.itemToEdit = {
         id: null,
         categoryId: null,
+        ownerId: null,
         description: '',
         name: '',
         pictureUrls: []

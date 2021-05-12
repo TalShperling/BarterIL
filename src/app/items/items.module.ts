@@ -5,6 +5,7 @@ import {ItemsService} from './services/items.service';
 import {
   ButtonsModule,
   CardsModule,
+  CarouselModule,
   IconsModule,
   InputsModule,
   InputUtilitiesModule,
@@ -48,6 +49,7 @@ import { ItemDetailsModalComponent } from './components/item-details-modal/item-
     CardsModule,
     ButtonsModule,
     IconsModule,
+    CarouselModule,
     WavesModule
   ],
   providers: [ItemsService, AlertsService, ItemsModalService]

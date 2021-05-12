@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Item} from 'src/entities/item.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Item } from 'src/entities/item.model';
+import { User } from 'src/entities/user.model';
 
 @Component({
   selector: 'app-item',
@@ -8,6 +9,7 @@ import {Item} from 'src/entities/item.model';
 })
 export class ItemComponent implements OnInit {
   @Input() item: Item;
+  @Input() currentUser: User;
   @Output() onDeleteItem: EventEmitter<Item>;
   @Output() onEditItem: EventEmitter<Item>;
   @Output() onViewItem: EventEmitter<Item>;

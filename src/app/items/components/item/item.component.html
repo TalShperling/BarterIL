@@ -1,20 +1,25 @@
 <div class="card">
-  <div class="view overlay item-image">
-    <img [src]="imageSrc" (error)="onImageError()" class="card-img-top"
-         alt="">
-    <a>
-      <div class="mask rgba-white-slight"></div>
-    </a>
+  <div class="view overlay waves-light item-image" mdbWavesEffect>
+    <div *ngIf="item.pictureUrls.length <= 1; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+      <img [src]="imageSrc" class="card-img-top" (click)="viewItem()"/>
+    </ng-template>
+    <ng-template #elseBlock>
+      <div class="view overlay waves-light item-image" mdbWavesEffect>
+        <mdb-carousel class="carousel slide carousel-fade" [animation]="'fade'">
+          <mdb-carousel-item *ngFor="let image of item.pictureUrls">
+            <img class="d-block card-img-top" [src]="image" (click)="viewItem()"/>
+          </mdb-carousel-item>
+        </mdb-carousel>
+      </div>
+    </ng-template>
   </div>
   <div class="card-body">
     <h4 class="card-title">{{item.name}}</h4>
     <p class="card-text">
       {{item.description}}
     </p>
-    <div class="d-flex justify-content-around">
-      <a mdbBtn floating="true" size="lg" class="primary-color" (click)="viewItem()" mdbWavesEffect>
-        <mdb-icon fas icon="info-circle"></mdb-icon>
-      </a>
+    <div class="d-flex justify-content-around" *ngIf="currentUser?.id === item?.ownerId || currentUser.isAdmin">
       <a mdbBtn floating="true" size="lg" class="success-color" (click)="editItem()" mdbWavesEffect>
         <mdb-icon fas icon="edit"></mdb-icon>
       </a>
