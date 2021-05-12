@@ -33,17 +33,13 @@
       </div>
       <div class="col-md-5 align-self-center">
         <div class="row justify-content-center">
-          <img alt="Upload an item image" [src]="imageURL" (click)="!isUploadingImage && itemImage.click()"
+          <img alt="Upload an item image" [src]="imageURL" (click)="itemImage.click()"
                class="item-image p-2">
         </div>
         <div class="row justify-content-center">
-          <div *ngIf="isUploadingImage">{{uploadPercent + '%'}}</div>
-        </div>
-        <div class="row justify-content-center">
           <input style="display: none" #itemImage type="file" accept="image/png, image/jpeg"
-                 (change)="uploadFile($event)"
-                 [disabled]="isUploadingImage">
-          <mdb-error style="position: inherit !important;" *ngIf="!isImageUploaded">Please upload an item image
+                 (change)="uploadFile($event)">
+          <mdb-error style="position: inherit !important;" *ngIf="isDefaultImage && !wasImageChanged">Please upload an item image
           </mdb-error>
         </div>
       </div>
@@ -53,7 +49,7 @@
 <div class="modal-footer justify-content-center">
   <div class="row justify-content-center">
     <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect
-            [disabled]="!editItemForm.valid || !isImageUploaded" (click)="onSubmit()">
+            [disabled]="!editItemForm.valid || (isDefaultImage && !wasImageChanged)" (click)="onSubmit()">
       Save
     </button>
   </div>
