@@ -19,7 +19,7 @@ import {
   initiateItemsFail,
   updateItem,
   updateItemFail,
-  updateItemSuccess
+  updateItemSuccess, updateItemWithImage
 } from '../../actions/items.actions';
 import { getItems, ItemsState } from '../../reducers/items.reducer';
 import { EditItemModalComponent } from '../edit-item-modal/edit-item-modal.component';
@@ -119,7 +119,9 @@ export class ItemListComponent extends ObservableListener implements OnInit {
         itemToEdit: Object.assign({}, item),
         onItemSave: (editedItem: Item) => {
           this.store$.dispatch(updateItem({item: editedItem}));
-        }
+        },
+        onItemSaveWithImageChange: (updatedItem: Item, itemImage: File) =>
+          this.store$.dispatch(updateItemWithImage({item: updatedItem, itemImage}))
       },
       class: 'modal-lg'
     });
