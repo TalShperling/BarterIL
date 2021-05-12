@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import {
@@ -45,7 +45,7 @@ export class ItemsEffects {
 
   updateItem$ = createEffect(() => this.actions$.pipe(
     ofType(updateItem),
-    withLatestFrom(this.store$.select(getUser)),
+    withLatestFrom(this.store$.pipe(select(getUser))),
     switchMap(([{ item }, user]) => {
       item.ownerId = user.id;
       
