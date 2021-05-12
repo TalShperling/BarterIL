@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Actions, ofType} from '@ngrx/effects';
 import {Store} from '@ngrx/store';
-import {MDBModalRef} from 'angular-bootstrap-md';
+import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ObservableListener} from 'src/app/components/observable-listener';
@@ -10,6 +10,18 @@ import {Item} from 'src/entities/item.model';
 import {EditItemModalComponent} from '../edit-item-modal/edit-item-modal.component';
 import {getItems, ItemsState} from '../../reducers/items.reducer';
 import {ItemsModalService} from '../../services/items-modal.service';
+import {
+  createItemFail,
+  createItemSuccess,
+  deleteItemFail,
+  deleteItemSuccess,
+  initiateItems,
+  initiateItemsFail,
+  updateItem,
+  updateItemFail,
+  updateItemSuccess,
+  updateItemWithImage
+} from '../../actions/items.actions';
 
 @Component({
   selector: 'app-item-list',
@@ -66,6 +78,9 @@ export class ItemListComponent extends ObservableListener implements OnInit {
 
     this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(initiateItemsFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.initAllFailMessage));
+
+    this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(updateItemWithImage))
+      .subscribe(() => this.alertsService.showSuccessAlert(this.updateSuccessMessage));
   }
 
   deleteItem(itemToDelete: Item): void {
