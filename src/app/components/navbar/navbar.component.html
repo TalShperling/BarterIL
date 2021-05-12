@@ -2,6 +2,18 @@
             style="direction: ltr">
   <mdb-navbar-brand><a class="navbar-brand text-white" routerLink="/">BarterIL</a></mdb-navbar-brand>
   <links>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown" dropdown *ngIf="(signInUser$|async).isAdmin">
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          Management<span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+          <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/users-management">Users management</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/items-management">Items management</a>
+        </div>
+      </li>
+    </ul>
+  </links>
+  <links>
     <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item">
         <a class="nav-link">
