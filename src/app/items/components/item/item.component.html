@@ -2,13 +2,13 @@
   <div class="view overlay waves-light item-image" mdbWavesEffect (click)="viewItem()">
     <div *ngIf="item.pictureUrls.length <= 1; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
-      <mdb-card-img [src]="imageSrc" class="card-img-top"></mdb-card-img>
+      <img [src]="imageSrc" class="card-img-top"/>
     </ng-template>
     <ng-template #elseBlock>
       <div class="view overlay waves-light item-image" mdbWavesEffect>
         <mdb-carousel [animation]="'slide'">
           <mdb-carousel-item *ngFor="let image of item.pictureUrls">
-            <img class="card-img-top" [src]="image">
+            <img class="card-img-top" [src]="image"/>
           </mdb-carousel-item>
         </mdb-carousel>
       </div>
