@@ -7,6 +7,8 @@ import {
   createItem,
   createItemFail,
   createItemSuccess,
+  createItemWithImage,
+  createItemWithImageSuccess,
   deleteItem,
   deleteItemFail,
   deleteItemSuccess,
@@ -51,7 +53,7 @@ export class ItemsEffects {
     withLatestFrom(this.store$.pipe(select(getUser))),
     switchMap(([{ item }, user]) => {
       item.ownerId = user.id;
-      
+
       return this.itemsService.upsert$(item)
         .pipe(
           map(() => createItemSuccess({ newItem: item })),
@@ -71,12 +73,28 @@ export class ItemsEffects {
   )
   );
 
-  upsertItemWithImage$ = createEffect(() => this.actions$.pipe(
+  createItemWithImage$ = createEffect(() => this.actions$.pipe(
+    ofType(createItemWithImage),
+    withLatestFrom(this.store$.pipe(select(getUser))),
+    switchMap(([{ item, itemImage }, user]) => {
+      let itemWithOwnerId: Item = Object.assign({}, item);
+
+      itemWithOwnerId.ownerId = user.id;
+
+      return this.itemsService.upsertWithImage$(itemWithOwnerId, itemImage)
+        .pipe(
+          map(() => createItemWithImageSuccess({ newItem: item })),
+          catchError((err) => of(updateItemWithImageFail({ message: err })))
+        )
+    }))
+  );
+
+  updateItemWithImage$ = createEffect(() => this.actions$.pipe(
     ofType(updateItemWithImage),
-    switchMap(({item, itemImage}) => this.itemsService.upsertWithImage$(item, itemImage)
+    switchMap(({ item, itemImage }) => this.itemsService.upsertWithImage$(item, itemImage)
       .pipe(
-        map(() => updateItemWithImageSuccess({newItem: item})),
-        catchError((err) => of(updateItemWithImageFail({message: err})))
+        map(() => updateItemWithImageSuccess({ updatedItem: item })),
+        catchError((err) => of(updateItemWithImageFail({ message: err })))
       )
     ))
   );

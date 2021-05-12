@@ -5,7 +5,7 @@ import {ItemsState} from '../reducers/items.reducer';
 import {Item} from '../../../entities/item.model';
 import {ModalActions} from '../../../entities/modal.model';
 import {ModalComponent} from '../../components/modal/modal.component';
-import {createItem, deleteItem, updateItem, updateItemWithImage} from '../actions/items.actions';
+import {createItem, createItemWithImage, deleteItem, updateItem, updateItemWithImage} from '../actions/items.actions';
 import {EditItemModalComponent} from '../components/edit-item-modal/edit-item-modal.component';
 import {ItemDetailsModalComponent} from '../components/item-details-modal/item-details-modal.component';
 
@@ -78,7 +78,7 @@ export class ItemsModalService {
           this.store$.dispatch(createItem({item: addedItem}));
         },
         onItemSaveWithImageChange: (item: Item, itemImage: File) =>
-          this.store$.dispatch(updateItemWithImage({item, itemImage}))
+          this.store$.dispatch(createItemWithImage({item, itemImage}))
       },
       class: 'modal-lg'
     });
