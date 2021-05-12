@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
-import {combineLatest, from, Observable, of} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import {CollectionType} from './models/collection-type.model';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask} from '@angular/fire/storage';
+import * as uuid from 'uuid';
+
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +40,9 @@ export abstract class FirebaseService {
     return from(this.firestore.doc(`${collection}/${data.id}`).delete());
   }
 
-  uploadFile(file, imageUUID: string): Observable<[AngularFireUploadTask, AngularFireStorageReference]> {
+  uploadFile(file: File): Observable<{ uploadTask$: AngularFireUploadTask, storageRef$: AngularFireStorageReference }> {
+    const imageUUID = uuid.v4();
     const fileRef = this.storage.ref(imageUUID);
-    return combineLatest(of(this.storage.upload(imageUUID, file)), of(fileRef));
+    return of({uploadTask$: this.storage.upload(imageUUID, file), storageRef$: fileRef});
   }
 }

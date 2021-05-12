@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {of} from 'rxjs';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {
   createItem,
   createItemFail,
@@ -14,10 +14,13 @@ import {
   initiateItemsSuccess,
   updateItem,
   updateItemFail,
-  updateItemSuccess
+  updateItemSuccess,
+  updateItemWithImage,
+  updateItemWithImageFail,
+  updateItemWithImageSuccess
 } from 'src/app/items/actions/items.actions';
-import { ItemsService } from 'src/app/items/services/items.service';
-import { Item } from 'src/entities/item.model';
+import {ItemsService} from 'src/app/items/services/items.service';
+import {Item} from 'src/entities/item.model';
 
 @Injectable()
 export class ItemsEffects {
@@ -59,6 +62,16 @@ export class ItemsEffects {
         catchError((err) => of(createItemFail({message: err})))
       ))
     )
+  );
+
+  upsertItemWithImage$ = createEffect(() => this.actions$.pipe(
+    ofType(updateItemWithImage),
+    switchMap(({item, itemImage}) => this.itemsService.upsertWithImage$(item, itemImage)
+      .pipe(
+        map(() => updateItemWithImageSuccess({newItem: item})),
+        catchError((err) => of(updateItemWithImageFail({message: err})))
+      )
+    ))
   );
 
   constructor(
