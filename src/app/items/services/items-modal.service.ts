@@ -5,9 +5,9 @@ import {ItemsState} from '../reducers/items.reducer';
 import {Item} from '../../../entities/item.model';
 import {ModalActions} from '../../../entities/modal.model';
 import {ModalComponent} from '../../components/modal/modal.component';
-import {deleteItem, updateItem} from '../actions/items.actions';
+import {createItem, deleteItem, updateItem, updateItemWithImage} from '../actions/items.actions';
 import {EditItemModalComponent} from '../components/edit-item-modal/edit-item-modal.component';
-import { ItemDetailsModalComponent } from '../components/item-details-modal/item-details-modal.component';
+import {ItemDetailsModalComponent} from '../components/item-details-modal/item-details-modal.component';
 
 @Injectable()
 export class ItemsModalService {
@@ -62,10 +62,25 @@ export class ItemsModalService {
         itemToEdit: Object.assign({}, item),
         onItemSave: (editedItem: Item) => {
           this.store$.dispatch(updateItem({item: editedItem}));
-        }
+        },
+        onItemSaveWithImageChange: (updatedItem: Item, itemImage: File) =>
+          this.store$.dispatch(updateItemWithImage({item: updatedItem, itemImage}))
       },
       class: 'modal-lg'
     });
   }
 
+  addItem(): void {
+    this.modalService.show(EditItemModalComponent, {
+      data: {
+        isAddingMode: true,
+        onItemSave: (addedItem: Item) => {
+          this.store$.dispatch(createItem({item: addedItem}));
+        },
+        onItemSaveWithImageChange: (item: Item, itemImage: File) =>
+          this.store$.dispatch(updateItemWithImage({item, itemImage}))
+      },
+      class: 'modal-lg'
+    });
+  }
 }

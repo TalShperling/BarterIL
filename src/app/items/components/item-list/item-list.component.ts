@@ -7,7 +7,6 @@ import {takeUntil} from 'rxjs/operators';
 import {ObservableListener} from 'src/app/components/observable-listener';
 import {AlertsService} from 'src/app/services/alerts/alerts.service';
 import {Item} from 'src/entities/item.model';
-import {EditItemModalComponent} from '../edit-item-modal/edit-item-modal.component';
 import {getItems, ItemsState} from '../../reducers/items.reducer';
 import {ItemsModalService} from '../../services/items-modal.service';
 import {
@@ -17,7 +16,6 @@ import {
   deleteItemSuccess,
   initiateItems,
   initiateItemsFail,
-  updateItem,
   updateItemFail,
   updateItemSuccess,
   updateItemWithImage
@@ -92,16 +90,6 @@ export class ItemListComponent extends ObservableListener implements OnInit {
   }
 
   editItem(item: Item): void {
-    this.modalService.show(EditItemModalComponent, {
-      data: {
-        itemToEdit: Object.assign({}, item),
-        onItemSave: (editedItem: Item) => {
-          this.store$.dispatch(updateItem({item: editedItem}));
-        },
-        onItemSaveWithImageChange: (updatedItem: Item, itemImage: File) =>
-          this.store$.dispatch(updateItemWithImage({item: updatedItem, itemImage}))
-      },
-      class: 'modal-lg'
-    });
+    this.itemsModalService.editItem(item);
   }
 }
