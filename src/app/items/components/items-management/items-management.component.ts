@@ -6,6 +6,8 @@ import {takeUntil} from 'rxjs/operators';
 import {ObservableListener} from '../../../components/observable-listener';
 import {getItems, ItemsState} from '../../reducers/items.reducer';
 import {ItemsModalService} from '../../services/items-modal.service';
+import {User} from '../../../../entities/user.model';
+import {getUser} from '../../../user/reducers/user.reducer';
 
 @Component({
   selector: 'app-items-management',
@@ -14,6 +16,7 @@ import {ItemsModalService} from '../../services/items-modal.service';
 })
 export class ItemsManagementComponent extends ObservableListener implements OnInit {
   items$: Observable<Item[]>;
+  currentUser$: Observable<User>;
   searchText = '';
 
   constructor(private store$: Store<ItemsState>,
@@ -23,6 +26,7 @@ export class ItemsManagementComponent extends ObservableListener implements OnIn
 
   ngOnInit(): void {
     this.items$ = this.store$.select(getItems).pipe(takeUntil(this.unsubscribeOnDestroy));
+    this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
   }
 
   deleteItem(item: Item): void {
