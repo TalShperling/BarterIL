@@ -35,7 +35,7 @@ import { ItemDetailsModalComponent } from './components/item-details-modal/item-
     ItemsManagementComponent,
     FilterItemsPipe
   ],
-  exports: [ItemListComponent],
+    exports: [ItemListComponent, ItemComponent],
   imports: [
     CommonModule,
     FormsModule,

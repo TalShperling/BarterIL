@@ -1,6 +1,6 @@
-import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
-import { Item } from 'src/entities/item.model';
-import { createItemSuccess, deleteItemSuccess, initiateItemsSuccess, updateItemSuccess } from '../actions/items.actions';
+import {createFeatureSelector, createReducer, createSelector, on} from '@ngrx/store';
+import {Item} from 'src/entities/item.model';
+import {createItemSuccess, deleteItemSuccess, initiateItemsSuccess, updateItemSuccess} from '../actions/items.actions';
 
 export const itemsFeatureKey = 'items';
 
@@ -15,7 +15,10 @@ export const initialItemsState: ItemsState = {
 export const itemsReducer = createReducer(
   initialItemsState,
   on(initiateItemsSuccess, (state, {items}) => ({...state, items})),
-  on(deleteItemSuccess, (state, {deletedItemId}) => ({...state, items: state.items.filter(item => item.id !== deletedItemId)})),
+  on(deleteItemSuccess, (state, {deletedItemId}) => ({
+    ...state,
+    items: state.items.filter(item => item.id !== deletedItemId)
+  })),
   on(createItemSuccess, (state, {newItem}) => ({...state, items: [...state.items, newItem]})),
   on(updateItemSuccess, (state, {updatedItem}) => ({
     ...state,
@@ -26,3 +29,4 @@ export const itemsReducer = createReducer(
 const selectItemsState = createFeatureSelector<ItemsState>(itemsFeatureKey);
 
 export const getItems = createSelector(selectItemsState, (state) => state.items);
+export const getMyItems = (ownerId) => createSelector(selectItemsState, (state) => state.items.filter(item => item.ownerId === ownerId));
