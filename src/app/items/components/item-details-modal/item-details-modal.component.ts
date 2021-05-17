@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MDBModalRef } from 'angular-bootstrap-md';
-import { Item } from '../../../../entities/item.model';
+import { Item, ItemAndCategories } from '../../../../entities/item.model';
 
 @Component({
   selector: 'app-item-details-modal',
@@ -8,17 +8,17 @@ import { Item } from '../../../../entities/item.model';
   styleUrls: ['./item-details-modal.component.scss']
 })
 export class ItemDetailsModalComponent implements OnInit{
-  item: Item;
+  itemAndCategories: ItemAndCategories;
   imageSrc: string;
 
   constructor(public modalRef: MDBModalRef) {
   }
 
   ngOnInit(): void {
-    if(this.item.pictureUrls.length === 0) {
+    if(this.itemAndCategories.pictureUrls.length === 0) {
       this.imageSrc = 'assets/images/no-image-to-show.png';
     } else {
-      this.imageSrc = this.item.pictureUrls[0];
+      this.imageSrc = this.itemAndCategories.pictureUrls[0];
     }
   }
 

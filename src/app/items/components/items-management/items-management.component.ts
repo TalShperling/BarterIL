@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {Item} from '../../../../entities/item.model';
-import {takeUntil} from 'rxjs/operators';
-import {ObservableListener} from '../../../components/observable-listener';
-import {getItems, ItemsState} from '../../reducers/items.reducer';
-import {ItemsModalService} from '../../services/items-modal.service';
-import {User} from '../../../../entities/user.model';
-import {getUser} from '../../../user/reducers/user.reducer';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ItemAndCategories } from '../../../../entities/item.model';
+import { User } from '../../../../entities/user.model';
+import { ObservableListener } from '../../../components/observable-listener';
+import { getUser } from '../../../user/reducers/user.reducer';
+import { getItemsAndCategories, ItemsState } from '../../reducers/items.reducer';
+import { ItemsModalService } from '../../services/items-modal.service';
 
 @Component({
   selector: 'app-items-management',
@@ -15,7 +15,7 @@ import {getUser} from '../../../user/reducers/user.reducer';
   styleUrls: ['./items-management.component.scss']
 })
 export class ItemsManagementComponent extends ObservableListener implements OnInit {
-  items$: Observable<Item[]>;
+  items$: Observable<ItemAndCategories[]>;
   currentUser$: Observable<User>;
   searchText = '';
 
@@ -25,19 +25,19 @@ export class ItemsManagementComponent extends ObservableListener implements OnIn
   }
 
   ngOnInit(): void {
-    this.items$ = this.store$.select(getItems).pipe(takeUntil(this.unsubscribeOnDestroy));
+    this.items$ = this.store$.select(getItemsAndCategories).pipe(takeUntil(this.unsubscribeOnDestroy));
     this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
   }
 
-  deleteItem(item: Item): void {
+  deleteItem(item: ItemAndCategories): void {
     this.itemsModalService.deleteItem(item);
   }
 
-  editItem(item: Item): void {
+  editItem(item: ItemAndCategories): void {
     this.itemsModalService.editItem(item);
   }
 
-  viewItem(item: Item): void {
+  viewItem(item: ItemAndCategories): void {
     this.itemsModalService.viewItem(item);
   }
 }

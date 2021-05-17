@@ -1,11 +1,11 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Item} from '../../../entities/item.model';
+import {Item, ItemAndCategories} from '../../../entities/item.model';
 
 @Pipe({
   name: 'filterItems'
 })
 export class FilterItemsPipe implements PipeTransform {
-  transform(items: Item[], searchText: string): Item[] {
+  transform(items: ItemAndCategories[], searchText: string): ItemAndCategories[] {
     if (!items) {
       return [];
     }

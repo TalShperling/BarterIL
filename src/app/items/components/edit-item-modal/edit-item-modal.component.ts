@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 import { MDBModalRef } from 'angular-bootstrap-md';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Category } from 'src/entities/category.model';
 import { Item } from 'src/entities/item.model';
 
 @Component({
@@ -15,6 +18,8 @@ export class EditItemModalComponent implements OnInit {
   private itemImage: File;
   editItemForm: FormGroup;
   itemToEdit: Item;
+  categories$: Observable<Category[]>;
+  selectedCategories$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   title: string;
   wasImageChanged = false;
   isDefaultImage = true;
@@ -36,6 +41,10 @@ export class EditItemModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.categories$.subscribe(categories => {
+      this.selectedCategories$.next(this.filterSelectedValues(categories));
+    })
+
     this.editItemForm = new FormGroup({
       nameForm: new FormControl(null, [Validators.required]),
       categoryIdForm: new FormControl(null, [Validators.required]),
@@ -47,7 +56,7 @@ export class EditItemModalComponent implements OnInit {
     if (this.isAddingMode) {
       this.itemToEdit = {
         id: null,
-        categoryId: null,
+        categoryIds: [],
         ownerId: null,
         description: '',
         name: '',
@@ -62,7 +71,9 @@ export class EditItemModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.wasImageChanged) {
+    this.itemToEdit.categoryIds = this.selectedCategories$.getValue();
+
+      if(this.wasImageChanged) {
       this.onItemSaveWithImageChange(this.itemToEdit, this.itemImage);
     } else {
       this.onItemSave(this.itemToEdit);
@@ -79,6 +90,14 @@ export class EditItemModalComponent implements OnInit {
     };
 
     reader.readAsDataURL(this.itemImage);
+  }
+
+  filterSelectedValues(categories: Category[]): string[] {
+    return categories.filter(category => this.itemToEdit.categoryIds.includes(category.id)).map(cat => cat.id);
+  }
+
+  addSelection(categories: MatSelectChange) {
+    this.selectedCategories$.next(categories.value);
   }
 }
 

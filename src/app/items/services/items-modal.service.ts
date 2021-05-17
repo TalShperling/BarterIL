@@ -1,33 +1,38 @@
-import {Injectable} from '@angular/core';
-import {MDBModalRef, MDBModalService, ModalOptions} from 'angular-bootstrap-md';
-import {Store} from '@ngrx/store';
-import {ItemsState} from '../reducers/items.reducer';
-import {Item} from '../../../entities/item.model';
-import {ModalActions} from '../../../entities/modal.model';
-import {ModalComponent} from '../../components/modal/modal.component';
-import {createItem, createItemWithImage, deleteItem, updateItem, updateItemWithImage} from '../actions/items.actions';
-import {EditItemModalComponent} from '../components/edit-item-modal/edit-item-modal.component';
-import {ItemDetailsModalComponent} from '../components/item-details-modal/item-details-modal.component';
+import { Injectable } from '@angular/core';
+import { MDBModalRef, MDBModalService, ModalOptions } from 'angular-bootstrap-md';
+import { Store } from '@ngrx/store';
+import { getCategories, ItemsState } from '../reducers/items.reducer';
+import { getItemFromItemAndCategories, Item, ItemAndCategories } from '../../../entities/item.model';
+import { ModalActions } from '../../../entities/modal.model';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { createItem, createItemWithImage, deleteItem, updateItem, updateItemWithImage } from '../actions/items.actions';
+import { EditItemModalComponent } from '../components/edit-item-modal/edit-item-modal.component';
+import { ItemDetailsModalComponent } from '../components/item-details-modal/item-details-modal.component';
+import { Observable } from 'rxjs';
+import { Category } from 'src/entities/category.model';
 
 @Injectable()
 export class ItemsModalService {
   modalRef: MDBModalRef;
+  allCategories$: Observable<Category[]>;
 
   constructor(private store$: Store<ItemsState>,
-              private modalService: MDBModalService) {
+    private modalService: MDBModalService) {
+    this.allCategories$ = this.store$.select(getCategories);
   }
 
-  deleteItem(itemToDelete: Item): void {
+  deleteItem(itemAndCategoriesToDelete: ItemAndCategories): void {
     const modalOptions = {
       data: {
         options: {
-          heading: `Delete '${itemToDelete.name}'`,
+          heading: `Delete '${itemAndCategoriesToDelete.name}'`,
           description: 'Are you sure you want to delete this item?',
           actions: [
             {
               actionName: ModalActions.DELETE,
               callback: () => {
-                this.store$.dispatch(deleteItem({itemToDelete}));
+                let itemToDelete = getItemFromItemAndCategories(itemAndCategoriesToDelete);
+                this.store$.dispatch(deleteItem({ itemToDelete }));
                 this.modalRef.hide();
               },
               color: 'danger-color'
@@ -47,24 +52,25 @@ export class ItemsModalService {
     this.modalRef = this.modalService.show(ModalComponent, modalOptions);
   }
 
-  viewItem(item: Item): void {
+  viewItem(itemAndCategories: ItemAndCategories): void {
     this.modalRef = this.modalService.show(ItemDetailsModalComponent, {
       data: {
-        item
+        itemAndCategories
       },
       class: 'modal-lg'
     });
   }
 
-  editItem(item: Item): void {
+  editItem(item: ItemAndCategories): void {
     this.modalService.show(EditItemModalComponent, {
       data: {
-        itemToEdit: Object.assign({}, item),
+        itemToEdit: Object.assign({}, getItemFromItemAndCategories(item)),
+        categories$: this.allCategories$,
         onItemSave: (editedItem: Item) => {
-          this.store$.dispatch(updateItem({item: editedItem}));
+          this.store$.dispatch(updateItem({ item: editedItem }));
         },
-        onItemSaveWithImageChange: (updatedItem: Item, itemImage: File) =>
-          this.store$.dispatch(updateItemWithImage({item: updatedItem, itemImage}))
+        onItemSaveWithImageChange: (updatedItem: ItemAndCategories, itemImage: File) =>
+          this.store$.dispatch(updateItemWithImage({ item: getItemFromItemAndCategories(updatedItem), itemImage }))
       },
       class: 'modal-lg'
     });
@@ -74,11 +80,12 @@ export class ItemsModalService {
     this.modalService.show(EditItemModalComponent, {
       data: {
         isAddingMode: true,
-        onItemSave: (addedItem: Item) => {
-          this.store$.dispatch(createItem({item: addedItem}));
+        categories$: this.allCategories$,
+        onItemSave: (addedItem: ItemAndCategories) => {
+          this.store$.dispatch(createItem({ item: getItemFromItemAndCategories(addedItem) }));
         },
-        onItemSaveWithImageChange: (item: Item, itemImage: File) =>
-          this.store$.dispatch(createItemWithImage({item, itemImage}))
+        onItemSaveWithImageChange: (item: ItemAndCategories, itemImage: File) =>
+          this.store$.dispatch(createItemWithImage({ item: getItemFromItemAndCategories(item), itemImage }))
       },
       class: 'modal-lg'
     });

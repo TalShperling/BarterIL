@@ -8,14 +8,14 @@
   <div class="row mt-4">
     <div class="col-md-4 offset-md-1 mx-3 my-3">
       <div class="view overlay waves-light item-image" mdbWavesEffect>
-        <div *ngIf="item.pictureUrls.length <= 1; then thenBlock else elseBlock"></div>
+        <div *ngIf="itemAndCategories.pictureUrls.length <= 1; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
           <mdb-card-img [src]="imageSrc" class="card-i  mg-top"></mdb-card-img>
         </ng-template>
         <ng-template #elseBlock>
           <div class="view overlay waves-light item-image" mdbWavesEffect>
             <mdb-carousel [animation]="'slide'">
-              <mdb-carousel-item *ngFor="let image of item.pictureUrls">
+              <mdb-carousel-item *ngFor="let image of itemAndCategories.pictureUrls">
                 <img class="card-img-top" [src]="image">
               </mdb-carousel-item>
             </mdb-carousel>
@@ -23,17 +23,20 @@
         </ng-template>
       </div>
       <div class="d-flex justify-content-start">
-        <div class="font-weight-normal">Amount: {{item.amount || 1}}</div>
+        <div class="font-weight-normal">Amount: {{itemAndCategories.amount || 1}}</div>
       </div>
     </div>
     <div class="col-md-7 text-md-left ml-3 mt-3">
       <div class="d-flex justify-content-start">
         <div>
-          <h2 class="mb-4">{{item.name}}</h2>
+          <h2 class="mb-4">{{itemAndCategories.name}}</h2>
         </div>
       </div>
       <div class="d-flex justify-content-start">
-        <div class="font-weight-normal">{{item.description}}</div>
+        <div class="font-weight-normal">{{itemAndCategories.description}}</div>
+      </div>
+      <div class="d-flex justify-content-start my-3">
+        <mdb-badge class="p-2 mx-2" *ngFor="let category of itemAndCategories.categories" default="true">{{category.name}}</mdb-badge>
       </div>
     </div>
   </div>

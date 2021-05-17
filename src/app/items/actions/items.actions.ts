@@ -1,7 +1,11 @@
 import {createAction, props} from '@ngrx/store';
+import { Category } from 'src/entities/category.model';
 import {Item} from 'src/entities/item.model';
 
 const ItemsActionNames = {
+  INITIATE_CATEGORIES: '[Categories] Initiate categories',
+  INITIATE_CATEGORIES_SUCCESS: '[Categories] Initiate categories succeeded',
+  INITIATE_CATEGORIES_FAIL: '[Categories] Initiate categories failed',
   INITIATE_ITEMS: '[Items] Initiate items',
   INITIATE_ITEMS_SUCCESS: '[Items] Initiate items succeeded',
   INITIATE_ITEMS_FAIL: '[Items] Initiate items failed',
@@ -21,6 +25,10 @@ const ItemsActionNames = {
   CREATE_ITEM_WITH_IMAGE_SUCCESS: '[Items] Create item with image succeeded',
   CREATE_ITEM_WITH_IMAGE_FAIL: '[Items] Create item with image failed'
 };
+
+export const initiateCategories = createAction(ItemsActionNames.INITIATE_CATEGORIES);
+export const initiateCategoriesSuccess = createAction(ItemsActionNames.INITIATE_CATEGORIES_SUCCESS, props<{ categories: Category[] }>());
+export const initiateCategoriesFail = createAction(ItemsActionNames.INITIATE_CATEGORIES_FAIL, props<{ message: string; }>());
 
 export const initiateItems = createAction(ItemsActionNames.INITIATE_ITEMS);
 export const initiateItemsSuccess = createAction(ItemsActionNames.INITIATE_ITEMS_SUCCESS, props<{ items: Item[] }>());

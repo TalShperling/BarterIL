@@ -24,10 +24,9 @@ export class UserInfoComponent extends ObservableListener implements OnInit {
   windowRef: any;
 
   constructor(private store: Store<UserState>,
-              private authenticateService: AuthenticateService,
               private windowService: WindowService) {
     super();
-    this.windowRef = windowService.windowRef;
+    this.windowRef = this.windowService.windowRef;
   }
 
   ngOnInit(): void {

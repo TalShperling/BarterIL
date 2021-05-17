@@ -12,6 +12,9 @@ import {
   deleteItem,
   deleteItemFail,
   deleteItemSuccess,
+  initiateCategories,
+  initiateCategoriesFail,
+  initiateCategoriesSuccess,
   initiateItems,
   initiateItemsFail,
   initiateItemsSuccess,
@@ -24,7 +27,9 @@ import {
 } from 'src/app/items/actions/items.actions';
 import { ItemsService } from 'src/app/items/services/items.service';
 import { getUser, UserState } from 'src/app/user/reducers/user.reducer';
+import { Category } from 'src/entities/category.model';
 import { Item } from 'src/entities/item.model';
+import { CategoriesService } from '../services/categories.service';
 
 @Injectable()
 export class ItemsEffects {
@@ -34,6 +39,16 @@ export class ItemsEffects {
       .pipe(
         map((items: Item[]) => initiateItemsSuccess({ items })),
         catchError((err) => of(initiateItemsFail({ message: err })))
+      ))
+  )
+  );
+
+  initiateCategories$ = createEffect(() => this.actions$.pipe(
+    ofType(initiateCategories),
+    switchMap(() => this.categoriesService.getAll$()
+      .pipe(
+        map((categories: Category[]) => initiateCategoriesSuccess({ categories })),
+        catchError((err) => of(initiateCategoriesFail({ message: err })))
       ))
   )
   );
@@ -102,7 +117,8 @@ export class ItemsEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<UserState>,
-    private itemsService: ItemsService
+    private itemsService: ItemsService,
+    private categoriesService: CategoriesService
   ) {
   }
 }

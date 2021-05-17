@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ItemComponent} from './components/item/item.component';
 import {ItemsService} from './services/items.service';
 import {
+  BadgeModule,
   ButtonsModule,
   CardsModule,
   CarouselModule,
@@ -16,6 +17,7 @@ import {EditItemModalComponent} from './components/edit-item-modal/edit-item-mod
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import {AlertsService} from '../services/alerts/alerts.service';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
@@ -25,6 +27,7 @@ import {ItemsManagementComponent} from './components/items-management/items-mana
 import {FilterItemsPipe} from '../components/pipes/filter-items.pipe';
 import {ItemsModalService} from './services/items-modal.service';
 import { ItemDetailsModalComponent } from './components/item-details-modal/item-details-modal.component';
+import { CategoriesService } from './services/categories.service';
 
 @NgModule({
   declarations: [
@@ -46,13 +49,15 @@ import { ItemDetailsModalComponent } from './components/item-details-modal/item-
     InputUtilitiesModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     CardsModule,
+    BadgeModule,
     ButtonsModule,
     IconsModule,
     CarouselModule,
     WavesModule
   ],
-  providers: [ItemsService, AlertsService, ItemsModalService]
+  providers: [CategoriesService, ItemsService, AlertsService, ItemsModalService]
 })
 export class ItemsModule {
 }
