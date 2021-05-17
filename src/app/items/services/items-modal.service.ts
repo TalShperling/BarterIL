@@ -69,8 +69,8 @@ export class ItemsModalService {
         onItemSave: (editedItem: Item) => {
           this.store$.dispatch(updateItem({ item: editedItem }));
         },
-        onItemSaveWithImageChange: (updatedItem: ItemAndCategories, itemImage: File) =>
-          this.store$.dispatch(updateItemWithImage({ item: getItemFromItemAndCategories(updatedItem), itemImage }))
+        onItemSaveWithImageChange: (updatedItem: Item, itemImage: File) =>
+          this.store$.dispatch(updateItemWithImage({ item: updatedItem, itemImage }))
       },
       class: 'modal-lg'
     });
@@ -81,11 +81,11 @@ export class ItemsModalService {
       data: {
         isAddingMode: true,
         categories$: this.allCategories$,
-        onItemSave: (addedItem: ItemAndCategories) => {
-          this.store$.dispatch(createItem({ item: getItemFromItemAndCategories(addedItem) }));
+        onItemSave: (addedItem: Item) => {
+          this.store$.dispatch(createItem({ item: addedItem }));
         },
-        onItemSaveWithImageChange: (item: ItemAndCategories, itemImage: File) =>
-          this.store$.dispatch(createItemWithImage({ item: getItemFromItemAndCategories(item), itemImage }))
+        onItemSaveWithImageChange: (item: Item, itemImage: File) =>
+          this.store$.dispatch(createItemWithImage({ item, itemImage }))
       },
       class: 'modal-lg'
     });

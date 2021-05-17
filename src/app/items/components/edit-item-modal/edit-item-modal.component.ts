@@ -42,7 +42,9 @@ export class EditItemModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.categories$.subscribe(categories => {
-      this.selectedCategories$.next(this.filterSelectedValues(categories));
+      if (!this.isAddingMode) {
+        this.selectedCategories$.next(this.filterSelectedValues(categories));
+      }
     })
 
     this.editItemForm = new FormGroup({
@@ -73,7 +75,7 @@ export class EditItemModalComponent implements OnInit {
   onSubmit(): void {
     this.itemToEdit.categoryIds = this.selectedCategories$.getValue();
 
-      if(this.wasImageChanged) {
+    if (this.wasImageChanged) {
       this.onItemSaveWithImageChange(this.itemToEdit, this.itemImage);
     } else {
       this.onItemSave(this.itemToEdit);

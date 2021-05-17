@@ -58,3 +58,9 @@ body {
   outline: 0;
   box-shadow: none !important;
 }
+
+
+// For the mat-select bug with modal
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  z-index: 99999 !important;
+}
