@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {User} from '../../../../entities/user.model';
 import {Item} from '../../../../entities/item.model';
 import {getMyItems, ItemsState} from '../../../items/reducers/items.reducer';
-import {takeUntil} from 'rxjs/operators';
+import {concatMap, takeUntil} from 'rxjs/operators';
 import {ObservableListener} from '../../../components/observable-listener';
 import {Store} from '@ngrx/store';
 import {AuthenticateService} from '../../../user/services/authentication.service';
@@ -12,6 +12,7 @@ import {getMyTransactions, TransactionsState} from '../../reducers/transactions.
 import {createTransaction, createTransactionFail, initiateTransactions} from '../../actions/transactions.actions';
 import {Transaction} from '../../../../entities/transaction.model';
 import firebase from 'firebase';
+import {getUser, UserState} from '../../../user/reducers/user.reducer';
 
 @Component({
   selector: 'app-barter-offer',
@@ -29,6 +30,7 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private store$: Store<ItemsState>,
+              private userStore$: Store<UserState>,
               private transactionsStore$: Store<TransactionsState>,
               private authService: AuthenticateService) {
     super();
@@ -36,16 +38,16 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
 
   ngOnInit(): void {
     this.transactionsStore$.dispatch(initiateTransactions());
-    this.transactionsStore$.select(getMyTransactions(this.authService.getUserFromLocalStorage().id))
+    this.userStore$.select(getUser).pipe(concatMap(user => this.transactionsStore$.select(getMyTransactions(user.id))))
       .subscribe(myTransactions => {
         this.myTransactions = myTransactions;
       });
 
-
     this.activatedRoute.data.subscribe((result) => {
       this.user = result.data[0];
       this.offerItem = result.data[1];
-      this.store$.select(getMyItems(this.authService.getUserFromLocalStorage().id)).pipe(takeUntil(this.unsubscribeOnDestroy))
+      this.userStore$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy),
+        concatMap(user => this.store$.select(getMyItems(user.id))))
         .subscribe(items => {
           this.myItems = items;
           this.selectedItem = items[0];
