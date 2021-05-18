@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
+import { AngularFireAnalyticsModule, UserTrackingService, ScreenTrackingService } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
@@ -42,7 +42,7 @@ import { UserModule } from './user/user.module';
     StoreDevtoolsModule.instrument(),
   ],
   entryComponents: [ModalComponent],
-  providers: [],
+  providers: [UserTrackingService, ScreenTrackingService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
