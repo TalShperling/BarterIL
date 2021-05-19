@@ -7,6 +7,8 @@ import {SignUpComponent} from './user/components/sign-up/sign-up.component';
 import {UserInfoComponent} from './user/components/user-info/user-info.component';
 import {UsersManagementComponent} from './user/components/users-management/users-management.component';
 import {ItemsManagementComponent} from './items/components/items-management/items-management.component';
+import {BarterOfferComponent} from './barter/components/barter-offer/barter-offer.component';
+import {BarterOfferResolver} from './barter/barter-offer.resolver';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -47,6 +49,15 @@ const routes: Routes = [
     component: ItemsManagementComponent,
     canActivate: [AngularFireAuthGuard],
     data: {authGuardPipe: redirectUnauthorizedToLogin}
+  },
+  {
+    path: 'barter-offer/:id',
+    component: BarterOfferComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: {authGuardPipe: redirectUnauthorizedToLogin},
+    resolve: {
+      data: BarterOfferResolver
+    }
   },
 ];
 

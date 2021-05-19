@@ -17,6 +17,7 @@ import { HomeModule } from './components/home/home.module';
 import { ModalComponent } from './components/modal/modal.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { UserModule } from './user/user.module';
+import {BarterModule} from './barter/barter.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { UserModule } from './user/user.module';
     AppRoutingModule,
     BadgeModule,
     UserModule,
+    BarterModule,
     MDBBootstrapModule.forRoot(),
     AngularFireAuthModule,
     HomeModule,
