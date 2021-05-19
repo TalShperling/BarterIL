@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Item } from 'src/entities/item.model';
-import { User } from 'src/entities/user.model';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Item} from 'src/entities/item.model';
+import {User} from 'src/entities/user.model';
 
 @Component({
   selector: 'app-item',
@@ -39,5 +39,9 @@ export class ItemComponent implements OnInit {
 
   onImageError(): void {
     this.imageSrc = 'assets/images/no-image-to-show.png';
+  }
+
+  changeImageSrc(imageSrc: string): void {
+    this.imageSrc = imageSrc;
   }
 }
