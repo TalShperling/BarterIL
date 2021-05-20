@@ -19,6 +19,7 @@ export class EditItemModalComponent implements OnInit {
   editItemForm: FormGroup;
   itemToEdit: Item;
   categories$: Observable<Category[]>;
+  categoriesList: Category[];
   selectedCategories$: BehaviorSubject<Category[]> = new BehaviorSubject<Category[]>([]);
   title: string;
   wasImageChanged = false;
@@ -43,6 +44,7 @@ export class EditItemModalComponent implements OnInit {
   ngOnInit(): void {
     this.categories$.subscribe(categories => {
       if (!this.isAddingMode) {
+        this.categoriesList = categories;
         this.selectedCategories$.next(this.filterSelectedValues(categories));
       }
     })
@@ -99,7 +101,11 @@ export class EditItemModalComponent implements OnInit {
   }
 
   addSelection(categories: MatSelectChange) {
-    this.selectedCategories$.next(categories.value);
+    this.selectedCategories$.next(this.categoriesList.filter(category => categories.value.includes(category.id)));
+  }
+
+  getCategoriesIdsFromCategories(cats: Category[]): string[] {
+    return cats.map(cat => cat.id);
   }
 }
 
