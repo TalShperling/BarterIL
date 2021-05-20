@@ -1,29 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {Actions, ofType} from '@ngrx/effects';
-import {Store} from '@ngrx/store';
-import {MDBModalRef} from 'angular-bootstrap-md';
-import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {ObservableListener} from 'src/app/components/observable-listener';
-import {AlertsService} from 'src/app/services/alerts/alerts.service';
-import {getUser} from 'src/app/user/reducers/user.reducer';
-import {Item, ItemAndCategories} from 'src/entities/item.model';
-import {getCategories, getItems, getItemsAndCategories, ItemsState} from '../../reducers/items.reducer';
-import {ItemsModalService} from '../../services/items-modal.service';
+import { Component, OnInit } from '@angular/core';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ObservableListener } from 'src/app/components/observable-listener';
+import { AlertsService } from 'src/app/services/alerts/alerts.service';
+import { getUser } from 'src/app/user/reducers/user.reducer';
+import { Item } from 'src/entities/item.model';
+import { User } from 'src/entities/user.model';
 import {
   createItemFail,
   createItemSuccess,
   deleteItemFail,
   deleteItemSuccess,
-  initiateCategories,
-  initiateItems,
+
+
+  initiateItemsAndCategories,
   initiateItemsFail,
   updateItemFail,
   updateItemSuccess,
   updateItemWithImage
 } from '../../actions/items.actions';
-import {User} from 'src/entities/user.model';
-import { Category } from 'src/entities/category.model';
+import { getItems, ItemsState } from '../../reducers/items.reducer';
+import { ItemsModalService } from '../../services/items-modal.service';
 
 @Component({
   selector: 'app-item-list',
@@ -32,7 +32,7 @@ import { Category } from 'src/entities/category.model';
 })
 export class ItemListComponent extends ObservableListener implements OnInit {
   modalRef: MDBModalRef;
-  itemsAndCategories$: Observable<ItemAndCategories[]>;
+  items$: Observable<Item[]>;
   currentUser$: Observable<User>;
   private deleteFailedMessage: string = 'The item couldn\'t be deleted, please try again later';
   private deleteSuccessMessage: string = 'The item has been deleted successfully';
@@ -48,12 +48,11 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     private store$: Store<ItemsState>,
     private itemsModalService: ItemsModalService) {
     super();
-    this.store$.dispatch(initiateItems());
-    this.store$.dispatch(initiateCategories());
+    this.store$.dispatch(initiateItemsAndCategories());
   }
 
   ngOnInit(): void {
-    this.itemsAndCategories$ = this.store$.select(getItemsAndCategories).pipe(takeUntil(this.unsubscribeOnDestroy));
+    this.items$ = this.store$.select(getItems).pipe(takeUntil(this.unsubscribeOnDestroy));
 
     this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(deleteItemFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.deleteFailedMessage));
@@ -88,15 +87,15 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
   }
 
-  deleteItem(itemToDelete: ItemAndCategories): void {
+  deleteItem(itemToDelete: Item): void {
     this.itemsModalService.deleteItem(itemToDelete);
   }
 
-  viewItem(item: ItemAndCategories): void {
+  viewItem(item: Item): void {
     this.itemsModalService.viewItem(item);
   }
 
-  editItem(item: ItemAndCategories): void {
+  editItem(item: Item): void {
     this.itemsModalService.editItem(item);
   }
 }

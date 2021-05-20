@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import {
   createItem,
   createItemFail,
@@ -16,6 +16,9 @@ import {
   initiateCategoriesFail,
   initiateCategoriesSuccess,
   initiateItems,
+  initiateItemsAndCategories,
+  initiateItemsAndCategoriesFail,
+  initiateItemsAndCategoriesSuccess,
   initiateItemsFail,
   initiateItemsSuccess,
   updateItem,
@@ -51,6 +54,19 @@ export class ItemsEffects {
         catchError((err) => of(initiateCategoriesFail({ message: err })))
       ))
   )
+  );
+
+  initiateItemsAndCategories$ = createEffect(() => this.actions$.pipe(
+    ofType(initiateItemsAndCategories),
+    switchMap(() => this.categoriesService.getAll$().pipe(mergeMap((categories: Category[]) =>
+      this.itemsService.getAll$()
+        .pipe(
+          map((items: Item[]) => {
+            return initiateItemsAndCategoriesSuccess({ categories, items })
+          }),
+          catchError((err) => of(initiateItemsAndCategoriesFail({ message: err })))
+        ))
+    )))
   );
 
   deleteItem$ = createEffect(() => this.actions$.pipe(

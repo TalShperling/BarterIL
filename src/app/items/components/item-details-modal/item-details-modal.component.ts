@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MDBModalRef } from 'angular-bootstrap-md';
-import { Item, ItemAndCategories } from '../../../../entities/item.model';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { Router } from '@angular/router';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { Item } from '../../../../entities/item.model';
 
 @Component({
   selector: 'app-item-details-modal',
@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./item-details-modal.component.scss']
 })
 export class ItemDetailsModalComponent implements OnInit {
-  itemAndCategories: ItemAndCategories;
-  formOpenTime: number;
   item: Item;
+  formOpenTime: number;
   imageSrc: string;
 
   constructor(public modalRef: MDBModalRef,
@@ -29,10 +28,10 @@ export class ItemDetailsModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.itemAndCategories.pictureUrls.length === 0) {
+    if (this.item.pictureUrls.length === 0) {
       this.imageSrc = 'assets/images/no-image-to-show.png';
     } else {
-      this.imageSrc = this.itemAndCategories.pictureUrls[0];
+      this.imageSrc = this.item.pictureUrls[0];
     }
   }
 

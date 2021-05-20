@@ -1,7 +1,8 @@
+import { state } from '@angular/animations';
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { Category } from 'src/entities/category.model';
-import { Item, itemAndCategoriesFactory } from 'src/entities/item.model';
-import { createItemSuccess, deleteItemSuccess, initiateCategoriesSuccess, initiateItemsSuccess, updateItemSuccess } from '../actions/items.actions';
+import { Item } from 'src/entities/item.model';
+import { createItemSuccess, deleteItemSuccess, initiateCategoriesSuccess, initiateItemsAndCategoriesSuccess, initiateItemsSuccess, updateItemSuccess } from '../actions/items.actions';
 
 export const itemsFeatureKey = 'items';
 
@@ -15,9 +16,28 @@ export const initialItemsState: ItemsState = {
   categories: []
 };
 
+const setCategoriesToItem = (item: Item, categories: Category[]): Item => {
+  let itemWithCategories: Item = Object.assign({}, item);
+  let relevantCategories: Category[] = [];
+  relevantCategories = categories.filter(cat => item.categories.map(itemCat => itemCat.id).includes(cat.id));
+
+  itemWithCategories.categories = relevantCategories;
+
+  return itemWithCategories;
+}
+
 export const itemsReducer = createReducer(
   initialItemsState,
-  on(initiateItemsSuccess, (state, { items }) => ({ ...state, items })),
+  on(initiateItemsAndCategoriesSuccess, (state, { items, categories }) => ({
+    ...state,
+    categories,
+    items: items.map(item => setCategoriesToItem(item, categories))
+    
+  })),
+  on(initiateItemsSuccess, (state, { items }) => ({
+    ...state,
+    items: items.map(item => state?.categories?.length && setCategoriesToItem(item, state.categories))
+  })),
   on(initiateCategoriesSuccess, (state, { categories }) => ({ ...state, categories })),
   on(deleteItemSuccess, (state, { deletedItemId }) => ({ ...state, items: state.items.filter(item => item.id !== deletedItemId) })),
   on(createItemSuccess, (state, { newItem }) => ({ ...state, items: [...state.items, newItem] })),
@@ -31,15 +51,5 @@ const selectItemsState = createFeatureSelector<ItemsState>(itemsFeatureKey);
 
 export const getItems = createSelector(selectItemsState, (state) => state.items);
 export const getCategories = createSelector(selectItemsState, (state) => state.categories);
-export const getItemsAndCategories = createSelector(selectItemsState, (state) => {
-  
-  let result = state.items.map(item => {
-    let relevantCategories = state.categories.filter(category => item.categoryIds?.includes(category.id));
-    let resultFactory = itemAndCategoriesFactory(item, relevantCategories);
 
-    return resultFactory;
-  }); 
-  
-  return result;
-});
 export const getMyItems = (ownerId) => createSelector(selectItemsState, (state) => state.items.filter(item => item.ownerId === ownerId));

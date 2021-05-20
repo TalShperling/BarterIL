@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ItemAndCategories } from '../../../../entities/item.model';
+import { Item } from '../../../../entities/item.model';
 import { User } from '../../../../entities/user.model';
 import { ObservableListener } from '../../../components/observable-listener';
 import { getUser } from '../../../user/reducers/user.reducer';
-import { getItemsAndCategories, ItemsState } from '../../reducers/items.reducer';
+import { getItems, ItemsState } from '../../reducers/items.reducer';
 import { ItemsModalService } from '../../services/items-modal.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { ItemsModalService } from '../../services/items-modal.service';
   styleUrls: ['./items-management.component.scss']
 })
 export class ItemsManagementComponent extends ObservableListener implements OnInit {
-  items$: Observable<ItemAndCategories[]>;
+  items$: Observable<Item[]>;
   currentUser$: Observable<User>;
   searchText = '';
 
@@ -25,19 +25,19 @@ export class ItemsManagementComponent extends ObservableListener implements OnIn
   }
 
   ngOnInit(): void {
-    this.items$ = this.store$.select(getItemsAndCategories).pipe(takeUntil(this.unsubscribeOnDestroy));
+    this.items$ = this.store$.select(getItems).pipe(takeUntil(this.unsubscribeOnDestroy));
     this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
   }
 
-  deleteItem(item: ItemAndCategories): void {
+  deleteItem(item: Item): void {
     this.itemsModalService.deleteItem(item);
   }
 
-  editItem(item: ItemAndCategories): void {
+  editItem(item: Item): void {
     this.itemsModalService.editItem(item);
   }
 
-  viewItem(item: ItemAndCategories): void {
+  viewItem(item: Item): void {
     this.itemsModalService.viewItem(item);
   }
 }

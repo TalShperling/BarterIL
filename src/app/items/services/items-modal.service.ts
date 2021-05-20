@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MDBModalRef, MDBModalService, ModalOptions } from 'angular-bootstrap-md';
 import { Store } from '@ngrx/store';
 import { getCategories, ItemsState } from '../reducers/items.reducer';
-import { getItemFromItemAndCategories, Item, ItemAndCategories } from '../../../entities/item.model';
+import {  Item } from '../../../entities/item.model';
 import { ModalActions } from '../../../entities/modal.model';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { createItem, createItemWithImage, deleteItem, updateItem, updateItemWithImage } from '../actions/items.actions';
@@ -21,17 +21,16 @@ export class ItemsModalService {
     this.allCategories$ = this.store$.select(getCategories);
   }
 
-  deleteItem(itemAndCategoriesToDelete: ItemAndCategories): void {
+  deleteItem(itemToDelete: Item): void {
     const modalOptions = {
       data: {
         options: {
-          heading: `Delete '${itemAndCategoriesToDelete.name}'`,
+          heading: `Delete '${itemToDelete.name}'`,
           description: 'Are you sure you want to delete this item?',
           actions: [
             {
               actionName: ModalActions.DELETE,
               callback: () => {
-                let itemToDelete = getItemFromItemAndCategories(itemAndCategoriesToDelete);
                 this.store$.dispatch(deleteItem({ itemToDelete }));
                 this.modalRef.hide();
               },
@@ -52,19 +51,19 @@ export class ItemsModalService {
     this.modalRef = this.modalService.show(ModalComponent, modalOptions);
   }
 
-  viewItem(itemAndCategories: ItemAndCategories): void {
+  viewItem(item: Item): void {
     this.modalRef = this.modalService.show(ItemDetailsModalComponent, {
       data: {
-        itemAndCategories
+        item
       },
       class: 'modal-lg'
     });
   }
 
-  editItem(item: ItemAndCategories): void {
+  editItem(item: Item): void {
     this.modalService.show(EditItemModalComponent, {
       data: {
-        itemToEdit: Object.assign({}, getItemFromItemAndCategories(item)),
+        itemToEdit: Object.assign({}, item),
         categories$: this.allCategories$,
         onItemSave: (editedItem: Item) => {
           this.store$.dispatch(updateItem({ item: editedItem }));

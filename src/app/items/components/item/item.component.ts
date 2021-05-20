@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ItemAndCategories } from 'src/entities/item.model';
+import { Item } from 'src/entities/item.model';
 import { User } from 'src/entities/user.model';
 
 @Component({
@@ -8,17 +8,17 @@ import { User } from 'src/entities/user.model';
   styleUrls: ['./item.component.scss']
 })
 export class ItemComponent implements OnInit {
-  @Input() item: ItemAndCategories;
+  @Input() item: Item;
   @Input() currentUser: User;
-  @Output() onDeleteItem: EventEmitter<ItemAndCategories>;
-  @Output() onEditItem: EventEmitter<ItemAndCategories>;
-  @Output() onViewItem: EventEmitter<ItemAndCategories>;
+  @Output() onDeleteItem: EventEmitter<Item>;
+  @Output() onEditItem: EventEmitter<Item>;
+  @Output() onViewItem: EventEmitter<Item>;
   imageSrc: string;
 
   constructor() {
-    this.onDeleteItem = new EventEmitter<ItemAndCategories>();
-    this.onEditItem = new EventEmitter<ItemAndCategories>();
-    this.onViewItem = new EventEmitter<ItemAndCategories>();
+    this.onDeleteItem = new EventEmitter<Item>();
+    this.onEditItem = new EventEmitter<Item>();
+    this.onViewItem = new EventEmitter<Item>();
   }
 
   ngOnInit(): void {

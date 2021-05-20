@@ -19,7 +19,7 @@ export class EditItemModalComponent implements OnInit {
   editItemForm: FormGroup;
   itemToEdit: Item;
   categories$: Observable<Category[]>;
-  selectedCategories$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  selectedCategories$: BehaviorSubject<Category[]> = new BehaviorSubject<Category[]>([]);
   title: string;
   wasImageChanged = false;
   isDefaultImage = true;
@@ -58,7 +58,7 @@ export class EditItemModalComponent implements OnInit {
     if (this.isAddingMode) {
       this.itemToEdit = {
         id: null,
-        categoryIds: [],
+        categories: [],
         ownerId: null,
         description: '',
         name: '',
@@ -73,7 +73,7 @@ export class EditItemModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.itemToEdit.categoryIds = this.selectedCategories$.getValue();
+    this.itemToEdit.categories = this.selectedCategories$.getValue();
 
     if (this.wasImageChanged) {
       this.onItemSaveWithImageChange(this.itemToEdit, this.itemImage);
@@ -94,8 +94,8 @@ export class EditItemModalComponent implements OnInit {
     reader.readAsDataURL(this.itemImage);
   }
 
-  filterSelectedValues(categories: Category[]): string[] {
-    return categories.filter(category => this.itemToEdit.categoryIds.includes(category.id)).map(cat => cat.id);
+  filterSelectedValues(categories: Category[]): Category[] {
+    return categories.filter(category => this.itemToEdit.categories.map(cat => cat.id).includes(category.id));
   }
 
   addSelection(categories: MatSelectChange) {
