@@ -40,4 +40,8 @@ export class ItemComponent implements OnInit {
   onImageError(): void {
     this.imageSrc = 'assets/images/no-image-to-show.png';
   }
+
+  changeImageSrc(imageSrc: string): void {
+    this.imageSrc = imageSrc;
+  }
 }

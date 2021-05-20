@@ -38,7 +38,7 @@ import { CategoriesService } from './services/categories.service';
     ItemsManagementComponent,
     FilterItemsPipe
   ],
-  exports: [ItemListComponent],
+    exports: [ItemListComponent, ItemComponent],
   imports: [
     CommonModule,
     FormsModule,

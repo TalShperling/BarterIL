@@ -42,3 +42,4 @@ export const getItemsAndCategories = createSelector(selectItemsState, (state) =>
   
   return result;
 });
+export const getMyItems = (ownerId) => createSelector(selectItemsState, (state) => state.items.filter(item => item.ownerId === ownerId));
