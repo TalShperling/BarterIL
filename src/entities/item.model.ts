@@ -1,4 +1,4 @@
-import { Category } from "./category.model";
+import { Category } from './category.model';
 
 export interface Item {
     id: string;
@@ -8,4 +8,5 @@ export interface Item {
     description: string;
     ownerId: string;
     pictureUrls: string[];
+    isLoaned: boolean;
 }

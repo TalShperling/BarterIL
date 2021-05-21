@@ -47,7 +47,7 @@ export class EditItemModalComponent implements OnInit {
         this.categoriesList = categories;
         this.selectedCategories$.next(this.filterSelectedValues(categories));
       }
-    })
+    });
 
     this.editItemForm = new FormGroup({
       nameForm: new FormControl(null, [Validators.required]),
@@ -64,7 +64,8 @@ export class EditItemModalComponent implements OnInit {
         ownerId: null,
         description: '',
         name: '',
-        pictureUrls: []
+        pictureUrls: [],
+        isLoaned: false
       };
       this.imageURL = '/assets/upload-button.png';
       this.isDefaultImage = true;
