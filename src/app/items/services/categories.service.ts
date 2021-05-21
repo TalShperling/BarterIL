@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {FirebaseService} from '../firebase/firebase.service';
-import {CollectionType} from '../firebase/models/collection-type.model';
-import {IFirebaseService} from '../firebase/models/firebase-service.interface';
-import {Category} from '../../../entities/category.model';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Category } from 'src/entities/category.model';
+import { FirebaseService } from '../../services/firebase/firebase.service';
+import { CollectionType } from '../../services/firebase/models/collection-type.model';
+import { IFirebaseService } from '../../services/firebase/models/firebase-service.interface';
 
 @Injectable()
 export class CategoriesService implements IFirebaseService<Category> {

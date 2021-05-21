@@ -10,36 +10,38 @@
       <div class="col-md-7">
         <div class="md-form md-outline">
           <input mdbInput mdbValidate type="text" id="nameForm" class="form-control" [(ngModel)]="itemToEdit.name"
-                 formControlName="nameForm">
+            formControlName="nameForm">
           <label for="nameForm">Name</label>
           <mdb-error *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">Name is invalid</mdb-error>
         </div>
         <div class="md-form md-outline">
-      <textarea class="md-textarea form-control" rows="3" id="descriptionForm" type="text" length="120" mdbCharCounter
-                mdbValidate mdbInput [(ngModel)]="itemToEdit.description" formControlName="descriptionForm"></textarea>
+          <textarea class="md-textarea form-control" rows="3" id="descriptionForm" type="text" length="120"
+            mdbCharCounter mdbValidate mdbInput [(ngModel)]="itemToEdit.description"
+            formControlName="descriptionForm"></textarea>
           <label for="descriptionForm">Description</label>
           <mdb-error *ngIf="descriptionForm.invalid && (descriptionForm.dirty || descriptionForm.touched)">Description
             is invalid
           </mdb-error>
         </div>
-        <div class="md-form md-outline">
-          <input mdbInput mdbValidate type="number" id="categoryIdForm" class="form-control"
-                 [(ngModel)]="itemToEdit.categoryId" formControlName="categoryIdForm">
-          <label for="categoryIdForm">Category ID</label>
-          <mdb-error *ngIf="categoryIdForm.invalid && (categoryIdForm.dirty || categoryIdForm.touched)">Category Id is
-            invalid
-          </mdb-error>
+        <div class="md-outline">
+          <mat-form-field appearance="fill" *ngIf="{categories: categories$ | async, selected: selectedCategories$ | async } as data">
+            <mat-label>Categories</mat-label>
+            <mat-select multiple [formControl]="categoryIdForm" [ngModel]="getCategoriesIdsFromCategories(data.selected)" (selectionChange)="addSelection($event)">
+              <mat-option *ngFor="let category of data.categories" [value]="category.id">{{category.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
       <div class="col-md-5 align-self-center">
         <div class="row justify-content-center">
-          <img alt="Upload an item image" [src]="imageURL" (click)="itemImage.click()"
-               class="item-image p-2">
+          <img alt="Upload an item image" [src]="imageURL" (click)="itemImage.click()" class="item-image p-2">
         </div>
         <div class="row justify-content-center">
           <input style="display: none" #itemImage type="file" accept="image/png, image/jpeg"
-                 (change)="uploadFile($event)">
-          <mdb-error style="position: inherit !important;" *ngIf="isDefaultImage && !wasImageChanged">Please upload an item image
+            (change)="uploadFile($event)">
+          <mdb-error style="position: inherit !important;" *ngIf="isDefaultImage && !wasImageChanged">Please upload an
+            item image
           </mdb-error>
         </div>
       </div>
@@ -49,9 +51,8 @@
 <div class="modal-footer justify-content-center">
   <div class="row justify-content-center">
     <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect
-            [disabled]="!editItemForm.valid || (isDefaultImage && !wasImageChanged)" (click)="onSubmit()">
+      [disabled]="!editItemForm.valid || (isDefaultImage && !wasImageChanged)" (click)="onSubmit()">
       Save
     </button>
   </div>
 </div>
-

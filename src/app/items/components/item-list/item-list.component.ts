@@ -1,27 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {Actions, ofType} from '@ngrx/effects';
-import {Store} from '@ngrx/store';
-import {MDBModalRef} from 'angular-bootstrap-md';
-import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {ObservableListener} from 'src/app/components/observable-listener';
-import {AlertsService} from 'src/app/services/alerts/alerts.service';
-import {getUser} from 'src/app/user/reducers/user.reducer';
-import {Item} from 'src/entities/item.model';
-import {getItems, ItemsState} from '../../reducers/items.reducer';
-import {ItemsModalService} from '../../services/items-modal.service';
+import { Component, OnInit } from '@angular/core';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ObservableListener } from 'src/app/components/observable-listener';
+import { AlertsService } from 'src/app/services/alerts/alerts.service';
+import { getUser } from 'src/app/user/reducers/user.reducer';
+import { Item } from 'src/entities/item.model';
+import { User } from 'src/entities/user.model';
 import {
   createItemFail,
   createItemSuccess,
   deleteItemFail,
   deleteItemSuccess,
-  initiateItems,
+
+
+  initiateItemsAndCategories,
   initiateItemsFail,
   updateItemFail,
   updateItemSuccess,
   updateItemWithImage
 } from '../../actions/items.actions';
-import {User} from 'src/entities/user.model';
+import { getItems, ItemsState } from '../../reducers/items.reducer';
+import { ItemsModalService } from '../../services/items-modal.service';
 
 @Component({
   selector: 'app-item-list',
@@ -46,7 +48,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     private store$: Store<ItemsState>,
     private itemsModalService: ItemsModalService) {
     super();
-    this.store$.dispatch(initiateItems());
+    this.store$.dispatch(initiateItemsAndCategories());
   }
 
   ngOnInit(): void {

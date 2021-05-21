@@ -58,6 +58,7 @@ import {FilterUsersPipe} from '../components/pipes/filter-users.pipe';
     RouterModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatInputModule,
     MatNativeDateModule,
     FormsModule,
     MatInputModule,

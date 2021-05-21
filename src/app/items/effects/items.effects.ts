@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import {
   createItem,
   createItemFail,
@@ -12,7 +12,13 @@ import {
   deleteItem,
   deleteItemFail,
   deleteItemSuccess,
+  initiateCategories,
+  initiateCategoriesFail,
+  initiateCategoriesSuccess,
   initiateItems,
+  initiateItemsAndCategories,
+  initiateItemsAndCategoriesFail,
+  initiateItemsAndCategoriesSuccess,
   initiateItemsFail,
   initiateItemsSuccess,
   updateItem,
@@ -24,7 +30,9 @@ import {
 } from 'src/app/items/actions/items.actions';
 import { ItemsService } from 'src/app/items/services/items.service';
 import { getUser, UserState } from 'src/app/user/reducers/user.reducer';
+import { Category } from 'src/entities/category.model';
 import { Item } from 'src/entities/item.model';
+import { CategoriesService } from '../services/categories.service';
 
 @Injectable()
 export class ItemsEffects {
@@ -36,6 +44,29 @@ export class ItemsEffects {
         catchError((err) => of(initiateItemsFail({ message: err })))
       ))
   )
+  );
+
+  initiateCategories$ = createEffect(() => this.actions$.pipe(
+    ofType(initiateCategories),
+    switchMap(() => this.categoriesService.getAll$()
+      .pipe(
+        map((categories: Category[]) => initiateCategoriesSuccess({ categories })),
+        catchError((err) => of(initiateCategoriesFail({ message: err })))
+      ))
+  )
+  );
+
+  initiateItemsAndCategories$ = createEffect(() => this.actions$.pipe(
+    ofType(initiateItemsAndCategories),
+    switchMap(() => this.categoriesService.getAll$().pipe(mergeMap((categories: Category[]) =>
+      this.itemsService.getAll$()
+        .pipe(
+          map((items: Item[]) => {
+            return initiateItemsAndCategoriesSuccess({ categories, items })
+          }),
+          catchError((err) => of(initiateItemsAndCategoriesFail({ message: err })))
+        ))
+    )))
   );
 
   deleteItem$ = createEffect(() => this.actions$.pipe(
@@ -102,7 +133,8 @@ export class ItemsEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<UserState>,
-    private itemsService: ItemsService
+    private itemsService: ItemsService,
+    private categoriesService: CategoriesService
   ) {
   }
 }

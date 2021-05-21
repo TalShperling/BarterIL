@@ -1,22 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
+import { Router } from '@angular/router';
 import { MDBModalRef } from 'angular-bootstrap-md';
 import { Item } from '../../../../entities/item.model';
-import { AngularFireAnalytics } from '@angular/fire/analytics';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-item-details-modal',
   templateUrl: './item-details-modal.component.html',
   styleUrls: ['./item-details-modal.component.scss']
 })
-export class ItemDetailsModalComponent implements OnInit, OnDestroy {
-  formOpenTime: number;
+export class ItemDetailsModalComponent implements OnInit {
   item: Item;
+  formOpenTime: number;
   imageSrc: string;
 
   constructor(public modalRef: MDBModalRef,
-              private analytics: AngularFireAnalytics,
-              private router: Router) {
+    private analytics: AngularFireAnalytics,
+    private router: Router) {
     this.formOpenTime = Date.now();
   }
 

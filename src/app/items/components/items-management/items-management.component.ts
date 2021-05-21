@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {Item} from '../../../../entities/item.model';
-import {takeUntil} from 'rxjs/operators';
-import {ObservableListener} from '../../../components/observable-listener';
-import {getItems, ItemsState} from '../../reducers/items.reducer';
-import {ItemsModalService} from '../../services/items-modal.service';
-import {User} from '../../../../entities/user.model';
-import {getUser} from '../../../user/reducers/user.reducer';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Item } from '../../../../entities/item.model';
+import { User } from '../../../../entities/user.model';
+import { ObservableListener } from '../../../components/observable-listener';
+import { getUser } from '../../../user/reducers/user.reducer';
+import { getItems, ItemsState } from '../../reducers/items.reducer';
+import { ItemsModalService } from '../../services/items-modal.service';
 
 @Component({
   selector: 'app-items-management',
