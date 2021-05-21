@@ -43,10 +43,8 @@ export class EditItemModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.categories$.subscribe(categories => {
-      if (!this.isAddingMode) {
-        this.categoriesList = categories;
-        this.selectedCategories$.next(this.filterSelectedValues(categories));
-      }
+      this.categoriesList = categories;
+      this.selectedCategories$.next(this.filterSelectedValues(categories));
     });
 
     this.editItemForm = new FormGroup({
