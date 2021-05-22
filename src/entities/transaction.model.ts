@@ -10,4 +10,5 @@ export interface Transaction {
   isTransactionCompleted: boolean;
   offerDate: Timestamp;
   transactionCompleteDate: Timestamp;
+  inProgress: boolean;
 }
