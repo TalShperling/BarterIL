@@ -77,7 +77,8 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
       isTransactionCompleted: false, id: '', traderId: this.authService.getUserFromLocalStorage().id,
       ownerId: this.user.id, ownerItemId: this.offerItem.id, traderItemId: this.selectedItem.id,
       offerDate: firebase.firestore.Timestamp.fromDate(new Date()),
-      transactionCompleteDate: null
+      transactionCompleteDate: null,
+      inProgress: false
     };
 
     this.transactionsStore$.dispatch(createTransaction({transaction}));
