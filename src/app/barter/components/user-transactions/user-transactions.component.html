@@ -43,7 +43,7 @@
         {{el.ownerItem.name}}
       </td>
       <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-        <div class="d-flex justify-content-around" *ngIf="!el.inProgress">
+        <div class="d-flex justify-content-around">
           <div>
             <mdb-icon fas icon="check-circle" size="2x" class="cursor-pointer"
                       (click)="acceptOffer(el)"
@@ -55,11 +55,6 @@
                       (click)="declineOffer(el)"
                       [ngClass]="{'disabled': el.isCompleted,
                       'activated-decline-offer': !el.isCompleted}"></mdb-icon>
-          </div>
-        </div>
-        <div *ngIf="el.inProgress" class="d-flex justify-content-center">
-          <div>
-            <button mdbBtn block="true" class="return-items text-white" (click)="returnItems(el)">Return Items</button>
           </div>
         </div>
       </td>

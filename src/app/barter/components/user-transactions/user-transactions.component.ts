@@ -32,6 +32,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
   completedTransactionsCheck: boolean = false;
   myOffersCheck: boolean = false;
   currentUser: User;
+  maxTableRows: number = 5;
 
   constructor(private cdRef: ChangeDetectorRef,
               private activatedRoute: ActivatedRoute,
@@ -65,7 +66,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(5);
+    this.mdbTablePagination.setMaxVisibleItemsNumberTo(this.maxTableRows);
     this.mdbTablePagination.calculateFirstItemIndex();
     this.mdbTablePagination.calculateLastItemIndex();
     this.cdRef.detectChanges();
@@ -87,30 +88,29 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         const firstItem: Item = {...items[0]};
         const secondItem: Item = {...items[1]};
 
-        if (transaction.ownerItem.isLoaned || transaction.offeredItem.isLoaned) {
-          this.alertsService.showErrorAlert('One of the two items is already loaned!');
-        } else {
-          firstItem.isLoaned = true;
-          secondItem.isLoaned = true;
-          const transactionIndex = this.elements.indexOf(this.elements.find(element =>
-            (element.offeredItem.id === firstItem.id || element.offeredItem.id === secondItem.id) &&
-            ((element.ownerItem.id === firstItem.id || element.ownerItem.id === secondItem.id))));
+        const firstItemOwnerId = firstItem.ownerId;
+        firstItem.ownerId = secondItem.ownerId;
+        secondItem.ownerId = firstItemOwnerId;
 
-          this.loanLocalItemsElements(firstItem.id, secondItem.id, true);
-          this.elements[transactionIndex].inProgress = true;
-          this.itemsStore$.dispatch(updateItem({item: firstItem}));
-          this.itemsStore$.dispatch(updateItem({item: secondItem}));
-          this.updateTransactionStatus(transaction.id);
-        }
+        const transactionIndex = this.elements.indexOf(this.elements.find(element =>
+          (element.offeredItem.id === firstItem.id || element.offeredItem.id === secondItem.id) &&
+          ((element.ownerItem.id === firstItem.id || element.ownerItem.id === secondItem.id))));
+        this.elements[transactionIndex].isCompleted = true;
+
+        this.itemsStore$.dispatch(updateItem({item: firstItem}));
+        this.itemsStore$.dispatch(updateItem({item: secondItem}));
+        this.updateTransactionStatus(transaction.id);
+        this.declineOtherTransactions(firstItem.id, secondItem.id);
+        this.alertsService.showSuccessAlert('Barter offer accepted!');
       });
   }
 
-  private loanLocalItemsElements(firstItemId: string, secondItemId: string, isLoaned: boolean): void {
+  private declineOtherTransactions(firstItemId: string, secondItemId: string): void {
     this.elements.forEach(element => {
         if (element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
           element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) {
-          element.ownerItem.isLoaned = isLoaned;
-          element.offeredItem.isLoaned = isLoaned;
+          element.isCompleted = true;
+          this.updateTransactionStatus(element.id);
         }
       }
     );
@@ -120,9 +120,9 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
     this.transactionStore$.select(getTransaction(transactionId)).pipe(first())
       .subscribe((transactionToUpdate: Transaction) => {
         const updatedTransaction = {...transactionToUpdate};
-        updatedTransaction.inProgress = true;
+        updatedTransaction.isTransactionCompleted = true;
+        updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
-        this.alertsService.showSuccessAlert('Barter offer accepted!');
       });
   }
 
@@ -136,36 +136,6 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
         this.alertsService.showErrorAlert('Barter offer was declined!');
       });
-  }
-
-  returnItems(transaction): void {
-    const transactionIndex = this.elements.indexOf(this.elements.find(element => element.id === transaction.id));
-    this.elements[transactionIndex].isCompleted = true;
-    this.elements[transactionIndex].inProgress = false;
-    this.elements[transactionIndex].ownerItem.isLoaned = false;
-    this.elements[transactionIndex].offeredItem.isLoaned = false;
-
-    this.itemsStore$.select(getTransactionItems(transaction.ownerItem.id, transaction.offeredItem.id)).pipe(first())
-      .subscribe((items: Item[]) => {
-        const firstItem: Item = {...items[0]};
-        const secondItem: Item = {...items[1]};
-        firstItem.isLoaned = false;
-        secondItem.isLoaned = false;
-        this.loanLocalItemsElements(firstItem.id, secondItem.id, false);
-        this.itemsStore$.dispatch(updateItem({item: firstItem}));
-        this.itemsStore$.dispatch(updateItem({item: secondItem}));
-      });
-
-    this.transactionStore$.select(getTransaction(transaction.id)).pipe(first())
-      .subscribe((transactionToUpdate: Transaction) => {
-        const updatedTransaction = {...transactionToUpdate};
-        updatedTransaction.inProgress = false;
-        updatedTransaction.isTransactionCompleted = true;
-        updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
-        this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
-      });
-
-    this.alertsService.showSuccessAlert('Barter offer completed!');
   }
 
   offeredToMeFilter(): void {
