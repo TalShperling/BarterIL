@@ -17,17 +17,18 @@ import {EditItemModalComponent} from './components/edit-item-modal/edit-item-mod
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import {MatSelectModule} from '@angular/material/select';
 import {AlertsService} from '../services/alerts/alerts.service';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 import {itemsFeatureKey, itemsReducer} from './reducers/items.reducer';
 import {ItemsEffects} from './effects/items.effects';
 import {ItemsManagementComponent} from './components/items-management/items-management.component';
-import {FilterItemsPipe} from '../components/pipes/filter-items.pipe';
 import {ItemsModalService} from './services/items-modal.service';
-import { ItemDetailsModalComponent } from './components/item-details-modal/item-details-modal.component';
-import { CategoriesService } from './services/categories.service';
+import {ItemDetailsModalComponent} from './components/item-details-modal/item-details-modal.component';
+import {CategoriesService} from './services/categories.service';
+import {ItemsTextFilterPipe} from '../pipes/items-text-filter.pipe';
+import {ItemsCategoryFilterPipe} from '../pipes/items-category-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { CategoriesService } from './services/categories.service';
     EditItemModalComponent,
     ItemDetailsModalComponent,
     ItemsManagementComponent,
-    FilterItemsPipe
+    ItemsTextFilterPipe,
+    ItemsCategoryFilterPipe
   ],
     exports: [ItemListComponent, ItemComponent],
   imports: [
