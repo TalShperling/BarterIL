@@ -1,19 +1,52 @@
-<div class="container-fluid">
-  <div class="d-flex" *ngIf="{items: items$ | async, user: currentUser$ | async } as data">
-    <div class="jumbotron w-100 pt-0 recommended-items mt-2">
-      <h2 class="h2 mt-3">Recommended</h2>
-      <div class="d-flex flex-column">
-        <app-item class="card-deck mt-4" *ngFor="let item of data.items" [item]="item"
-          [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
-          (onViewItem)="viewItem($event)">
-        </app-item>
+<div class="container-fluid" style="padding-top: 5%;">
+  <div class="row justify-content-center">
+    <div class="col-md-2">
+      <div class="md-form md-outline mb-0" style="margin-top: 0.4rem !important;">
+        <input mdbInput type="text" id="labelForm" class="input-form form-control" [(ngModel)]="searchText">
+        <label for="labelForm" class="ml-2">Search an item...</label>
       </div>
     </div>
-    <div class="flex-grow-1 d-flex flex-wrap h-50 ml-5 mb-4">
-      <app-item class="card-deck ml-2 mt-4" *ngFor="let item of data.items" [item]="item"
-        [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
-        (onViewItem)="viewItem($event)">
-      </app-item>
+    <div class="col-md-2" style="max-height: 9vh;">
+      <mat-form-field appearance="fill" *ngIf="{categories: categories$ | async} as categories">
+        <mat-label>Categories</mat-label>
+        <mat-select multiple [(ngModel)]="selectedCategoryIds">
+          <mat-option *ngFor="let category of categories.categories" [value]="category.id">{{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-2">
+      Rate of users
+      <!-- TODO: rate of user-->
+    </div>
+  </div>
+  <div class="d-flex item-list-container"
+       *ngIf="{items: items$ | async, user: currentUser$ | async } as data">
+    <div class="w-100 pt-0 mt-2">
+      <h2 class="h2 mt-3">Recommended</h2>
+      <div class="row">
+        <div class="col-md-3">
+          <div style="border: 5px #37474f solid">
+            <app-item class="card-deck mt-4" *ngFor="let item of data.items" [item]="item"
+                      [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
+                      (onViewItem)="viewItem($event)">
+            </app-item>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div *ngIf="data.items | itemsTextFilter: searchText
+                                 | itemsCategoryFilter: selectedCategoryIds as filteredItems;">
+            <div class="flex-grow-1 d-flex flex-wrap h-50 ml-5 mb-4">
+              <app-item class="card-deck ml-2 mt-4" *ngFor="let item of filteredItems" [item]="item"
+                        [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
+                        (onViewItem)="viewItem($event)"></app-item>
+              <div *ngIf="!filteredItems.length">
+                <b>No Items were found!</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

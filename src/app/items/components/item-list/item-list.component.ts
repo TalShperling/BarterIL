@@ -14,16 +14,15 @@ import {
   createItemSuccess,
   deleteItemFail,
   deleteItemSuccess,
-
-
   initiateItemsAndCategories,
   initiateItemsFail,
   updateItemFail,
   updateItemSuccess,
   updateItemWithImage
 } from '../../actions/items.actions';
-import { getItems, ItemsState } from '../../reducers/items.reducer';
+import {getCategories, getItems, ItemsState} from '../../reducers/items.reducer';
 import { ItemsModalService } from '../../services/items-modal.service';
+import {Category} from '../../../../entities/category.model';
 
 @Component({
   selector: 'app-item-list',
@@ -34,6 +33,9 @@ export class ItemListComponent extends ObservableListener implements OnInit {
   modalRef: MDBModalRef;
   items$: Observable<Item[]>;
   currentUser$: Observable<User>;
+  searchText: string;
+  selectedCategoryIds: string[];
+  categories$: Observable<Category[]>;
   private deleteFailedMessage: string = 'The item couldn\'t be deleted, please try again later';
   private deleteSuccessMessage: string = 'The item has been deleted successfully';
   private updateFailedMessage: string = 'The item couldn\'t be updated, please try again later';
@@ -53,6 +55,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
 
   ngOnInit(): void {
     this.items$ = this.store$.select(getItems).pipe(takeUntil(this.unsubscribeOnDestroy));
+    this.categories$ = this.store$.select(getCategories).pipe(takeUntil(this.unsubscribeOnDestroy));
 
     this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(deleteItemFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.deleteFailedMessage));

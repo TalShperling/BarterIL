@@ -3,12 +3,16 @@
   flex: 0 0 33.333333%;
 }
 
-.recommended-items {
-  max-height: 100vh !important;
-  width: 175vw!important;
-  overflow: auto !important;
+:host ::ng-deep .mat-form-field-flex {
+  background-color: white;
 }
 
 .modal-lg {
   max-width: 70%;
+}
+
+.item-list-container {
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
