@@ -1,5 +1,6 @@
 import {User} from '../../entities/user.model';
 import {Item} from '../../entities/item.model';
+import {TransactionStatus} from './transaction-status';
 
 export interface TransactionDetails {
   id: string;
@@ -7,5 +8,5 @@ export interface TransactionDetails {
   owner: User;
   traderItem: Item;
   ownerItem: Item;
-  isCompleted: boolean;
+  status: TransactionStatus;
 }

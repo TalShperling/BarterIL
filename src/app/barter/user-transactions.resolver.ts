@@ -31,8 +31,7 @@ export class UserTransactionsResolver implements Resolve<TransactionDetails[]> {
                 owner: this.userService.getById$(transaction.ownerId).pipe(first()),
                 traderItem: this.itemService.getById$(transaction.traderItemId).pipe(first()),
                 ownerItem: this.itemService.getById$(transaction.ownerItemId).pipe(first()),
-                isCompleted: of(transaction.isTransactionCompleted),
-                inProgress: of(transaction.inProgress)
+                status: of(transaction.status),
               }))
           )
         )

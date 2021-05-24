@@ -25,7 +25,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let el of elements; let i = index" [ngClass]="{'completed-transaction': el.isCompleted}">
+    <tr *ngFor="let el of elements; let i = index" [ngClass]="{'completed-transaction': el.status === transactionStatuses.COMPLETED
+    || el.status === transactionStatuses.CANCELED }">
       <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
           class="cursor-pointer">
         {{el.bidder.firstName.concat(' ', el.bidder.lastName)}}
@@ -47,14 +48,16 @@
           <div>
             <mdb-icon fas icon="check-circle" size="2x" class="cursor-pointer"
                       (click)="acceptOffer(el)"
-                      [ngClass]="{'disabled': (el.isCompleted || el.bidder.id === currentUser.id),
-                      'activated-accept-offer': (!el.isCompleted && el.bidder.id !== currentUser.id)}"></mdb-icon>
+                      [ngClass]="{'disabled': (el.status === transactionStatuses.COMPLETED
+                      || el.status === transactionStatuses.CANCELED || el.bidder.id === currentUser.id),
+                      'activated-accept-offer': (el.status !== transactionStatuses.COMPLETED
+                      && el.status !== transactionStatuses.CANCELED && el.bidder.id !== currentUser.id)}"></mdb-icon>
           </div>
           <div>
             <mdb-icon fas icon="ban" size="2x" class="cursor-pointer"
                       (click)="declineOffer(el)"
-                      [ngClass]="{'disabled': el.isCompleted,
-                      'activated-decline-offer': !el.isCompleted}"></mdb-icon>
+                      [ngClass]="{'disabled': el.status === transactionStatuses.COMPLETED || el.status === transactionStatuses.CANCELED,
+                      'activated-decline-offer': el.status !== transactionStatuses.COMPLETED && el.status !== transactionStatuses.CANCELED}"></mdb-icon>
           </div>
         </div>
       </td>

@@ -14,6 +14,7 @@ import {AlertsService} from '../../../services/alerts/alerts.service';
 import {first} from 'rxjs/operators';
 import firebase from 'firebase';
 import {User} from '../../../../entities/user.model';
+import {TransactionStatus} from '../../transaction-status';
 
 @Component({
   selector: 'app-user-transactions',
@@ -24,7 +25,6 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild(MdbTablePaginationComponent, {static: true}) mdbTablePagination: MdbTablePaginationComponent;
   @ViewChild(MdbTableDirective, {static: true}) mdbTable: MdbTableDirective;
   elements: any = [];
-  previous: any = [];
   headElements = ['Bidder', 'Owner', 'Offered Item', 'Owner Item', 'Action'];
   transactionsElements = [];
   modalRef: MDBModalRef;
@@ -52,11 +52,10 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
           owner: transaction.owner,
           offeredItem: transaction.traderItem,
           ownerItem: transaction.ownerItem,
-          isCompleted: transaction.isCompleted,
-          inProgress: transaction.inProgress
+          status: transaction.status,
         }));
 
-      this.elements.sort((a, b) => a.isCompleted - b.isCompleted);
+      this.elements.sort((a, b) => a.status - b.status);
 
       this.transactionsElements = this.elements;
       this.setTableData();
@@ -95,32 +94,32 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         const transactionIndex = this.elements.indexOf(this.elements.find(element =>
           (element.offeredItem.id === firstItem.id || element.offeredItem.id === secondItem.id) &&
           ((element.ownerItem.id === firstItem.id || element.ownerItem.id === secondItem.id))));
-        this.elements[transactionIndex].isCompleted = true;
+        this.elements[transactionIndex].status = TransactionStatus.COMPLETED;
 
         this.itemsStore$.dispatch(updateItem({item: firstItem}));
         this.itemsStore$.dispatch(updateItem({item: secondItem}));
-        this.updateTransactionStatus(transaction.id);
-        this.declineOtherTransactions(firstItem.id, secondItem.id);
+        this.updateTransactionStatus(transaction.id, TransactionStatus.COMPLETED);
+        this.declineOtherTransactions(firstItem.id, secondItem.id, transaction.id);
         this.alertsService.showSuccessAlert('Barter offer accepted!');
       });
   }
 
-  private declineOtherTransactions(firstItemId: string, secondItemId: string): void {
+  private declineOtherTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
     this.elements.forEach(element => {
-        if (element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
-          element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) {
-          element.isCompleted = true;
-          this.updateTransactionStatus(element.id);
+        if ((element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
+          element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) && element.id !== currentTransactionId) {
+          element.status = TransactionStatus.CANCELED;
+          this.updateTransactionStatus(element.id, TransactionStatus.CANCELED);
         }
       }
     );
   }
 
-  private updateTransactionStatus(transactionId: string): void {
+  private updateTransactionStatus(transactionId: string, transactionStatus: TransactionStatus): void {
     this.transactionStore$.select(getTransaction(transactionId)).pipe(first())
       .subscribe((transactionToUpdate: Transaction) => {
         const updatedTransaction = {...transactionToUpdate};
-        updatedTransaction.isTransactionCompleted = true;
+        updatedTransaction.status = transactionStatus;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
       });
@@ -130,9 +129,9 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
     this.transactionStore$.select(getTransaction(transaction.id)).pipe(first())
       .subscribe((transactionToUpdate: Transaction) => {
         const updatedTransaction = {...transactionToUpdate};
-        updatedTransaction.isTransactionCompleted = true;
+        updatedTransaction.status = TransactionStatus.CANCELED;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
-        this.elements.find(element => element.id === transaction.id).isCompleted = true;
+        this.elements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
         this.alertsService.showErrorAlert('Barter offer was declined!');
       });
@@ -171,7 +170,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
     this.elements = this.transactionsElements;
 
     if (this.completedTransactionsCheck) {
-      this.elements = this.elements.filter(transaction => transaction.isCompleted);
+      this.elements = this.elements.filter(transaction => transaction.status === TransactionStatus.COMPLETED);
     }
 
     this.setTableData();
@@ -180,6 +179,9 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
   private setTableData(): void {
     this.mdbTable.setDataSource(this.elements);
     this.elements = this.mdbTable.getDataSource();
-    this.previous = this.mdbTable.getDataSource();
+  }
+
+  public get transactionStatuses(): typeof TransactionStatus {
+    return TransactionStatus;
   }
 }
