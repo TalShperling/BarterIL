@@ -1,6 +1,7 @@
 :root {
   --main-theme-color: #37474f;
   --error-color: #f55858;
+  --approval-color: #29b62b;
 }
 
 html, body {
@@ -63,4 +64,8 @@ body {
 // For the mat-select bug with modal
 .cdk-global-overlay-wrapper, .cdk-overlay-container {
   z-index: 99999 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer
 }

@@ -39,3 +39,8 @@ const selectTransactionsState = createFeatureSelector<TransactionsState>(transac
 export const getTransactions = createSelector(selectTransactionsState, (state) => state.transactions);
 export const getMyTransactions = (ownerId) => createSelector(selectTransactionsState,
   (state) => state.transactions.filter(transaction => transaction.traderId === ownerId));
+export const getMyTransactionsAndOffers = (ownerId) => createSelector(selectTransactionsState,
+  (state) => state.transactions.filter(transaction => transaction.traderId === ownerId
+  || transaction.ownerId === ownerId));
+export const getTransaction = (transactionId) => createSelector(selectTransactionsState,
+  (state) => state.transactions.find(transaction => transaction.id === transactionId));

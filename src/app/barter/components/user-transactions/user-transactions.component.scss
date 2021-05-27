@@ -1,0 +1,28 @@
+table {
+  margin-top: 3rem;
+}
+
+.check-filters {
+  margin-top: 6rem;
+}
+
+.completed-transaction {
+  background-color: #d1d1d1;
+}
+
+.disabled {
+  color: #9f9fa0;
+}
+
+.activated-accept-offer {
+  color: var(--approval-color);
+}
+
+.activated-decline-offer {
+  color: var(--error-color);
+}
+
+.return-items{
+  background-color: var(--main-theme-color);
+  font-size: 15px;
+}
