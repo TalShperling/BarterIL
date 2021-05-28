@@ -52,7 +52,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
           owner: transaction.owner,
           offeredItem: transaction.traderItem,
           ownerItem: transaction.ownerItem,
-          status: transaction.status,
+          status: transaction.status
         }));
 
       this.elements.sort((a, b) => a.status - b.status);
@@ -107,7 +107,8 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
   private declineOtherTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
     this.elements.forEach(element => {
         if ((element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
-          element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) && element.id !== currentTransactionId) {
+          element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) && element.id !== currentTransactionId
+          && element.status === TransactionStatus.OPEN) {
           element.status = TransactionStatus.CANCELED;
           this.updateTransactionStatus(element.id, TransactionStatus.CANCELED);
         }
@@ -120,6 +121,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
       .subscribe((transactionToUpdate: Transaction) => {
         const updatedTransaction = {...transactionToUpdate};
         updatedTransaction.status = transactionStatus;
+        updatedTransaction.operatedBy = this.currentUser.id;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
       });
@@ -131,6 +133,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         const updatedTransaction = {...transactionToUpdate};
         updatedTransaction.status = TransactionStatus.CANCELED;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
+        updatedTransaction.operatedBy = this.currentUser.id;
         this.elements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
         this.alertsService.showErrorAlert('Barter offer was declined!');
