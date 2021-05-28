@@ -1,8 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AngularFireAnalytics} from '@angular/fire/analytics';
-import {Router} from '@angular/router';
-import {MDBModalRef} from 'angular-bootstrap-md';
-import {Item} from '../../../../entities/item.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { Item } from '../../../../entities/item.model';
+import { ItemsState } from '../../reducers/items.reducer';
+import { Store } from '@ngrx/store';
+import { sendViewDuration } from '../../actions/items.actions';
 
 @Component({
   selector: 'app-item-details-modal',
@@ -16,16 +18,17 @@ export class ItemDetailsModalComponent implements OnInit, OnDestroy {
   isWatchMode: boolean = false;
 
   constructor(public modalRef: MDBModalRef,
-              private analytics: AngularFireAnalytics,
-              private router: Router) {
+              private router: Router,
+              private store: Store<ItemsState>) {
     this.formOpenTime = Date.now();
   }
 
   ngOnDestroy(): void {
-    this.analytics.logEvent('item_view', {
-      item: this.item,
-      duration: Date.now() - this.formOpenTime
-    });
+    this.store.dispatch(sendViewDuration({
+        duration: (Date.now() - this.formOpenTime) / 1000,
+        itemId: this.item.id
+      }
+    ));
   }
 
   ngOnInit(): void {

@@ -28,6 +28,7 @@ import {FilterItemsPipe} from '../components/pipes/filter-items.pipe';
 import {ItemsModalService} from './services/items-modal.service';
 import { ItemDetailsModalComponent } from './components/item-details-modal/item-details-modal.component';
 import { CategoriesService } from './services/categories.service';
+import { UserViewsService } from './services/user-views.service';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { CategoriesService } from './services/categories.service';
     CarouselModule,
     WavesModule
   ],
-  providers: [CategoriesService, ItemsService, AlertsService, ItemsModalService]
+  providers: [CategoriesService, ItemsService, AlertsService, ItemsModalService, UserViewsService]
 })
 export class ItemsModule {
 }
