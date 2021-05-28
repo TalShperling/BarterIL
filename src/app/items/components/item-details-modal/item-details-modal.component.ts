@@ -40,4 +40,9 @@ export class ItemDetailsModalComponent implements OnInit, OnDestroy {
     this.modalRef.hide();
     this.router.navigate(['/barter-offer', this.item.id]);
   }
+
+  openBarterDetails(): void {
+    this.modalRef.hide();
+    this.router.navigate(['/user-details', this.item.ownerId]);
+  }
 }
