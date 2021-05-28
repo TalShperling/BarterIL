@@ -15,12 +15,18 @@ import {TransactionsService} from './services/transactions.service';
 import { UserTransactionsComponent } from './components/user-transactions/user-transactions.component';
 import {FormsModule} from '@angular/forms';
 import {UserTransactionsResolver} from './user-transactions.resolver';
+import { TransactionsManagementComponent } from './components/transactions-management/transactions-management.component';
+import { FilterTransactionsPipe } from '../components/pipes/filter-transactions.pipe';
+import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 
 
 @NgModule({
   declarations: [
     BarterOfferComponent,
+    TransactionsTableComponent,
     UserTransactionsComponent,
+    TransactionsManagementComponent,
+    FilterTransactionsPipe
   ],
   imports: [
     CommonModule,

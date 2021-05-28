@@ -61,7 +61,6 @@ import {FilterUsersPipe} from '../components/pipes/filter-users.pipe';
     MatInputModule,
     MatNativeDateModule,
     FormsModule,
-    MatInputModule,
     MatSnackBarModule
   ],
   providers: [
