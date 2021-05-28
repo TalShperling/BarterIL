@@ -13,6 +13,7 @@ import {createTransaction, createTransactionFail, initiateTransactions} from '..
 import {Transaction} from '../../../../entities/transaction.model';
 import firebase from 'firebase';
 import {getUser, UserState} from '../../../user/reducers/user.reducer';
+import {TransactionStatus} from '../../transaction-status';
 
 @Component({
   selector: 'app-barter-offer',
@@ -61,9 +62,11 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
   }
 
   offerDeal(): void {
-    const invalidTransactions: Transaction[] = this.myTransactions.filter(currentTransaction => !currentTransaction.isTransactionCompleted
-      && currentTransaction.ownerId === this.offerItem.ownerId && currentTransaction.ownerItemId === this.offerItem.id
-      && currentTransaction.traderItemId === this.selectedItem.id);
+    const invalidTransactions: Transaction[] = this.myTransactions
+      .filter(currentTransaction => (currentTransaction.status !== TransactionStatus.COMPLETED
+        && currentTransaction.status !== TransactionStatus.CANCELED)
+        && currentTransaction.ownerId === this.offerItem.ownerId && currentTransaction.ownerItemId === this.offerItem.id
+        && currentTransaction.traderItemId === this.selectedItem.id);
 
     if (invalidTransactions.length > 0) {
       this.transactionsStore$.dispatch(createTransactionFail({message: 'Transaction failed'}));
@@ -74,7 +77,7 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
 
   private createTransaction(): void {
     const transaction: Transaction = {
-      isTransactionCompleted: false, id: '', traderId: this.authService.getUserFromLocalStorage().id,
+      status: TransactionStatus.OPEN, id: '', traderId: this.authService.getUserFromLocalStorage().id,
       ownerId: this.user.id, ownerItemId: this.offerItem.id, traderItemId: this.selectedItem.id,
       offerDate: firebase.firestore.Timestamp.fromDate(new Date()),
       transactionCompleteDate: null

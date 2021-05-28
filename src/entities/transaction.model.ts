@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import Timestamp = firebase.firestore.Timestamp;
+import {TransactionStatus} from '../app/barter/transaction-status';
 
 export interface Transaction {
   id: string;
@@ -7,7 +8,7 @@ export interface Transaction {
   traderItemId: string;
   traderId: string;
   ownerId: string;
-  isTransactionCompleted: boolean;
   offerDate: Timestamp;
   transactionCompleteDate: Timestamp;
+  status: TransactionStatus;
 }

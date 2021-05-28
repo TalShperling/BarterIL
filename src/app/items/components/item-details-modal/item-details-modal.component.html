@@ -42,7 +42,7 @@
   </div>
 </div>
 <div class="modal-footer justify-content-center">
-  <div class="row justify-content-center">
+  <div class="row justify-content-center" *ngIf="!isWatchMode">
     <button (click)="openOffer()" class="relative waves-light" color="success" mdbBtn mdbWavesEffect type="button">
       Make an offer
     </button>

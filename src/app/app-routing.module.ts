@@ -9,6 +9,8 @@ import {UsersManagementComponent} from './user/components/users-management/users
 import {ItemsManagementComponent} from './items/components/items-management/items-management.component';
 import {BarterOfferComponent} from './barter/components/barter-offer/barter-offer.component';
 import {BarterOfferResolver} from './barter/barter-offer.resolver';
+import {UserTransactionsComponent} from './barter/components/user-transactions/user-transactions.component';
+import {UserTransactionsResolver} from './barter/user-transactions.resolver';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -57,6 +59,15 @@ const routes: Routes = [
     data: {authGuardPipe: redirectUnauthorizedToLogin},
     resolve: {
       data: BarterOfferResolver
+    }
+  },
+  {
+    path: 'user-transactions',
+    component: UserTransactionsComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: {authGuardPipe: redirectUnauthorizedToLogin},
+    resolve: {
+      data: UserTransactionsResolver
     }
   },
 ];
