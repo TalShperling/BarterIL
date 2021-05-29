@@ -2,7 +2,8 @@
   <div class="row justify-content-center">
     <div class="col-md-2">
       <div class="md-form md-outline mb-0" style="margin-top: 0.4rem !important;">
-        <input mdbInput type="text" id="labelForm" style="height: 9vh;" class="input-form form-control" [(ngModel)]="searchText">
+        <input mdbInput type="text" id="labelForm" style="height: 6vh;" class="input-form form-control"
+               [(ngModel)]="searchText">
         <label for="labelForm" class="ml-2">Search an item...</label>
       </div>
     </div>
@@ -23,14 +24,18 @@
   <div class="d-flex item-list-container"
        *ngIf="{items: items$ | async, user: currentUser$ | async } as data">
     <div class="w-100 pt-0 mt-2">
-      <h2 class="h2 mt-3">Recommended</h2>
       <div class="row">
-        <div class="col-md-3">
-          <div style="border: 5px #37474f solid">
-            <app-item class="card-deck mt-4" *ngFor="let item of data.items" [item]="item"
-                      [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
-                      (onViewItem)="viewItem($event)">
-            </app-item>
+        <div class="col-md-3 recommended-items jumbotron">
+          <div>
+            <div class="d-flex flex-column">
+              <h2 class="h2">Recommended</h2>
+            </div>
+            <div>
+              <app-item class="card-deck mt-4" *ngFor="let item of data.items" [item]="item"
+                        [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
+                        (onViewItem)="viewItem($event)">
+              </app-item>
+            </div>
           </div>
         </div>
         <div class="col-md-9">
