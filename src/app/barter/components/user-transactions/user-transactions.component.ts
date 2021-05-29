@@ -25,7 +25,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild(MdbTablePaginationComponent, {static: true}) mdbTablePagination: MdbTablePaginationComponent;
   @ViewChild(MdbTableDirective, {static: true}) mdbTable: MdbTableDirective;
   elements: any = [];
-  headElements = ['Bidder', 'Owner', 'Offered Item', 'Owner Item', 'Action'];
+  headElements = ['Bidder', 'Owner', 'Offered Item', 'Owner Item', 'Status', 'Offered date', 'Completeness date', 'Action'];
   transactionsElements = [];
   modalRef: MDBModalRef;
   offeredToMeCheck: boolean = false;
@@ -52,7 +52,9 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
           owner: transaction.owner,
           offeredItem: transaction.traderItem,
           ownerItem: transaction.ownerItem,
-          status: transaction.status
+          status: transaction.status,
+          offeredDate: transaction.offeredDate,
+          completenessDate: transaction.completenessDate
         }));
 
       this.elements.sort((a, b) => a.status - b.status);
@@ -135,6 +137,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         updatedTransaction.operatedBy = this.currentUser.id;
         this.elements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
+        this.elements.find(element => element.id === transaction.id).completenessDate = new Date();
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
         this.alertsService.showErrorAlert('Barter offer was declined!');
       });
@@ -186,5 +189,16 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
 
   public get transactionStatuses(): typeof TransactionStatus {
     return TransactionStatus;
+  }
+
+  getStatusDescription(status: TransactionStatus): string {
+    switch (status) {
+      case TransactionStatus.OPEN:
+        return 'Open';
+      case TransactionStatus.COMPLETED:
+        return 'Completed';
+      case TransactionStatus.CANCELED:
+        return 'Canceled';
+    }
   }
 }
