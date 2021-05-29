@@ -42,7 +42,8 @@ export class TransactionsService implements IFirebaseService<Transaction> {
       const myNewTransactions: Transaction[] = transactions.filter(transaction =>
         this.shouldFilterTransaction(!!transaction.transactionCompleteDate ? transaction.transactionCompleteDate.toDate() :
           transaction.offerDate.toDate()) &&
-        transaction.operatedBy !== user.id);
+        transaction.operatedBy !== user.id &&
+        (user.id === transaction.ownerId || user.id === transaction.traderId));
 
       this.newTransaction$.next(myNewTransactions);
     });

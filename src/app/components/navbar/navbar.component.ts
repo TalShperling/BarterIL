@@ -48,8 +48,7 @@ export class NavbarComponent implements OnInit {
           date: of(!!transaction.transactionCompleteDate ? transaction.transactionCompleteDate.toDate() : transaction.offerDate.toDate())
         })))
     )).subscribe((alerts: Alert[]) => {
-      this.alerts = alerts;
-      this.alerts.sort((a: Alert, b: Alert) => b.date.getTime() - a.date.getTime());
+      this.alerts = alerts.sort((a: Alert, b: Alert) => b.date.getTime() - a.date.getTime());
 
       if (alerts.length) {
         this.displayNotification = true;
