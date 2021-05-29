@@ -29,6 +29,7 @@ import {ItemDetailsModalComponent} from './components/item-details-modal/item-de
 import {CategoriesService} from './services/categories.service';
 import {ItemsTextFilterPipe} from '../pipes/items-text-filter.pipe';
 import {ItemsCategoryFilterPipe} from '../pipes/items-category-filter.pipe';
+import { UserViewsService } from './services/user-views.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,7 @@ import {ItemsCategoryFilterPipe} from '../pipes/items-category-filter.pipe';
     CarouselModule,
     WavesModule
   ],
-  providers: [CategoriesService, ItemsService, AlertsService, ItemsModalService]
+  providers: [CategoriesService, ItemsService, AlertsService, ItemsModalService, UserViewsService]
 })
 export class ItemsModule {
 }

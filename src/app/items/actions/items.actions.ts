@@ -1,6 +1,6 @@
-import {createAction, props} from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { Category } from 'src/entities/category.model';
-import {Item} from 'src/entities/item.model';
+import { Item } from 'src/entities/item.model';
 
 const ItemsActionNames = {
   INITIATE_ITEMS_AND_CATEGORIES: '[Items] Initiate items and categories',
@@ -26,7 +26,8 @@ const ItemsActionNames = {
   UPDATE_ITEM_WITH_IMAGE_FAIL: '[Items] Update item with image failed',
   CREATE_ITEM_WITH_IMAGE: '[Items] Create item with image',
   CREATE_ITEM_WITH_IMAGE_SUCCESS: '[Items] Create item with image succeeded',
-  CREATE_ITEM_WITH_IMAGE_FAIL: '[Items] Create item with image failed'
+  CREATE_ITEM_WITH_IMAGE_FAIL: '[Items] Create item with image failed',
+  SEND_VIEW_DURATION: '[Items] Send view duration'
 };
 
 export const initiateItemsAndCategories = createAction(ItemsActionNames.INITIATE_ITEMS_AND_CATEGORIES);
@@ -60,4 +61,6 @@ export const createItemFail = createAction(ItemsActionNames.CREATE_ITEM_FAIL, pr
 export const createItemWithImage = createAction(ItemsActionNames.CREATE_ITEM_WITH_IMAGE, props<{ item: Item, itemImage: File }>());
 export const createItemWithImageSuccess = createAction(ItemsActionNames.CREATE_ITEM_WITH_IMAGE_SUCCESS, props<{ newItem: Item }>());
 export const createItemWithImageFail = createAction(ItemsActionNames.CREATE_ITEM_WITH_IMAGE_FAIL, props<{ message: string }>());
+
+export const sendViewDuration = createAction(ItemsActionNames.SEND_VIEW_DURATION, props<{ itemId: string, duration: number }>());
 

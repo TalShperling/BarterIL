@@ -1,8 +1,14 @@
-import { state } from '@angular/animations';
-import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
-import { Category } from 'src/entities/category.model';
-import { Item } from 'src/entities/item.model';
-import { createItemSuccess, deleteItemSuccess, initiateCategoriesSuccess, initiateItemsAndCategoriesSuccess, initiateItemsSuccess, updateItemSuccess } from '../actions/items.actions';
+import {createFeatureSelector, createReducer, createSelector, on} from '@ngrx/store';
+import {Category} from 'src/entities/category.model';
+import {Item} from 'src/entities/item.model';
+import {
+  createItemSuccess,
+  deleteItemSuccess,
+  initiateCategoriesSuccess,
+  initiateItemsAndCategoriesSuccess,
+  initiateItemsSuccess,
+  updateItemSuccess
+} from '../actions/items.actions';
 
 export const itemsFeatureKey = 'items';
 
@@ -17,33 +23,36 @@ export const initialItemsState: ItemsState = {
 };
 
 const setCategoriesToItem = (item: Item, categories: Category[]): Item => {
-  let itemWithCategories: Item = Object.assign({}, item);
+  const itemWithCategories: Item = Object.assign({}, item);
   let relevantCategories: Category[] = [];
   relevantCategories = categories.filter(cat => item.categories.map(itemCat => itemCat.id).includes(cat.id));
 
   itemWithCategories.categories = relevantCategories;
 
   return itemWithCategories;
-}
+};
 
 export const itemsReducer = createReducer(
   initialItemsState,
-  on(initiateItemsAndCategoriesSuccess, (state, { items, categories }) => ({
+  on(initiateItemsAndCategoriesSuccess, (state, {items, categories}) => ({
     ...state,
     categories,
     items: items.map(item => setCategoriesToItem(item, categories))
-    
+
   })),
-  on(initiateItemsSuccess, (state, { items }) => ({
+  on(initiateItemsSuccess, (state, {items}) => ({
     ...state,
     items: items.map(item => state?.categories?.length && setCategoriesToItem(item, state.categories))
   })),
-  on(initiateCategoriesSuccess, (state, { categories }) => ({ ...state, categories })),
-  on(deleteItemSuccess, (state, { deletedItemId }) => ({ ...state, items: state.items.filter(item => item.id !== deletedItemId) })),
-  on(createItemSuccess, (state, { newItem }) => ({ ...state, items: [...state.items, newItem] })),
-  on(updateItemSuccess, (state, { updatedItem }) => ({
+  on(initiateCategoriesSuccess, (state, {categories}) => ({...state, categories})),
+  on(deleteItemSuccess, (state, {deletedItemId}) => ({
     ...state,
-    items: state.items.map(item => item.id === updatedItem.id ? { ...item, ...updatedItem } : item)
+    items: state.items.filter(item => item.id !== deletedItemId)
+  })),
+  on(createItemSuccess, (state, {newItem}) => ({...state, items: [...state.items, newItem]})),
+  on(updateItemSuccess, (state, {updatedItem}) => ({
+    ...state,
+    items: state.items.map(item => item.id === updatedItem.id ? {...item, ...updatedItem} : item)
   })),
 );
 
@@ -53,3 +62,5 @@ export const getItems = createSelector(selectItemsState, (state) => state.items)
 export const getCategories = createSelector(selectItemsState, (state) => state.categories);
 
 export const getMyItems = (ownerId) => createSelector(selectItemsState, (state) => state.items.filter(item => item.ownerId === ownerId));
+export const getTransactionItems = (ownerItemId, traderItemId) => createSelector(selectItemsState,
+  (state) => state.items.filter(item => item.id === ownerItemId || item.id === traderItemId));

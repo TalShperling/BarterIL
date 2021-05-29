@@ -6,17 +6,21 @@ import {ItemsModule} from '../items/items.module';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import {ButtonsModule} from 'angular-bootstrap-md';
+import {ButtonsModule, CheckboxModule, IconsModule, InputsModule, TableModule, WavesModule} from 'angular-bootstrap-md';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {transactionsFeatureKey, transactionsReducer} from './reducers/transactions.reducer';
 import {TransactionsEffects} from './effects/transactions.effects';
 import {TransactionsService} from './services/transactions.service';
+import { UserTransactionsComponent } from './components/user-transactions/user-transactions.component';
+import {FormsModule} from '@angular/forms';
+import {UserTransactionsResolver} from './user-transactions.resolver';
 
 
 @NgModule({
   declarations: [
     BarterOfferComponent,
+    UserTransactionsComponent,
   ],
   imports: [
     CommonModule,
@@ -26,11 +30,18 @@ import {TransactionsService} from './services/transactions.service';
     EffectsModule.forFeature([TransactionsEffects]),
     MatInputModule,
     MatSelectModule,
-    ButtonsModule
+    ButtonsModule,
+    FormsModule,
+    InputsModule,
+    TableModule,
+    WavesModule,
+    IconsModule,
+    CheckboxModule
   ],
   providers: [
     BarterOfferResolver,
-    TransactionsService
+    TransactionsService,
+    UserTransactionsResolver
   ]
 })
 export class BarterModule {
