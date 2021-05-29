@@ -32,6 +32,8 @@ export class UserTransactionsResolver implements Resolve<TransactionDetails[]> {
                 traderItem: this.itemService.getById$(transaction.traderItemId).pipe(first()),
                 ownerItem: this.itemService.getById$(transaction.ownerItemId).pipe(first()),
                 status: of(transaction.status),
+                offeredDate: of(transaction.offerDate.toDate()),
+                completenessDate: of(!!transaction.transactionCompleteDate ? transaction.transactionCompleteDate.toDate() : null)
               }))
           )
         )

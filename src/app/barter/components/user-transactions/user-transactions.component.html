@@ -43,6 +43,18 @@
           class="cursor-pointer" (click)="showItemDetails(el.ownerItem)">
         {{el.ownerItem.name}}
       </td>
+      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
+          class="cursor-pointer">
+        {{getStatusDescription(el.status)}}
+      </td>
+      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
+          class="cursor-pointer">
+        {{el.offeredDate | date: 'dd/MM/yyyy HH:mm'}}
+      </td>
+      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
+          class="cursor-pointer">
+        {{el.completenessDate | date: 'dd/MM/yyyy HH:mm'}}
+      </td>
       <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
         <div class="d-flex justify-content-around">
           <div>

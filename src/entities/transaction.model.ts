@@ -11,4 +11,5 @@ export interface Transaction {
   offerDate: Timestamp;
   transactionCompleteDate: Timestamp;
   status: TransactionStatus;
+  operatedBy: string;
 }
