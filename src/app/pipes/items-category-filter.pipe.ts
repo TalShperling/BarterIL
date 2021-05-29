@@ -12,7 +12,7 @@ export class ItemsCategoryFilterPipe implements PipeTransform {
       return items;
     }
 
-    return items.filter(it => it.categories.find(itemCategory =>
+    return items.filter(it => it.categories.some(itemCategory =>
       categoryIds.includes(itemCategory.id)));
   }
 }
