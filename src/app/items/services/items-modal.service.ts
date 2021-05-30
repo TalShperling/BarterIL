@@ -63,6 +63,16 @@ export class ItemsModalService {
     });
   }
 
+  viewItemInWatchMode(item: Item): void {
+    this.modalRef = this.modalService.show(ItemDetailsModalComponent, {
+      data: {
+        item,
+        isWatchMode: true
+      },
+      class: 'modal-lg'
+    });
+  }
+
   editItem(item: Item): void {
     this.modalService.show(EditItemModalComponent, {
       data: {

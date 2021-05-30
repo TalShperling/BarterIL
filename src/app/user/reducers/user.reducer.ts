@@ -38,4 +38,6 @@ const selectUserState = createFeatureSelector<UserState>(userFeatureKey);
 
 export const getUser = createSelector(selectUserState, (state) => state.currentUser);
 export const getUsers = createSelector(selectUserState, (state) => state.users);
+export const getUserById = (userId) => createSelector(selectUserState,
+  (state) => state.users.find(user => user.id === userId));
 export const isUserLoggedIn = createSelector(getUser, user => user !== null);

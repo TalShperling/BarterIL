@@ -3,10 +3,10 @@ import {Actions, ofType} from '@ngrx/effects';
 import {Store} from '@ngrx/store';
 import {MDBModalRef} from 'angular-bootstrap-md';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {ObservableListener} from 'src/app/components/observable-listener';
 import {AlertsService} from 'src/app/services/alerts/alerts.service';
-import {getUser} from 'src/app/user/reducers/user.reducer';
+import {getUser, UserState} from 'src/app/user/reducers/user.reducer';
 import {Item} from 'src/entities/item.model';
 import {User} from 'src/entities/user.model';
 import {
@@ -20,11 +20,12 @@ import {
   updateItemSuccess,
   updateItemWithImage
 } from '../../actions/items.actions';
-import {getCategories, getItems, ItemsState} from '../../reducers/items.reducer';
-import { ItemsModalService } from '../../services/items-modal.service';
+import {getCategories, getOptionalTradeItems, ItemsState} from '../../reducers/items.reducer';
+import {ItemsModalService} from '../../services/items-modal.service';
 import {Category} from '../../../../entities/category.model';
 import {initiateTransactions} from '../../../barter/actions/transactions.actions';
 import {TransactionsState} from '../../../barter/reducers/transactions.reducer';
+import {initiateUsers} from '../../../user/actions/user.actions';
 
 @Component({
   selector: 'app-item-list',
@@ -50,16 +51,22 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     private alertsService: AlertsService,
     private actions$: Actions,
     private store$: Store<ItemsState>,
+    private userStore$: Store<UserState>,
     private transactionsStore$: Store<TransactionsState>,
     private itemsModalService: ItemsModalService) {
     super();
     this.store$.dispatch(initiateItemsAndCategories());
+    this.store$.dispatch(initiateUsers());
+
   }
 
   ngOnInit(): void {
-    this.items$ = this.store$.select(getItems).pipe(takeUntil(this.unsubscribeOnDestroy));
     this.categories$ = this.store$.select(getCategories).pipe(takeUntil(this.unsubscribeOnDestroy));
     this.transactionsStore$.dispatch(initiateTransactions());
+    this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
+    this.currentUser$.pipe(filter(user => !!user)).subscribe(user => {
+      this.items$ = this.store$.select(getOptionalTradeItems(user.id)).pipe(takeUntil(this.unsubscribeOnDestroy));
+    });
 
     this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(deleteItemFail))
       .subscribe(() => this.alertsService.showErrorAlert(this.deleteFailedMessage));
@@ -91,7 +98,6 @@ export class ItemListComponent extends ObservableListener implements OnInit {
     this.actions$.pipe(takeUntil(this.unsubscribeOnDestroy), ofType(updateItemWithImage))
       .subscribe(() => this.alertsService.showSuccessAlert(this.updateSuccessMessage));
 
-    this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
   }
 
   deleteItem(itemToDelete: Item): void {

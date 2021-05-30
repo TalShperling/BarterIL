@@ -28,7 +28,7 @@
         <div class="col-md-3">
           <div style="border: 5px #37474f solid">
             <app-item class="card-deck mt-4" *ngFor="let item of data.items" [item]="item"
-                      [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
+                      [currentUser]="data.user" [isEditorMode]="false"
                       (onViewItem)="viewItem($event)">
             </app-item>
           </div>
@@ -38,7 +38,7 @@
                                  | itemsCategoryFilter: selectedCategoryIds as filteredItems;">
             <div class="flex-grow-1 d-flex flex-wrap h-50 ml-5 mb-4">
               <app-item class="card-deck ml-2 mt-4" *ngFor="let item of filteredItems" [item]="item"
-                        [currentUser]="data.user" (onDeleteItem)="deleteItem($event)" (onEditItem)="editItem($event)"
+                        [currentUser]="data.user" [isEditorMode]="false"
                         (onViewItem)="viewItem($event)"></app-item>
               <div *ngIf="!filteredItems.length">
                 <b>No Items were found!</b>

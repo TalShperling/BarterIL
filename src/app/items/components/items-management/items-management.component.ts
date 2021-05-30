@@ -38,6 +38,6 @@ export class ItemsManagementComponent extends ObservableListener implements OnIn
   }
 
   viewItem(item: Item): void {
-    this.itemsModalService.viewItem(item);
+    this.itemsModalService.viewItemInWatchMode(item);
   }
 }
