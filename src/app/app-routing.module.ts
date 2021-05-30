@@ -46,6 +46,12 @@ const routes: Routes = [
     canActivate: [AngularFireAuthGuard],
     data: {authGuardPipe: redirectUnauthorizedToLogin}
   },
+  // {
+  //   path: 'transactions-management',
+  //   component: TransactionsManagementComponent,
+  //   canActivate: [AngularFireAuthGuard],
+  //   data: {authGuardPipe: redirectUnauthorizedToLogin}
+  // },
   {
     path: 'items-management',
     component: ItemsManagementComponent,

@@ -9,6 +9,7 @@ import {Store} from '@ngrx/store';
 import {getUser, UserState} from '../user/reducers/user.reducer';
 import {Transaction} from '../../entities/transaction.model';
 import {TransactionDetails} from './transaction-details.model';
+import { TransactionAndUsers } from 'src/entities/transaction-and-users.model';
 
 @Injectable()
 export class UserTransactionsResolver implements Resolve<TransactionDetails[]> {
@@ -33,7 +34,8 @@ export class UserTransactionsResolver implements Resolve<TransactionDetails[]> {
                 ownerItem: this.itemService.getById$(transaction.ownerItemId).pipe(first()),
                 status: of(transaction.status),
                 offeredDate: of(transaction.offerDate.toDate()),
-                completenessDate: of(!!transaction.transactionCompleteDate ? transaction.transactionCompleteDate.toDate() : null)
+                completenessDate: of(!!transaction.transactionCompleteDate ? transaction.transactionCompleteDate.toDate() : null),
+                operatedBy: of(transaction.operatedBy)
               }))
           )
         )
