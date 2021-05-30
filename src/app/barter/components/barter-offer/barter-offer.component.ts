@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {User} from '../../../../entities/user.model';
 import {Item} from '../../../../entities/item.model';
 import {getMyItems, ItemsState} from '../../../items/reducers/items.reducer';
-import {concatMap, takeUntil} from 'rxjs/operators';
+import {concatMap, first, takeUntil, tap} from 'rxjs/operators';
 import {ObservableListener} from '../../../components/observable-listener';
 import {Store} from '@ngrx/store';
 import {AuthenticateService} from '../../../user/services/authentication.service';
@@ -25,6 +25,7 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
   offerItem: Item;
   myItems: Item[] = [];
   selectedItem: Item;
+  currentUser: User;
   private myTransactions: Transaction[];
   @ViewChild('myItem') myItem!: ItemComponent;
 
@@ -39,7 +40,8 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
 
   ngOnInit(): void {
     this.transactionsStore$.dispatch(initiateTransactions());
-    this.userStore$.select(getUser).pipe(concatMap(user => this.transactionsStore$.select(getMyTransactions(user.id))))
+    this.userStore$.select(getUser).pipe(tap(user => this.currentUser = user),
+      concatMap(user => this.transactionsStore$.select(getMyTransactions(user.id)).pipe(first())))
       .subscribe(myTransactions => {
         this.myTransactions = myTransactions;
       });
@@ -80,7 +82,8 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
       status: TransactionStatus.OPEN, id: '', traderId: this.authService.getUserFromLocalStorage().id,
       ownerId: this.user.id, ownerItemId: this.offerItem.id, traderItemId: this.selectedItem.id,
       offerDate: firebase.firestore.Timestamp.fromDate(new Date()),
-      transactionCompleteDate: null
+      transactionCompleteDate: null,
+      operatedBy: this.currentUser.id
     };
 
     this.transactionsStore$.dispatch(createTransaction({transaction}));

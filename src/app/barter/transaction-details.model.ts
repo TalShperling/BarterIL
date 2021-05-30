@@ -9,4 +9,6 @@ export interface TransactionDetails {
   traderItem: Item;
   ownerItem: Item;
   status: TransactionStatus;
+  offeredDate: Date;
+  completenessDate: Date;
 }

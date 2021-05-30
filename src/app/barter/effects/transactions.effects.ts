@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {Store} from '@ngrx/store';
 import {of} from 'rxjs';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, skip, switchMap, tap} from 'rxjs/operators';
 import {
   createTransaction,
   createTransactionFail,
@@ -31,6 +31,10 @@ export class TransactionsEffects {
       ))
     )
   );
+
+  observeTransactions$ = createEffect(() => this.transactionsService.getAll$().pipe(skip(1),
+    tap((transactions: Transaction[]) => this.transactionsService.alertNewTransaction(transactions))
+  ), {dispatch: false});
 
   createTransaction$ = createEffect(() => this.actions$.pipe(
     ofType(createTransaction),

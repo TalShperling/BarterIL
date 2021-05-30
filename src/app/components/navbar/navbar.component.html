@@ -25,16 +25,23 @@
         <a class="nav-link">
           <div class="btn-group" mdbDropdown>
             <div>
-              <mdb-icon fas icon="bell" size="lg" mdbDropdownToggle></mdb-icon>
+              <mdb-icon fas icon="bell" size="lg" (click)="hideAlerts()" mdbDropdownToggle></mdb-icon>
             </div>
-            <div class="notification" *ngIf="false">
-              <!--              TODO: after message service is created-->
-              <!--              <mdb-badge pill="true" color="red">-->
-              <!--                1-->
-              <!--              </mdb-badge>-->
+            <div class="notification" *ngIf="displayNotification">
+              <mdb-badge pill="true" color="red">
+                {{(transactions$| async).length}}
+              </mdb-badge>
             </div>
             <div class="dropdown-menu dropdown-menu-right dropdown-primary mt-2">
-              <a class="dropdown-item" style="text-align: right"> no messages </a>
+              <a *ngIf="!alerts.length" class="dropdown-item">
+                <span>No messages</span>
+              </a>
+              <div *ngFor="let alert of alerts">
+                <a class="dropdown-item">
+                  <span class="font-weight-bold">{{alert.date | date: 'HH:mm'}}</span>
+                  <span>{{alert.description + alert.trader.firstName.concat(' ', alert.trader.lastName)}}</span>
+                </a>
+              </div>
             </div>
           </div>
         </a>
