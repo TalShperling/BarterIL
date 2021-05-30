@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
-import { MDBModalRef, MDBModalService, ModalOptions } from 'angular-bootstrap-md';
-import { Store } from '@ngrx/store';
-import { getCategories, ItemsState } from '../reducers/items.reducer';
-import {  Item } from '../../../entities/item.model';
-import { ModalActions } from '../../../entities/modal.model';
-import { ModalComponent } from '../../components/modal/modal.component';
-import { createItem, createItemWithImage, deleteItem, updateItem, updateItemWithImage } from '../actions/items.actions';
-import { EditItemModalComponent } from '../components/edit-item-modal/edit-item-modal.component';
-import { ItemDetailsModalComponent } from '../components/item-details-modal/item-details-modal.component';
-import { Observable } from 'rxjs';
-import { Category } from 'src/entities/category.model';
+import {Injectable} from '@angular/core';
+import {MDBModalRef, MDBModalService, ModalOptions} from 'angular-bootstrap-md';
+import {Store} from '@ngrx/store';
+import {getCategories, ItemsState} from '../reducers/items.reducer';
+import {Item} from '../../../entities/item.model';
+import {ModalActions} from '../../../entities/modal.model';
+import {ModalComponent} from '../../components/modal/modal.component';
+import {createItem, createItemWithImage, deleteItem, updateItem, updateItemWithImage} from '../actions/items.actions';
+import {EditItemModalComponent} from '../components/edit-item-modal/edit-item-modal.component';
+import {ItemDetailsModalComponent} from '../components/item-details-modal/item-details-modal.component';
+import {Observable} from 'rxjs';
+import {Category} from 'src/entities/category.model';
+import {getUser, UserState} from '../../user/reducers/user.reducer';
+import {first} from 'rxjs/operators';
 
 @Injectable()
 export class ItemsModalService {
@@ -17,7 +19,8 @@ export class ItemsModalService {
   allCategories$: Observable<Category[]>;
 
   constructor(private store$: Store<ItemsState>,
-    private modalService: MDBModalService) {
+              private modalService: MDBModalService,
+              private userStore$: Store<UserState>) {
     this.allCategories$ = this.store$.select(getCategories);
   }
 
@@ -31,7 +34,7 @@ export class ItemsModalService {
             {
               actionName: ModalActions.DELETE,
               callback: () => {
-                this.store$.dispatch(deleteItem({ itemToDelete }));
+                this.store$.dispatch(deleteItem({itemToDelete}));
                 this.modalRef.hide();
               },
               color: 'danger-color'
@@ -66,27 +69,30 @@ export class ItemsModalService {
         itemToEdit: Object.assign({}, item),
         categories$: this.allCategories$,
         onItemSave: (editedItem: Item) => {
-          this.store$.dispatch(updateItem({ item: editedItem }));
+          this.store$.dispatch(updateItem({item: editedItem}));
         },
         onItemSaveWithImageChange: (updatedItem: Item, itemImage: File) =>
-          this.store$.dispatch(updateItemWithImage({ item: updatedItem, itemImage }))
+          this.store$.dispatch(updateItemWithImage({item: updatedItem, itemImage}))
       },
       class: 'modal-lg'
     });
   }
 
   addItem(): void {
-    this.modalService.show(EditItemModalComponent, {
-      data: {
-        isAddingMode: true,
-        categories$: this.allCategories$,
-        onItemSave: (addedItem: Item) => {
-          this.store$.dispatch(createItem({ item: addedItem }));
+    this.userStore$.select(getUser).pipe(first()).subscribe(user => {
+      this.modalService.show(EditItemModalComponent, {
+        data: {
+          isAddingMode: true,
+          user,
+          categories$: this.allCategories$,
+          onItemSave: (addedItem: Item) => {
+            this.store$.dispatch(createItem({item: addedItem}));
+          },
+          onItemSaveWithImageChange: (item: Item, itemImage: File) =>
+            this.store$.dispatch(createItemWithImage({item, itemImage}))
         },
-        onItemSaveWithImageChange: (item: Item, itemImage: File) =>
-          this.store$.dispatch(createItemWithImage({ item, itemImage }))
-      },
-      class: 'modal-lg'
+        class: 'modal-lg'
+      });
     });
   }
 }
