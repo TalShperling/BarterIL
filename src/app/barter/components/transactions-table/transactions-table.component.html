@@ -39,7 +39,7 @@
       </td>
       <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
         <div class="d-flex justify-content-around">
-          <div>
+          <div *ngIf="enableAcceptOffer">
             <mdb-icon fas icon="check-circle" size="2x" class="cursor-pointer"
                       (click)="acceptOffer(el)"
                       [ngClass]="{'disabled': (el.status === transactionStatuses.COMPLETED

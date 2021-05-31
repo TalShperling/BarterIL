@@ -22,7 +22,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './transactions-table.component.html',
   styleUrls: ['./transactions-table.component.scss']
 })
-export class TransactionsTableComponent implements OnChanges, AfterViewInit {
+export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
   @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
   @Input() elements: any;
@@ -32,11 +32,15 @@ export class TransactionsTableComponent implements OnChanges, AfterViewInit {
   @Output() onAcceptOffer: EventEmitter<any>;
   @Output() onDeclineOffer: EventEmitter<any>;
   maxTableRows: number = 5;
+  enableAcceptOffer: boolean = false;
 
   constructor(private cdRef: ChangeDetectorRef) {
     this.onAcceptOffer = new EventEmitter<any>();
     this.onDeclineOffer = new EventEmitter<any>();
     this.onItemClick = new EventEmitter<Item>();
+  }
+  ngOnInit(): void {
+    this.enableAcceptOffer = this.onAcceptOffer.observers.length > 0;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
