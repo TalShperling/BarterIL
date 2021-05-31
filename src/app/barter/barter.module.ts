@@ -15,11 +15,13 @@ import {TransactionsService} from './services/transactions.service';
 import { UserTransactionsComponent } from './components/user-transactions/user-transactions.component';
 import {FormsModule} from '@angular/forms';
 import {UserTransactionsResolver} from './user-transactions.resolver';
+import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 
 
 @NgModule({
   declarations: [
     BarterOfferComponent,
+    TransactionsTableComponent,
     UserTransactionsComponent,
   ],
   imports: [

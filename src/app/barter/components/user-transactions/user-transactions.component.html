@@ -1,86 +1,21 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="elements$ | async as elements">
   <div class="d-flex justify-content-start">
     <div>
-      <mdb-checkbox (change)="myOffersFilter()"
-                    [checked]="myOffersCheck">My Offers
+      <mdb-checkbox (change)="myOffersFilter()" [checked]="myOffersCheck">My Offers
       </mdb-checkbox>
     </div>
     <div class="ml-5">
-      <mdb-checkbox (change)="offeredToMeFilter()"
-                    [checked]="offeredToMeCheck">Offered To Me
+      <mdb-checkbox (change)="offeredToMeFilter()" [checked]="offeredToMeCheck">Offered To Me
       </mdb-checkbox>
     </div>
     <div class="ml-5">
-      <mdb-checkbox (change)="completedTransactionsFilter()"
-                    [checked]="completedTransactionsCheck">Completed Transactions
+      <mdb-checkbox (change)="completedTransactionsFilter()" [checked]="completedTransactionsCheck">Completed
+        Transactions
       </mdb-checkbox>
     </div>
   </div>
 
-  <table mdbTable #tableEl="mdbTable" class="z-depth-1 text-center">
-    <thead>
-    <tr>
-      <th *ngFor="let head of headElements; let i = index" scope="col" class="font-weight-bold">{{head}}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let el of (elements | async); let i = index" [ngClass]="{'completed-transaction': el.status === transactionStatuses.COMPLETED
-    || el.status === transactionStatuses.CANCELED }">
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer">
-        {{el.bidder.firstName.concat(' ', el.bidder.lastName)}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer">
-        {{el.owner.firstName.concat(' ', el.owner.lastName)}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer" (click)="showItemDetails(el.offeredItem)">
-        {{el.offeredItem.name}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer" (click)="showItemDetails(el.ownerItem)">
-        {{el.ownerItem.name}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer">
-        {{getStatusDescription(el.status)}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer">
-        {{el.offeredDate | date: 'dd/MM/yyyy HH:mm'}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          class="cursor-pointer">
-        {{el.completenessDate | date: 'dd/MM/yyyy HH:mm'}}
-      </td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-        <div class="d-flex justify-content-around">
-          <div>
-            <mdb-icon fas icon="check-circle" size="2x" class="cursor-pointer"
-                      (click)="acceptOffer(el)"
-                      [ngClass]="{'disabled': (el.status === transactionStatuses.COMPLETED
-                      || el.status === transactionStatuses.CANCELED || el.bidder.id === currentUser.id),
-                      'activated-accept-offer': (el.status !== transactionStatuses.COMPLETED
-                      && el.status !== transactionStatuses.CANCELED && el.bidder.id !== currentUser.id)}"></mdb-icon>
-          </div>
-          <div>
-            <mdb-icon fas icon="ban" size="2x" class="cursor-pointer"
-                      (click)="declineOffer(el)"
-                      [ngClass]="{'disabled': el.status === transactionStatuses.COMPLETED || el.status === transactionStatuses.CANCELED,
-                      'activated-decline-offer': el.status !== transactionStatuses.COMPLETED && el.status !== transactionStatuses.CANCELED}"></mdb-icon>
-          </div>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-    <tfoot class="grey lighten-5 w-100">
-    <tr>
-      <td colspan="4">
-        <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements | async"></mdb-table-pagination>
-      </td>
-    </tr>
-    </tfoot>
-  </table>
+  <app-transactions-table [elements]="elements" [headElements]="headElements" [currentUser]="currentUser"
+    (onItemClick)="showItemDetails($event)" (onAcceptOffer)="acceptOffer($event)"
+    (onDeclineOffer)="declineOffer($event)"></app-transactions-table>
 </div>
