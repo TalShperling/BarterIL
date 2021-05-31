@@ -15,6 +15,7 @@ import {first} from 'rxjs/operators';
 import firebase from 'firebase';
 import {User} from '../../../../entities/user.model';
 import {TransactionStatus} from '../../transaction-status';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-user-transactions',
@@ -24,7 +25,7 @@ import {TransactionStatus} from '../../transaction-status';
 export class UserTransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild(MdbTablePaginationComponent, {static: true}) mdbTablePagination: MdbTablePaginationComponent;
   @ViewChild(MdbTableDirective, {static: true}) mdbTable: MdbTableDirective;
-  elements: any = [];
+  elements: BehaviorSubject<any>;
   headElements = ['Bidder', 'Owner', 'Offered Item', 'Owner Item', 'Status', 'Offered date', 'Completeness date', 'Action'];
   transactionsElements = [];
   modalRef: MDBModalRef;
@@ -41,12 +42,14 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
               private itemsStore$: Store<ItemsState>,
               private userStore$: Store<UserState>,
               private alertsService: AlertsService) {
+                this.elements = new BehaviorSubject<any>([]);
   }
 
   ngOnInit() {
+    let elementsToInsert: any[] = [];
     this.activatedRoute.data.subscribe((result) => {
       result.data.forEach(transaction =>
-        this.elements.push({
+        elementsToInsert.push({
           id: transaction.id,
           bidder: transaction.trader,
           owner: transaction.owner,
@@ -57,9 +60,11 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
           completenessDate: transaction.completenessDate
         }));
 
-      this.elements.sort((a, b) => a.status - b.status);
+      elementsToInsert.sort((a, b) => a.status - b.status);
 
-      this.transactionsElements = this.elements;
+      this.elements.next(elementsToInsert);
+
+      this.transactionsElements = elementsToInsert;
       this.setTableData();
     });
 
@@ -93,7 +98,7 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         firstItem.ownerId = secondItem.ownerId;
         secondItem.ownerId = firstItemOwnerId;
 
-        const transactionIndex = this.elements.indexOf(this.elements.find(element =>
+        const transactionIndex = this.elements.value.indexOf(this.elements.value.find(element =>
           (element.offeredItem.id === firstItem.id || element.offeredItem.id === secondItem.id) &&
           ((element.ownerItem.id === firstItem.id || element.ownerItem.id === secondItem.id))));
         this.elements[transactionIndex].status = TransactionStatus.COMPLETED;
@@ -136,8 +141,8 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
         updatedTransaction.status = TransactionStatus.CANCELED;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         updatedTransaction.operatedBy = this.currentUser.id;
-        this.elements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
-        this.elements.find(element => element.id === transaction.id).completenessDate = new Date();
+        this.elements.value.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
+        this.elements.value.find(element => element.id === transaction.id).completenessDate = new Date();
         this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
         this.alertsService.showErrorAlert('Barter offer was declined!');
       });
@@ -147,10 +152,10 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
     this.offeredToMeCheck = !this.offeredToMeCheck;
     this.myOffersCheck = false;
     this.completedTransactionsCheck = false;
-    this.elements = this.transactionsElements;
+    this.elements.next(this.transactionsElements);
 
     if (this.offeredToMeCheck) {
-      this.elements = this.elements.filter(transaction => transaction.owner.id === this.currentUser.id);
+      this.elements.next(this.elements.value.filter(transaction => transaction.owner.id === this.currentUser.id));
     }
 
     this.setTableData();
@@ -160,10 +165,10 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
     this.myOffersCheck = !this.myOffersCheck;
     this.offeredToMeCheck = false;
     this.completedTransactionsCheck = false;
-    this.elements = this.transactionsElements;
+    this.elements.next(this.transactionsElements);
 
     if (this.myOffersCheck) {
-      this.elements = this.elements.filter(transaction => transaction.bidder.id === this.currentUser.id);
+      this.elements.next(this.elements.value.filter(transaction => transaction.bidder.id === this.currentUser.id));
     }
 
     this.setTableData();
@@ -173,10 +178,10 @@ export class UserTransactionsComponent implements OnInit, AfterViewInit {
     this.completedTransactionsCheck = !this.completedTransactionsCheck;
     this.offeredToMeCheck = false;
     this.myOffersCheck = false;
-    this.elements = this.transactionsElements;
+    this.elements.next(this.transactionsElements);
 
     if (this.completedTransactionsCheck) {
-      this.elements = this.elements.filter(transaction => transaction.status === TransactionStatus.COMPLETED);
+      this.elements.next(this.elements.value.filter(transaction => transaction.status === TransactionStatus.COMPLETED));
     }
 
     this.setTableData();

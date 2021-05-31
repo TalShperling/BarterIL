@@ -25,7 +25,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let el of elements; let i = index" [ngClass]="{'completed-transaction': el.status === transactionStatuses.COMPLETED
+    <tr *ngFor="let el of (elements | async); let i = index" [ngClass]="{'completed-transaction': el.status === transactionStatuses.COMPLETED
     || el.status === transactionStatuses.CANCELED }">
       <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
           class="cursor-pointer">
@@ -78,7 +78,7 @@
     <tfoot class="grey lighten-5 w-100">
     <tr>
       <td colspan="4">
-        <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements"></mdb-table-pagination>
+        <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements | async"></mdb-table-pagination>
       </td>
     </tr>
     </tfoot>
