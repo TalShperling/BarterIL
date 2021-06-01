@@ -5,6 +5,7 @@ import { MDBModalRef } from 'angular-bootstrap-md';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from 'src/entities/category.model';
 import { Item } from 'src/entities/item.model';
+import {User} from '../../../../entities/user.model';
 
 @Component({
   selector: 'app-edit-item-modal',
@@ -25,6 +26,7 @@ export class EditItemModalComponent implements OnInit {
   wasImageChanged = false;
   isDefaultImage = true;
   imageURL: string;
+  user: User;
 
   constructor(public modalRef: MDBModalRef) {
   }
@@ -59,7 +61,7 @@ export class EditItemModalComponent implements OnInit {
       this.itemToEdit = {
         id: null,
         categories: [],
-        ownerId: null,
+        ownerId: this.user.id,
         description: '',
         name: '',
         pictureUrls: [],
