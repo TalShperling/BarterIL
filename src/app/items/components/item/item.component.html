@@ -1,18 +1,6 @@
 <div class="card p-2">
   <div class="view overlay waves-light item-image" mdbWavesEffect style="cursor: pointer" (click)="viewItem()">
-    <div *ngIf="item.pictureUrls.length <= 1; then thenBlock else elseBlock"></div>
-    <ng-template #thenBlock>
-      <img [src]="imageSrc" class="card-img-top"/>
-    </ng-template>
-    <ng-template #elseBlock>
-      <div class="view overlay waves-light item-image" mdbWavesEffect>
-        <mdb-carousel class="carousel slide carousel-fade" [animation]="'fade'">
-          <mdb-carousel-item *ngFor="let image of item.pictureUrls">
-            <img class="d-block card-img-top" [src]="image"/>
-          </mdb-carousel-item>
-        </mdb-carousel>
-      </div>
-    </ng-template>
+    <img [src]="imageSrc" class="card-img-top"/>
   </div>
   <div class="card-body d-flex justify-content-around flex-column p-2" style="cursor: pointer;" (click)="viewItem()">
     <h4 class="card-title">{{item.name}}</h4>
