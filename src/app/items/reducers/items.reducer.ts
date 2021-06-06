@@ -62,5 +62,7 @@ export const getItems = createSelector(selectItemsState, (state) => state.items)
 export const getCategories = createSelector(selectItemsState, (state) => state.categories);
 
 export const getMyItems = (ownerId) => createSelector(selectItemsState, (state) => state.items.filter(item => item.ownerId === ownerId));
+export const getOptionalTradeItems = (ownerId) =>
+  createSelector(selectItemsState, (state) => state.items.filter(item => item.ownerId !== ownerId));
 export const getTransactionItems = (ownerItemId, traderItemId) => createSelector(selectItemsState,
   (state) => state.items.filter(item => item.id === ownerItemId || item.id === traderItemId));

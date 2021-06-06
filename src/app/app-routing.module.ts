@@ -13,6 +13,8 @@ import {UserTransactionsComponent} from './barter/components/user-transactions/u
 import {UserTransactionsResolver} from './barter/user-transactions.resolver';
 import { TransactionsManagementComponent } from './barter/components/transactions-management/transactions-management.component';
 import { TransactionsManagementResolver } from './barter/transactions-management.resolver';
+import {UserItemsComponent} from './items/components/user-items/user-items.component';
+import {UserItemsResolver} from './items/resolvers/user-items.resolver';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
@@ -81,6 +83,13 @@ const routes: Routes = [
       data: UserTransactionsResolver
     }
   },
+  {
+    path: 'user-items',
+    component: UserItemsComponent,
+    resolve: {
+      data: UserItemsResolver
+    }
+  }
 ];
 
 @NgModule({

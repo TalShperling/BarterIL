@@ -29,7 +29,9 @@ import {ItemDetailsModalComponent} from './components/item-details-modal/item-de
 import {CategoriesService} from './services/categories.service';
 import {ItemsTextFilterPipe} from '../pipes/items-text-filter.pipe';
 import {ItemsCategoryFilterPipe} from '../pipes/items-category-filter.pipe';
-import { UserViewsService } from './services/user-views.service';
+import {UserViewsService} from './services/user-views.service';
+import {UserItemsComponent} from './components/user-items/user-items.component';
+import {UserItemsResolver} from './resolvers/user-items.resolver';
 
 @NgModule({
   declarations: [
@@ -39,9 +41,10 @@ import { UserViewsService } from './services/user-views.service';
     ItemDetailsModalComponent,
     ItemsManagementComponent,
     ItemsTextFilterPipe,
-    ItemsCategoryFilterPipe
+    ItemsCategoryFilterPipe,
+    UserItemsComponent
   ],
-    exports: [ItemListComponent, ItemComponent],
+  exports: [ItemListComponent, ItemComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -60,7 +63,14 @@ import { UserViewsService } from './services/user-views.service';
     CarouselModule,
     WavesModule
   ],
-  providers: [CategoriesService, ItemsService, AlertsService, ItemsModalService, UserViewsService]
+  providers: [
+    CategoriesService,
+    ItemsService,
+    AlertsService,
+    ItemsModalService,
+    UserViewsService,
+    UserItemsResolver
+  ]
 })
 export class ItemsModule {
 }

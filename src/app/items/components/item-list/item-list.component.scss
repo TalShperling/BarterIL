@@ -11,14 +11,14 @@
   max-width: 70%;
 }
 
-.item-list-container {
-  height: 80vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
+.recommended-items {
+  max-height: 75vh !important;
+  width: 175vw!important;
+  overflow: auto !important;
 }
 
-.recommended-items {
-  max-height: 100vh !important;
+.all-items {
+  max-height: 75vh !important;
   width: 175vw!important;
   overflow: auto !important;
 }
