@@ -81,8 +81,15 @@ export class TransactionsManagementComponent implements OnInit {
         updatedTransaction.status = TransactionStatus.CANCELED;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         updatedTransaction.operatedBy = this.currentUser.id;
-        this.elements$.value.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
-        this.elements$.value.find(element => element.id === transaction.id).completenessDate = new Date();
+
+        // check if unnecessary because of dispatch to store
+        let newElements = this.elements$.value;
+
+        newElements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
+        newElements.find(element => element.id === transaction.id).completenessDate = new Date();
+
+        this.elements$.next(newElements);
+
         this.transactionStore$.dispatch(updateTransaction({ transaction: updatedTransaction }));
         this.alertsService.showErrorAlert('Barter offer was declined!');
       });
