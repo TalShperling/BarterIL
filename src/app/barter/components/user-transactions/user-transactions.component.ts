@@ -145,7 +145,7 @@ export class UserTransactionsComponent implements OnInit {
         let newElements = this.elements$.value;
 
         newElements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
-        newElements.value.find(element => element.id === transaction.id).completenessDate = new Date();
+        newElements.find(element => element.id === transaction.id).completenessDate = new Date();
 
 
         this.elements$.next(newElements);
