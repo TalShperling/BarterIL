@@ -1,0 +1,10 @@
+<mdb-icon fas icon="star" [ngClass]="{'blue-text': rating >= 1, 'grey-text': rating < 1, 'icon-disabled': isDisabled}"
+          (click)="rate(1)" size="3x"></mdb-icon>
+<mdb-icon fas icon="star" [ngClass]="{'blue-text': rating >= 2, 'grey-text': rating < 2, 'icon-disabled': isDisabled}"
+          (click)="rate(2)" size="3x"></mdb-icon>
+<mdb-icon fas icon="star" [ngClass]="{'blue-text': rating >= 3, 'grey-text': rating < 3, 'icon-disabled': isDisabled}"
+          (click)="rate(3)" size="3x"></mdb-icon>
+<mdb-icon fas icon="star" [ngClass]="{'blue-text': rating >= 4, 'grey-text': rating < 4, 'icon-disabled': isDisabled}"
+          (click)="rate(4)" size="3x"></mdb-icon>
+<mdb-icon fas icon="star" [ngClass]="{'blue-text': rating >= 5, 'grey-text': rating < 5, 'icon-disabled': isDisabled}"
+          (click)="rate(5)" size="3x"></mdb-icon>
