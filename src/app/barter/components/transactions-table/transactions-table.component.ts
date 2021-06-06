@@ -1,21 +1,20 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MDBModalRef, MDBModalService, MdbTableDirective, MdbTablePaginationComponent } from 'angular-bootstrap-md';
-import { ActivatedRoute } from '@angular/router';
-import { Item } from '../../../../entities/item.model';
-import { ItemDetailsModalComponent } from '../../../items/components/item-details-modal/item-details-modal.component';
-import { getUser, UserState } from '../../../user/reducers/user.reducer';
-import { Store } from '@ngrx/store';
-import { getTransaction, TransactionsState } from '../../reducers/transactions.reducer';
-import { Transaction } from '../../../../entities/transaction.model';
-import { updateTransaction } from '../../actions/transactions.actions';
-import { getTransactionItems, ItemsState } from '../../../items/reducers/items.reducer';
-import { updateItem } from '../../../items/actions/items.actions';
-import { AlertsService } from '../../../services/alerts/alerts.service';
-import { first } from 'rxjs/operators';
-import firebase from 'firebase';
-import { User } from '../../../../entities/user.model';
-import { TransactionStatus } from '../../transaction-status';
-import { BehaviorSubject } from 'rxjs';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {MDBModalService, MdbTableDirective, MdbTablePaginationComponent} from 'angular-bootstrap-md';
+import {Item} from '../../../../entities/item.model';
+import {User} from '../../../../entities/user.model';
+import {TransactionStatus} from '../../transaction-status';
+import {UserRatingComponent} from '../user-rating/user-rating.component';
 
 @Component({
   selector: 'app-transactions-table',
@@ -23,24 +22,26 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./transactions-table.component.scss']
 })
 export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewInit {
-  @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
-  @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
+  @ViewChild(MdbTablePaginationComponent, {static: true}) mdbTablePagination: MdbTablePaginationComponent;
+  @ViewChild(MdbTableDirective, {static: true}) mdbTable: MdbTableDirective;
   @Input() elements: any;
   @Input() headElements;
   @Input() currentUser: User;
-  @Output() onItemClick: EventEmitter<Item>;
-  @Output() onAcceptOffer: EventEmitter<any>;
-  @Output() onDeclineOffer: EventEmitter<any>;
+  @Output() itemClickEmitter: EventEmitter<Item>;
+  @Output() acceptOfferEmitter: EventEmitter<any>;
+  @Output() declineOfferEmitter: EventEmitter<any>;
   maxTableRows: number = 5;
   enableAcceptOffer: boolean = false;
 
-  constructor(private cdRef: ChangeDetectorRef) {
-    this.onAcceptOffer = new EventEmitter<any>();
-    this.onDeclineOffer = new EventEmitter<any>();
-    this.onItemClick = new EventEmitter<Item>();
+  constructor(private cdRef: ChangeDetectorRef,
+              private modalService: MDBModalService) {
+    this.acceptOfferEmitter = new EventEmitter<any>();
+    this.declineOfferEmitter = new EventEmitter<any>();
+    this.itemClickEmitter = new EventEmitter<Item>();
   }
+
   ngOnInit(): void {
-    this.enableAcceptOffer = this.onAcceptOffer.observers.length > 0;
+    this.enableAcceptOffer = this.acceptOfferEmitter.observers.length > 0;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,15 +56,15 @@ export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewI
   }
 
   showItemDetails(item: Item): void {
-    this.onItemClick.emit(item);
+    this.itemClickEmitter.emit(item);
   }
 
   acceptOffer(transaction): void {
-    this.onAcceptOffer.emit(transaction);
+    this.acceptOfferEmitter.emit(transaction);
   }
 
   declineOffer(transaction): void {
-    this.onDeclineOffer.emit(transaction);
+    this.declineOfferEmitter.emit(transaction);
   }
 
   private setTableData(): void {
@@ -73,6 +74,18 @@ export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewI
 
   public get transactionStatuses(): typeof TransactionStatus {
     return TransactionStatus;
+  }
+
+  rateUser(bidder: User, owner: User) {
+    const ratedUser = bidder.id === this.currentUser.id ? owner : bidder;
+    const ratingUser = bidder.id !== this.currentUser.id ? owner.id : bidder.id;
+
+    this.modalService.show(UserRatingComponent, {
+      data: {
+        ratedUser,
+        ratingUser
+      }
+    });
   }
 
   getStatusDescription(status: TransactionStatus): string {

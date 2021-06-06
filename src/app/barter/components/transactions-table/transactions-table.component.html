@@ -53,6 +53,12 @@
                       [ngClass]="{'disabled': el.status === transactionStatuses.COMPLETED || el.status === transactionStatuses.CANCELED,
                       'activated-decline-offer': el.status !== transactionStatuses.COMPLETED && el.status !== transactionStatuses.CANCELED}"></mdb-icon>
           </div>
+          <div>
+            <mdb-icon fas icon="star" size="2x" [ngClass]="{'disabled': el.status === transactionStatuses.OPEN,
+            'activated-rating': (el.status === transactionStatuses.CANCELED || el.status === transactionStatuses.COMPLETED)}"
+                      class="cursor-pointer"
+                      (click)="rateUser(el.bidder, el.owner)"></mdb-icon>
+          </div>
         </div>
       </td>
     </tr>
