@@ -18,25 +18,22 @@ import { TransactionStatus } from '../../transaction-status';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-user-transactions',
-  templateUrl: './user-transactions.component.html',
-  styleUrls: ['./user-transactions.component.scss']
+  selector: 'app-transactions-management',
+  templateUrl: './transactions-management.component.html',
+  styleUrls: ['./transactions-management.component.scss']
 })
-export class UserTransactionsComponent implements OnInit {
+export class TransactionsManagementComponent implements OnInit {
   elements$: BehaviorSubject<any>;
   headElements = ['Bidder', 'Owner', 'Offered Item', 'Owner Item', 'Status', 'Offered date', 'Completeness date', 'Action'];
   transactionsElements = [];
   modalRef: MDBModalRef;
-  offeredToMeCheck: boolean = false;
   completedTransactionsCheck: boolean = false;
-  myOffersCheck: boolean = false;
   currentUser: User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private modalService: MDBModalService,
     private transactionStore$: Store<TransactionsState>,
-    private itemsStore$: Store<ItemsState>,
     private userStore$: Store<UserState>,
     private alertsService: AlertsService) {
     this.elements$ = new BehaviorSubject<any>([]);
@@ -77,62 +74,6 @@ export class UserTransactionsComponent implements OnInit {
     });
   }
 
-  acceptOffer(transaction): void {
-    this.itemsStore$.select(getTransactionItems(transaction.ownerItem.id, transaction.offeredItem.id)).pipe(first())
-      .subscribe((items: Item[]) => {
-        const firstItem: Item = { ...items[0] };
-        const secondItem: Item = { ...items[1] };
-
-        const firstItemOwnerId = firstItem.ownerId;
-        firstItem.ownerId = secondItem.ownerId;
-        secondItem.ownerId = firstItemOwnerId;
-
-        const transactionIndex = this.elements$.value.indexOf(this.elements$.value.find(element =>
-          (element.offeredItem.id === firstItem.id || element.offeredItem.id === secondItem.id) &&
-          ((element.ownerItem.id === firstItem.id || element.ownerItem.id === secondItem.id))));
-
-        // check if unnecessary because of dispatch to store
-        let newElements = this.elements$.value;
-        newElements[transactionIndex].status = TransactionStatus.COMPLETED;
-        this.elements$.next(newElements);
-
-
-        this.itemsStore$.dispatch(updateItem({ item: firstItem }));
-        this.itemsStore$.dispatch(updateItem({ item: secondItem }));
-        this.updateTransactionStatus(transaction.id, TransactionStatus.COMPLETED);
-        this.declineOtherTransactions(firstItem.id, secondItem.id, transaction.id);
-        this.alertsService.showSuccessAlert('Barter offer accepted!');
-      });
-  }
-
-  private declineOtherTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
-    this.elements$.value.forEach((element: any, index: number) => {
-      if ((element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
-        element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) && element.id !== currentTransactionId
-        && element.status === TransactionStatus.OPEN) {
-
-        // check if unnecessary because of dispatch to store
-        let newElements = this.elements$.value;
-        newElements[index].status = TransactionStatus.CANCELED;
-        this.elements$.next(newElements);
-
-        this.updateTransactionStatus(element.id, TransactionStatus.CANCELED);
-      }
-    }
-    );
-  }
-
-  private updateTransactionStatus(transactionId: string, transactionStatus: TransactionStatus): void {
-    this.transactionStore$.select(getTransaction(transactionId)).pipe(first())
-      .subscribe((transactionToUpdate: Transaction) => {
-        const updatedTransaction = { ...transactionToUpdate };
-        updatedTransaction.status = transactionStatus;
-        updatedTransaction.operatedBy = this.currentUser.id;
-        updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
-        this.transactionStore$.dispatch(updateTransaction({ transaction: updatedTransaction }));
-      });
-  }
-
   declineOffer(transaction): void {
     this.transactionStore$.select(getTransaction(transaction.id)).pipe(first())
       .subscribe((transactionToUpdate: Transaction) => {
@@ -147,7 +88,6 @@ export class UserTransactionsComponent implements OnInit {
         newElements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
         newElements.find(element => element.id === transaction.id).completenessDate = new Date();
 
-
         this.elements$.next(newElements);
 
         this.transactionStore$.dispatch(updateTransaction({ transaction: updatedTransaction }));
@@ -155,32 +95,8 @@ export class UserTransactionsComponent implements OnInit {
       });
   }
 
-  offeredToMeFilter(): void {
-    this.offeredToMeCheck = !this.offeredToMeCheck;
-    this.myOffersCheck = false;
-    this.completedTransactionsCheck = false;
-    this.elements$.next(this.transactionsElements);
-
-    if (this.offeredToMeCheck) {
-      this.elements$.next(this.elements$.value.filter(transaction => transaction.owner.id === this.currentUser.id));
-    }
-  }
-
-  myOffersFilter(): void {
-    this.myOffersCheck = !this.myOffersCheck;
-    this.offeredToMeCheck = false;
-    this.completedTransactionsCheck = false;
-    this.elements$.next(this.transactionsElements);
-
-    if (this.myOffersCheck) {
-      this.elements$.next(this.elements$.value.filter(transaction => transaction.bidder.id === this.currentUser.id));
-    }
-  }
-
   completedTransactionsFilter(): void {
     this.completedTransactionsCheck = !this.completedTransactionsCheck;
-    this.offeredToMeCheck = false;
-    this.myOffersCheck = false;
     this.elements$.next(this.transactionsElements);
 
     if (this.completedTransactionsCheck) {

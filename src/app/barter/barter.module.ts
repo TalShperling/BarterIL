@@ -15,11 +15,16 @@ import {TransactionsService} from './services/transactions.service';
 import { UserTransactionsComponent } from './components/user-transactions/user-transactions.component';
 import {FormsModule} from '@angular/forms';
 import {UserTransactionsResolver} from './user-transactions.resolver';
+import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
+import { TransactionsManagementComponent } from './components/transactions-management/transactions-management.component';
+import { TransactionsManagementResolver } from './transactions-management.resolver';
 
 
 @NgModule({
   declarations: [
     BarterOfferComponent,
+    TransactionsManagementComponent,
+    TransactionsTableComponent,
     UserTransactionsComponent,
   ],
   imports: [
@@ -41,7 +46,8 @@ import {UserTransactionsResolver} from './user-transactions.resolver';
   providers: [
     BarterOfferResolver,
     TransactionsService,
-    UserTransactionsResolver
+    UserTransactionsResolver,
+    TransactionsManagementResolver
   ]
 })
 export class BarterModule {

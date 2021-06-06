@@ -1,0 +1,12 @@
+<div class="container-fluid" *ngIf="elements$ | async as elements">
+  <div class="d-flex justify-content-start">
+    <div class="ml-5">
+      <mdb-checkbox (change)="completedTransactionsFilter()" [checked]="completedTransactionsCheck">Completed
+        Transactions
+      </mdb-checkbox>
+    </div>
+  </div>
+
+  <app-transactions-table [elements]="elements" [headElements]="headElements" [currentUser]="currentUser"
+    (onItemClick)="showItemDetails($event)" (onDeclineOffer)="declineOffer($event)"></app-transactions-table>
+</div>
