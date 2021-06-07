@@ -3,12 +3,14 @@ const admin = require('firebase-admin');
 const twilio = require('twilio');
 admin.initializeApp();
 
-exports.sendNotifications1 = functions.firestore.document('/transactions/{transactionId}').onCreate((snapshot, context) => {
+exports.sendNotifications1 = functions.firestore.document('/transactions/{transactionId}').onUpdate((change, context) => {
     console.log("Got response");
     functions.logger.log("Hey");
-    const original = snapshot.data();
-    const accountSid = 'AC7aa4ad969f9cd63cc83c7e2e25616bed';
-    const authToken = '38a5d1fba91bea373bc3b100c61f3038';
+    const original = change.after.data();
+    console.log(original);
+    console.log(functions.config().twilio);
+    const accountSid = functions.config().twilio.accountsid;
+    const authToken = functions.config().twilio.authtoken;
     const client = new twilio(accountSid, authToken);
 
     console.log(original);
