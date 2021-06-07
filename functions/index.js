@@ -18,12 +18,7 @@ exports.sendNotifications1 = functions.firestore.document('/transactions/{transa
         body: "Hey",
         to: '+972504084477'
     })
-        .then((message) => {
-            console.log(message.sid);
-            console.log('Uppercasing', context.params.transactionId, original);
-            const uppercase = original.toUpperCase();
-            return snapshot.ref.parent.child('firstName').set(uppercase);
-        })
+        .then((message) => console.log(message.sid))
         .catch((err) => {
             throw (err);
         });
