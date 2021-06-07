@@ -1,21 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MDBModalRef, MDBModalService, MdbTableDirective, MdbTablePaginationComponent } from 'angular-bootstrap-md';
-import { ActivatedRoute } from '@angular/router';
-import { Item } from '../../../../entities/item.model';
-import { ItemDetailsModalComponent } from '../../../items/components/item-details-modal/item-details-modal.component';
-import { getUser, UserState } from '../../../user/reducers/user.reducer';
-import { Store } from '@ngrx/store';
-import { getTransaction, TransactionsState } from '../../reducers/transactions.reducer';
-import { Transaction } from '../../../../entities/transaction.model';
-import { updateTransaction } from '../../actions/transactions.actions';
-import { getTransactionItems, ItemsState } from '../../../items/reducers/items.reducer';
-import { updateItem } from '../../../items/actions/items.actions';
-import { AlertsService } from '../../../services/alerts/alerts.service';
-import { first } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
+import {ActivatedRoute} from '@angular/router';
+import {Item} from '../../../../entities/item.model';
+import {ItemDetailsModalComponent} from '../../../items/components/item-details-modal/item-details-modal.component';
+import {getUser, UserState} from '../../../user/reducers/user.reducer';
+import {Store} from '@ngrx/store';
+import {getTransaction, getTransactions, TransactionsState} from '../../reducers/transactions.reducer';
+import {Transaction} from '../../../../entities/transaction.model';
+import {updateTransaction} from '../../actions/transactions.actions';
+import {getTransactionItems, ItemsState} from '../../../items/reducers/items.reducer';
+import {updateItem} from '../../../items/actions/items.actions';
+import {AlertsService} from '../../../services/alerts/alerts.service';
+import {first} from 'rxjs/operators';
 import firebase from 'firebase';
-import { User } from '../../../../entities/user.model';
-import { TransactionStatus } from '../../transaction-status';
-import { BehaviorSubject } from 'rxjs';
+import {User} from '../../../../entities/user.model';
+import {TransactionStatus} from '../../transaction-status';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-user-transactions',
@@ -42,8 +42,8 @@ export class UserTransactionsComponent implements OnInit {
     this.elements$ = new BehaviorSubject<any>([]);
   }
 
-  ngOnInit() {
-    let elementsToInsert: any[] = [];
+  ngOnInit(): void {
+    const elementsToInsert: any[] = [];
     this.activatedRoute.data.subscribe((result) => {
       result.data.forEach(transaction =>
         elementsToInsert.push({
@@ -80,8 +80,8 @@ export class UserTransactionsComponent implements OnInit {
   acceptOffer(transaction): void {
     this.itemsStore$.select(getTransactionItems(transaction.ownerItem.id, transaction.offeredItem.id)).pipe(first())
       .subscribe((items: Item[]) => {
-        const firstItem: Item = { ...items[0] };
-        const secondItem: Item = { ...items[1] };
+        const firstItem: Item = {...items[0]};
+        const secondItem: Item = {...items[1]};
 
         const firstItemOwnerId = firstItem.ownerId;
         firstItem.ownerId = secondItem.ownerId;
@@ -91,58 +91,68 @@ export class UserTransactionsComponent implements OnInit {
           (element.offeredItem.id === firstItem.id || element.offeredItem.id === secondItem.id) &&
           ((element.ownerItem.id === firstItem.id || element.ownerItem.id === secondItem.id))));
 
-        // check if unnecessary because of dispatch to store
-        let newElements = this.elements$.value;
+        const newElements = this.elements$.value;
         newElements[transactionIndex].status = TransactionStatus.COMPLETED;
         this.elements$.next(newElements);
 
 
-        this.itemsStore$.dispatch(updateItem({ item: firstItem }));
-        this.itemsStore$.dispatch(updateItem({ item: secondItem }));
+        this.itemsStore$.dispatch(updateItem({item: firstItem}));
+        this.itemsStore$.dispatch(updateItem({item: secondItem}));
         this.updateTransactionStatus(transaction.id, TransactionStatus.COMPLETED);
+        this.declineElementsTransactions(firstItem.id, secondItem.id, transaction.id);
         this.declineOtherTransactions(firstItem.id, secondItem.id, transaction.id);
         this.alertsService.showSuccessAlert('Barter offer accepted!');
       });
   }
 
-  private declineOtherTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
+  private declineElementsTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
     this.elements$.value.forEach((element: any, index: number) => {
-      if ((element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
-        element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) && element.id !== currentTransactionId
-        && element.status === TransactionStatus.OPEN) {
+        if ((element.ownerItem.id === firstItemId || element.offeredItem.id === firstItemId ||
+          element.ownerItem.id === secondItemId || element.offeredItem.id === secondItemId) && element.id !== currentTransactionId
+          && element.status === TransactionStatus.OPEN) {
 
-        // check if unnecessary because of dispatch to store
-        let newElements = this.elements$.value;
-        newElements[index].status = TransactionStatus.CANCELED;
-        this.elements$.next(newElements);
-
-        this.updateTransactionStatus(element.id, TransactionStatus.CANCELED);
+          const newElements = this.elements$.value;
+          newElements[index].status = TransactionStatus.CANCELED;
+          this.elements$.next(newElements);
+        }
       }
-    }
     );
+  }
+
+  private declineOtherTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
+    this.transactionStore$.select(getTransactions).pipe(first()).subscribe((transactions: Transaction[]) => {
+      transactions.forEach((transaction: Transaction) => {
+          if ((transaction.ownerItemId === firstItemId || transaction.traderItemId === firstItemId ||
+            transaction.ownerItemId === secondItemId || transaction.traderItemId === secondItemId)
+            && transaction.id !== currentTransactionId
+            && transaction.status === TransactionStatus.OPEN) {
+            this.updateTransactionStatus(transaction.id, TransactionStatus.CANCELED);
+          }
+        }
+      );
+    });
   }
 
   private updateTransactionStatus(transactionId: string, transactionStatus: TransactionStatus): void {
     this.transactionStore$.select(getTransaction(transactionId)).pipe(first())
       .subscribe((transactionToUpdate: Transaction) => {
-        const updatedTransaction = { ...transactionToUpdate };
+        const updatedTransaction = {...transactionToUpdate};
         updatedTransaction.status = transactionStatus;
         updatedTransaction.operatedBy = this.currentUser.id;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
-        this.transactionStore$.dispatch(updateTransaction({ transaction: updatedTransaction }));
+        this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
       });
   }
 
   declineOffer(transaction): void {
     this.transactionStore$.select(getTransaction(transaction.id)).pipe(first())
       .subscribe((transactionToUpdate: Transaction) => {
-        const updatedTransaction = { ...transactionToUpdate };
+        const updatedTransaction = {...transactionToUpdate};
         updatedTransaction.status = TransactionStatus.CANCELED;
         updatedTransaction.transactionCompleteDate = firebase.firestore.Timestamp.fromDate(new Date());
         updatedTransaction.operatedBy = this.currentUser.id;
 
-        // check if unnecessary because of dispatch to store
-        let newElements = this.elements$.value;
+        const newElements = this.elements$.value;
 
         newElements.find(element => element.id === transaction.id).status = TransactionStatus.CANCELED;
         newElements.find(element => element.id === transaction.id).completenessDate = new Date();
@@ -150,7 +160,7 @@ export class UserTransactionsComponent implements OnInit {
 
         this.elements$.next(newElements);
 
-        this.transactionStore$.dispatch(updateTransaction({ transaction: updatedTransaction }));
+        this.transactionStore$.dispatch(updateTransaction({transaction: updatedTransaction}));
         this.alertsService.showErrorAlert('Barter offer was declined!');
       });
   }
