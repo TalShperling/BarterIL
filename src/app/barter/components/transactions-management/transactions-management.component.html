@@ -8,5 +8,5 @@
   </div>
 
   <app-transactions-table [elements]="elements" [headElements]="headElements" [currentUser]="currentUser"
-    (onItemClick)="showItemDetails($event)" (onDeclineOffer)="declineOffer($event)"></app-transactions-table>
+                          (itemClickEmitter)="showItemDetails($event)" (declineOfferEmitter)="declineOffer($event)"></app-transactions-table>
 </div>

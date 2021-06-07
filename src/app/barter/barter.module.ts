@@ -18,6 +18,9 @@ import {UserTransactionsResolver} from './user-transactions.resolver';
 import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 import { TransactionsManagementComponent } from './components/transactions-management/transactions-management.component';
 import { TransactionsManagementResolver } from './transactions-management.resolver';
+import { RatingComponent } from './components/rating/rating.component';
+import { UserRatingComponent } from './components/user-rating/user-rating.component';
+import {RatingService} from './services/rating.service';
 
 
 @NgModule({
@@ -26,6 +29,8 @@ import { TransactionsManagementResolver } from './transactions-management.resolv
     TransactionsManagementComponent,
     TransactionsTableComponent,
     UserTransactionsComponent,
+    RatingComponent,
+    UserRatingComponent,
   ],
   imports: [
     CommonModule,
@@ -47,7 +52,8 @@ import { TransactionsManagementResolver } from './transactions-management.resolv
     BarterOfferResolver,
     TransactionsService,
     UserTransactionsResolver,
-    TransactionsManagementResolver
+    TransactionsManagementResolver,
+    RatingService
   ]
 })
 export class BarterModule {

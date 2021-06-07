@@ -7,5 +7,6 @@ export enum CollectionType {
   USERS = 'users',
   USERS_ITEMS = 'users_items',
   USERS_ROLES = 'users_roles',
-  USERS_VIEWS = 'users_views'
+  USERS_VIEWS = 'users_views',
+  RATINGS = 'ratings'
 }

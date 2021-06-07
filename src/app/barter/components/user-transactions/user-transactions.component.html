@@ -16,6 +16,6 @@
   </div>
 
   <app-transactions-table [elements]="elements" [headElements]="headElements" [currentUser]="currentUser"
-    (onItemClick)="showItemDetails($event)" (onAcceptOffer)="acceptOffer($event)"
-    (onDeclineOffer)="declineOffer($event)"></app-transactions-table>
+                          (itemClickEmitter)="showItemDetails($event)" (acceptOfferEmitter)="acceptOffer($event)"
+                          (declineOfferEmitter)="declineOffer($event)"></app-transactions-table>
 </div>

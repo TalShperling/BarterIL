@@ -1,0 +1,9 @@
+.grey-text, .blue-text {
+  cursor: pointer !important;
+}
+
+.icon-disabled {
+  cursor: none;
+  opacity: .5;
+  pointer-events: none;
+}
