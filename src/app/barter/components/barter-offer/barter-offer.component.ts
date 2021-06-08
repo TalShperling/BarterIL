@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../../../../entities/user.model';
 import {Item} from '../../../../entities/item.model';
 import {getMyItems, ItemsState} from '../../../items/reducers/items.reducer';
@@ -26,6 +26,7 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
   myItems: Item[] = [];
   selectedItem: Item;
   currentUser: User;
+  isButtonDisabled: boolean = false;
   private myTransactions: Transaction[];
   @ViewChild('myItem') myItem!: ItemComponent;
 
@@ -34,7 +35,8 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
               private store$: Store<ItemsState>,
               private userStore$: Store<UserState>,
               private transactionsStore$: Store<TransactionsState>,
-              private authService: AuthenticateService) {
+              private authService: AuthenticateService,
+              private router: Router) {
     super();
   }
 
@@ -64,6 +66,7 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
   }
 
   offerDeal(): void {
+    this.isButtonDisabled = true;
     const invalidTransactions: Transaction[] = this.myTransactions
       .filter(currentTransaction => (currentTransaction.status !== TransactionStatus.COMPLETED
         && currentTransaction.status !== TransactionStatus.CANCELED)
@@ -71,9 +74,15 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
         && currentTransaction.traderItemId === this.selectedItem.id);
 
     if (invalidTransactions.length > 0) {
+      this.isButtonDisabled = false;
       this.transactionsStore$.dispatch(createTransactionFail({message: 'Transaction failed'}));
     } else {
       this.createTransaction();
+
+      setTimeout(() => {
+          this.router.navigate(['/home']);
+        },
+        3000);
     }
   }
 
