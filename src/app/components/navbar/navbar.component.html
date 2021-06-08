@@ -38,7 +38,7 @@
                 <span>No messages</span>
               </a>
               <div *ngFor="let alert of alerts">
-                <a class="dropdown-item">
+                <a class="dropdown-item" routerLink="/user-transactions">
                   <span class="font-weight-bold">{{alert.date | date: 'HH:mm'}}</span>
                   <span>{{alert.description + alert.trader.firstName.concat(' ', alert.trader.lastName)}}</span>
                 </a>
