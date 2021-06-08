@@ -1,0 +1,13 @@
+[debug] [2021-06-08T18:39:14.757Z] ----------------------------------------------------------------------
+[debug] [2021-06-08T18:39:14.759Z] Command:       C:\Program Files (x86)\nodejs\node.exe C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2021-06-08T18:39:14.759Z] CLI Version:   9.12.1
+[debug] [2021-06-08T18:39:14.759Z] Platform:      win32
+[debug] [2021-06-08T18:39:14.760Z] Node Version:  v14.17.0
+[debug] [2021-06-08T18:39:14.761Z] Time:          Tue Jun 08 2021 21:39:14 GMT+0300 (שעון ישראל (קיץ))
+[debug] [2021-06-08T18:39:14.761Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-06-08T18:39:14.770Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-06-08T18:39:14.770Z] > authorizing via signed-in user (talshper@gmail.com)
+[debug] [2021-06-08T18:39:14.771Z] [iam] checking project barteril for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2021-06-08T18:39:14.773Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/barteril:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
