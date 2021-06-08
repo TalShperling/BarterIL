@@ -14,7 +14,6 @@ import {MDBModalService, MdbTableDirective, MdbTablePaginationComponent} from 'a
 import {Item} from '../../../../entities/item.model';
 import {User} from '../../../../entities/user.model';
 import {TransactionStatus} from '../../transaction-status';
-import {UserRatingComponent} from '../user-rating/user-rating.component';
 
 @Component({
   selector: 'app-transactions-table',
@@ -30,18 +29,22 @@ export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewI
   @Output() itemClickEmitter: EventEmitter<Item>;
   @Output() acceptOfferEmitter: EventEmitter<any>;
   @Output() declineOfferEmitter: EventEmitter<any>;
+  @Output() rateUserEmitter: EventEmitter<any>;
   maxTableRows: number = 5;
   enableAcceptOffer: boolean = false;
+  enableRating: boolean = false;
 
   constructor(private cdRef: ChangeDetectorRef,
               private modalService: MDBModalService) {
     this.acceptOfferEmitter = new EventEmitter<any>();
     this.declineOfferEmitter = new EventEmitter<any>();
+    this.rateUserEmitter = new EventEmitter<any>();
     this.itemClickEmitter = new EventEmitter<Item>();
   }
 
   ngOnInit(): void {
     this.enableAcceptOffer = this.acceptOfferEmitter.observers.length > 0;
+    this.enableRating = this.rateUserEmitter.observers.length > 0;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -66,6 +69,10 @@ export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewI
   declineOffer(transaction): void {
     this.declineOfferEmitter.emit(transaction);
   }
+  
+  rateUser(bidder, owner) {
+    this.rateUserEmitter.emit({bidder: bidder, owner: owner});
+  }
 
   private setTableData(): void {
     this.mdbTable.setDataSource(this.elements);
@@ -74,18 +81,6 @@ export class TransactionsTableComponent implements OnInit, OnChanges, AfterViewI
 
   public get transactionStatuses(): typeof TransactionStatus {
     return TransactionStatus;
-  }
-
-  rateUser(bidder: User, owner: User) {
-    const ratedUser = bidder.id === this.currentUser.id ? owner : bidder;
-    const ratingUser = bidder.id !== this.currentUser.id ? owner.id : bidder.id;
-
-    this.modalService.show(UserRatingComponent, {
-      data: {
-        ratedUser,
-        ratingUser
-      }
-    });
   }
 
   getStatusDescription(status: TransactionStatus): string {

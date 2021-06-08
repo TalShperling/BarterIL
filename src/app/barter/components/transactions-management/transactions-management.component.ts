@@ -16,6 +16,7 @@ import firebase from 'firebase';
 import { User } from '../../../../entities/user.model';
 import { TransactionStatus } from '../../transaction-status';
 import { BehaviorSubject } from 'rxjs';
+import { UserRatingComponent } from '../user-rating/user-rating.component';
 
 @Component({
   selector: 'app-transactions-management',
