@@ -14,6 +14,8 @@ import {Transaction} from '../../../../entities/transaction.model';
 import firebase from 'firebase';
 import {getUser, UserState} from '../../../user/reducers/user.reducer';
 import {TransactionStatus} from '../../transaction-status';
+import {Rating} from '../../../../entities/rating.model';
+import {RatingService} from '../../services/rating.service';
 
 @Component({
   selector: 'app-barter-offer',
@@ -29,18 +31,23 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
   isButtonDisabled: boolean = false;
   private myTransactions: Transaction[];
   @ViewChild('myItem') myItem!: ItemComponent;
+  ratings: Rating[];
 
 
   constructor(private activatedRoute: ActivatedRoute,
               private store$: Store<ItemsState>,
               private userStore$: Store<UserState>,
               private transactionsStore$: Store<TransactionsState>,
+              private ratingService: RatingService,
               private authService: AuthenticateService,
               private router: Router) {
     super();
   }
 
   ngOnInit(): void {
+    this.ratingService.getAll$().pipe(first()).subscribe(ratings => {
+      this.ratings = ratings;
+    });
     this.transactionsStore$.dispatch(initiateTransactions());
     this.userStore$.select(getUser).pipe(tap(user => this.currentUser = user),
       concatMap(user => this.transactionsStore$.select(getMyTransactions(user.id)).pipe(first())))
@@ -96,5 +103,9 @@ export class BarterOfferComponent extends ObservableListener implements OnInit {
     };
 
     this.transactionsStore$.dispatch(createTransaction({transaction}));
+  }
+
+  filterRatingsByOwner(ownerId: string, ratings: Rating[]) {
+    return ratings && ratings.length ? ratings.filter(rating => rating.ratedUser === ownerId) : [];
   }
 }

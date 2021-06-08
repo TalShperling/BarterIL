@@ -16,13 +16,9 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-md-2" style="margin-top: 3vh">
-      TODO: Rate of users
-      <!-- TODO: rate of user-->
-    </div>
   </div>
   <div class="d-flex"
-       *ngIf="{items: items$ | async, user: currentUser$ | async } as data">
+       *ngIf="{items: items$ | async, user: currentUser$ | async, ratings: ratings$ | async} as data">
     <div class="w-100 pt-0 mt-2" style="overflow: hidden;">
       <div class="row">
         <div class="col-md-3 py-1 recommended-items jumbotron">
@@ -32,6 +28,7 @@
           <div>
             <app-item class="card-deck mt-2" *ngFor="let item of data.items" [item]="item"
                       [currentUser]="data.user" [isEditorMode]="false"
+                      [ratings]="filterRatingsByOwner(item.ownerId, data.ratings)"
                       (onViewItem)="viewItem($event)">
             </app-item>
           </div>
@@ -42,6 +39,7 @@
                                  | itemsCategoryFilter: selectedCategoryIds as filteredItems;">
             <app-item class="card-deck ml-2 mt-2" *ngFor="let item of filteredItems" [item]="item"
                       [currentUser]="data.user" [isEditorMode]="false"
+                      [ratings]="filterRatingsByOwner(item.ownerId, data.ratings)"
                       (onViewItem)="viewItem($event)"></app-item>
             <div *ngIf="!filteredItems.length">
               <b>No Items were found!</b>

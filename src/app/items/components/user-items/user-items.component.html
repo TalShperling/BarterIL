@@ -6,10 +6,11 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4 mb-4 d-flex align-items-stretch" *ngFor="let item of items | itemsTextFilter: searchText">
-    <app-item class="card-deck ml-2 w-100"
+  <div class="col-md-4 mb-4 d-flex align-items-stretch"  *ngFor="let item of items | itemsTextFilter: searchText">
+    <app-item class="card-deck ml-2 w-100" *ngIf="ratings"
               [item]="item"
               [isEditorMode]="true"
+              [ratings]="filterRatingsByOwner(item.ownerId, ratings)"
               [currentUser]="currentUser$ | async"
               (onDeleteItem)="deleteItem($event)"
               (onEditItem)="editItem($event)"

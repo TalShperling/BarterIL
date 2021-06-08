@@ -6,15 +6,16 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4 mb-4 d-flex align-items-stretch" *ngFor="let item of (items$ | async) | itemsTextFilter: searchText">
-    <app-item class="card-deck ml-2 w-100"
+  <div class="col-md-4 mb-4 d-flex align-items-stretch"
+       *ngFor="let item of (items$ | async) | itemsTextFilter: searchText">
+    <app-item class="card-deck ml-2 w-100" *ngIf="ratings"
               [item]="item"
               [isEditorMode]="true"
               [currentUser]="currentUser$ | async"
+              [ratings]="filterRatingsByOwner(item.ownerId, ratings)"
               (onDeleteItem)="deleteItem($event)"
               (onEditItem)="editItem($event)"
               (onViewItem)="viewItem($event)">
     </app-item>
   </div>
 </div>
-
