@@ -9,8 +9,9 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div>
-        <app-item #myItem [item]="selectedItem"></app-item>
+      <div *ngIf="ratings">
+        <app-item #myItem [item]="selectedItem"
+                  [ratings]="filterRatingsByOwner(selectedItem.ownerId, ratings)"></app-item>
       </div>
     </div>
     <div class="d-flex justify-content-center align-items-center">
@@ -18,7 +19,9 @@
     </div>
 
     <div class="mr-5 item-card" style="margin-top: 7.5rem">
-      <app-item [item]="offerItem"></app-item>
+      <div *ngIf="ratings">
+        <app-item [item]="offerItem" [ratings]="filterRatingsByOwner(offerItem.ownerId, ratings)"></app-item>
+      </div>
       <div class="text-center mt-4" style="border: 5px solid var(--main-theme-color);">
         <div>
           <h2>contact details</h2>

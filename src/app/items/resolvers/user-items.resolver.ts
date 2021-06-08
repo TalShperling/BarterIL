@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {forkJoin, Observable, of} from 'rxjs';
-import {first, mergeMap} from 'rxjs/operators';
+import {filter, first, mergeMap} from 'rxjs/operators';
 import {getUser, UserState} from '../../user/reducers/user.reducer';
 import {Store} from '@ngrx/store';
 import {getMyItems, ItemsState} from '../reducers/items.reducer';
@@ -16,7 +16,7 @@ export class UserItemsResolver implements Resolve<{ ownerId: string, items: Item
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ ownerId: string, items: Item[] }> {
     return this.userStore$.select(getUser)
-      .pipe(first(),
+      .pipe(filter(user => !!user), first(),
         mergeMap((user: User) => {
           return forkJoin({
             ownerId: of(user.id),

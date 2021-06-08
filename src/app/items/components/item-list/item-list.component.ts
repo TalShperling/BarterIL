@@ -26,6 +26,8 @@ import {Category} from '../../../../entities/category.model';
 import {initiateTransactions} from '../../../barter/actions/transactions.actions';
 import {TransactionsState} from '../../../barter/reducers/transactions.reducer';
 import {initiateUsers} from '../../../user/actions/user.actions';
+import {RatingService} from '../../../barter/services/rating.service';
+import {Rating} from '../../../../entities/rating.model';
 
 @Component({
   selector: 'app-item-list',
@@ -39,6 +41,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
   searchText: string;
   selectedCategoryIds: string[];
   categories$: Observable<Category[]>;
+  ratings$: Observable<Rating[]>;
   private deleteFailedMessage: string = 'The item couldn\'t be deleted, please try again later';
   private deleteSuccessMessage: string = 'The item has been deleted successfully';
   private updateFailedMessage: string = 'The item couldn\'t be updated, please try again later';
@@ -49,6 +52,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
 
   constructor(
     private alertsService: AlertsService,
+    private ratingService: RatingService,
     private actions$: Actions,
     private store$: Store<ItemsState>,
     private userStore$: Store<UserState>,
@@ -61,6 +65,7 @@ export class ItemListComponent extends ObservableListener implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ratings$ = this.ratingService.getAll$();
     this.categories$ = this.store$.select(getCategories).pipe(takeUntil(this.unsubscribeOnDestroy));
     this.transactionsStore$.dispatch(initiateTransactions());
     this.currentUser$ = this.store$.select(getUser).pipe(takeUntil(this.unsubscribeOnDestroy));
@@ -110,5 +115,9 @@ export class ItemListComponent extends ObservableListener implements OnInit {
 
   editItem(item: Item): void {
     this.itemsModalService.editItem(item);
+  }
+
+  filterRatingsByOwner(ownerId: string, ratings: Rating[]) {
+    return ratings && ratings.length ? ratings.filter(rating => rating.ratedUser === ownerId) : [];
   }
 }
