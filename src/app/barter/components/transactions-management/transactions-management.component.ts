@@ -8,15 +8,12 @@ import { Store } from '@ngrx/store';
 import { getTransaction, TransactionsState } from '../../reducers/transactions.reducer';
 import { Transaction } from '../../../../entities/transaction.model';
 import { updateTransaction } from '../../actions/transactions.actions';
-import { getTransactionItems, ItemsState } from '../../../items/reducers/items.reducer';
-import { updateItem } from '../../../items/actions/items.actions';
 import { AlertsService } from '../../../services/alerts/alerts.service';
 import { first } from 'rxjs/operators';
 import firebase from 'firebase';
 import { User } from '../../../../entities/user.model';
 import { TransactionStatus } from '../../transaction-status';
 import { BehaviorSubject } from 'rxjs';
-import { UserRatingComponent } from '../user-rating/user-rating.component';
 
 @Component({
   selector: 'app-transactions-management',
