@@ -16,6 +16,7 @@ import firebase from 'firebase';
 import {User} from '../../../../entities/user.model';
 import {TransactionStatus} from '../../transaction-status';
 import {BehaviorSubject} from 'rxjs';
+import { UserRatingComponent } from '../user-rating/user-rating.component';
 
 @Component({
   selector: 'app-user-transactions',
@@ -103,6 +104,19 @@ export class UserTransactionsComponent implements OnInit {
         this.declineOtherTransactions(firstItem.id, secondItem.id, transaction.id);
         this.alertsService.showSuccessAlert('Barter offer accepted!');
       });
+  }
+
+  
+  rateUser(data): void {
+    const ratedUser = data.bidder.id === this.currentUser.id ? data.owner : data.bidder;
+    const ratingUser = data.bidder.id !== this.currentUser.id ? data.owner.id : data.bidder.id;
+
+    this.modalService.show(UserRatingComponent, {
+      data: {
+        ratedUser,
+        ratingUser
+      }
+    });
   }
 
   private declineElementsTransactions(firstItemId: string, secondItemId: string, currentTransactionId: string): void {
