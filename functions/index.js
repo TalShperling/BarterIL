@@ -12,7 +12,7 @@ exports.sendNotifications1 = functions.firestore.document('/transactions/{transa
     const ownerId = updatedData.ownerId;
     const traderId = updatedData.traderId;
 
-    const userIdToNotify = ownerId === updatedData.operatedBy ? ownerId : traderId;
+    const userIdToNotify = ownerId === updatedData.operatedBy ? traderId : ownerId;
     
     let itemIdOfUserToNotify;
     
