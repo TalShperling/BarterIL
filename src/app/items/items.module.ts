@@ -32,6 +32,7 @@ import {ItemsCategoryFilterPipe} from '../pipes/items-category-filter.pipe';
 import {UserViewsService} from './services/user-views.service';
 import {UserItemsComponent} from './components/user-items/user-items.component';
 import {UserItemsResolver} from './resolvers/user-items.resolver';
+import { RecommendationService } from './services/recommendation.service';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {UserItemsResolver} from './resolvers/user-items.resolver';
     AlertsService,
     ItemsModalService,
     UserViewsService,
-    UserItemsResolver
+    UserItemsResolver,
+    RecommendationService
   ]
 })
 export class ItemsModule {

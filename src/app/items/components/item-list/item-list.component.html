@@ -26,7 +26,7 @@
             <h2 class="h2">Recommended</h2>
           </div>
           <div>
-            <app-item class="card-deck mt-2" *ngFor="let item of data.items" [item]="item"
+            <app-item class="card-deck mt-2" *ngFor="let item of recommendedItems$ | async" [item]="item"
                       [currentUser]="data.user" [isEditorMode]="false"
                       [ratings]="filterRatingsByOwner(item.ownerId, data.ratings)"
                       (onViewItem)="viewItem($event)">
