@@ -18,7 +18,7 @@ import {
   updateSuccess, updateSuperficialData, updateSuperficialDataFail, updateSuperficialDataSuccess,
   updateWithoutPhone
 } from '../actions/user.actions';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import {AuthenticateService} from '../services/authentication.service';
 import firebase from 'firebase';
 import {UsersService} from '../services/users.service';
@@ -52,6 +52,7 @@ export class UserEffects {
     switchMap(({email, password}) => this.authService.signIn$(email, password)
       .pipe(
         switchMap((userCredential: UserCredential) => this.userService.getById$(userCredential.user.uid)),
+        take(1),
         map((user: User) => loginSuccess({user})),
         catchError((err) => of(loginFail({message: err})))
       ))
