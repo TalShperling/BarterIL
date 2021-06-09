@@ -8,7 +8,8 @@
           Management<span class="caret"></span></a>
         <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
           <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/users-management">Users management</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/transactions-management">Transactions management</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/transactions-management">Transactions
+            management</a>
           <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/items-management">Items management</a>
         </div>
       </li>
@@ -24,18 +25,20 @@
     <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item">
         <a class="nav-link">
-          <div class="btn-group" mdbDropdown>
-            <div>
-              <mdb-icon fas icon="bell" size="lg" (click)="hideAlerts()" mdbDropdownToggle></mdb-icon>
-            </div>
-            <div class="notification" *ngIf="displayNotification">
-              <mdb-badge pill="true" color="red">
-                {{(transactions$| async).length}}
-              </mdb-badge>
+          <div *ngIf="(alerts$ | async) || [] as alerts" class="btn-group" mdbDropdown (hidden)="clearAlerts()">
+            <div mdbDropdownToggle>
+              <div>
+                <mdb-icon fas icon="bell" size="lg"></mdb-icon>
+              </div>
+              <div class="notification" *ngIf="alerts.length">
+                <mdb-badge pill="true" color="red">
+                  {{alerts.length}}
+                </mdb-badge>
+              </div>
             </div>
             <div class="dropdown-menu dropdown-menu-right dropdown-primary mt-2">
               <a *ngIf="!alerts.length" class="dropdown-item">
-                <span>No messages</span>
+                <span>No new messages</span>
               </a>
               <div *ngFor="let alert of alerts">
                 <a class="dropdown-item" routerLink="/user-transactions">
