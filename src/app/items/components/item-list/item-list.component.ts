@@ -80,7 +80,8 @@ export class ItemListComponent extends ObservableListener implements OnInit {
         this.items$
       ).pipe(
         map(([recommendation, items]) =>
-          recommendation.items.map(({itemId}) => items.find(i => i.id === itemId)).filter(item => item))
+          recommendation.items.map(({itemId}) =>
+            items.find(i => i.id === itemId)).filter(item => item && item.ownerId !== user.id).slice(0, 5))
       );
     });
 
