@@ -1,15 +1,15 @@
 <div class="container-fluid" *ngIf="elements$ | async as elements">
   <div class="d-flex justify-content-start">
     <div>
-      <mdb-checkbox (change)="myOffersFilter()" [checked]="myOffersCheck">My Offers
+      <mdb-checkbox (change)="filterTransactions('myOffersCheck')" [checked]="myOffersCheck">My Offers
       </mdb-checkbox>
     </div>
     <div class="ml-5">
-      <mdb-checkbox (change)="offeredToMeFilter()" [checked]="offeredToMeCheck">Offered To Me
+      <mdb-checkbox (change)="filterTransactions('offeredToMeCheck')" [checked]="offeredToMeCheck">Offered To Me
       </mdb-checkbox>
     </div>
     <div class="ml-5">
-      <mdb-checkbox (change)="completedTransactionsFilter()" [checked]="completedTransactionsCheck">Completed
+      <mdb-checkbox (change)="filterTransactions('completedTransactionsCheck')" [checked]="completedTransactionsCheck">Completed
         Transactions
       </mdb-checkbox>
     </div>
