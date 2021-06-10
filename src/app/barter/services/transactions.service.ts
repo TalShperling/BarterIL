@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {FirebaseService} from '../../services/firebase/firebase.service';
-import {CollectionType} from '../../services/firebase/models/collection-type.model';
-import {IFirebaseService} from '../../services/firebase/models/firebase-service.interface';
-import {Transaction} from '../../../entities/transaction.model';
-import {getUser, UserState} from '../../user/reducers/user.reducer';
-import {User} from '../../../entities/user.model';
-import {Store} from '@ngrx/store';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { FirebaseService } from '../../services/firebase/firebase.service';
+import { CollectionType } from '../../services/firebase/models/collection-type.model';
+import { IFirebaseService } from '../../services/firebase/models/firebase-service.interface';
+import { Transaction } from '../../../entities/transaction.model';
+import { getUser, UserState } from '../../user/reducers/user.reducer';
+import { User } from '../../../entities/user.model';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class TransactionsService implements IFirebaseService<Transaction> {
@@ -35,6 +35,10 @@ export class TransactionsService implements IFirebaseService<Transaction> {
 
   getNewTransactions$(): Observable<Transaction[]> {
     return this.newTransaction$.asObservable();
+  }
+
+  clearNewTransactions$(): void {
+    this.newTransaction$.next([]);
   }
 
   alertNewTransaction(transactions: Transaction[]) {
